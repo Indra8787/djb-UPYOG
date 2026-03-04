@@ -30,7 +30,6 @@ const ModuleHeader = ({
             {breadcrumbs.map((item, index) => {
               const Icon = item.icon;
 
-              console.log(item);
               const handleClick = () => {
                 if (item.path) history.push(item.path);
                 else if (item.onClick) item.onClick();

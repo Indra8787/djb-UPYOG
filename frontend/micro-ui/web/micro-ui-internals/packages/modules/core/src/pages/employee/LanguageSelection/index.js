@@ -1,5 +1,5 @@
-import { Card, CustomButton, SubmitBar } from "@djb25/digit-ui-react-components";
 import React, { useState } from "react";
+import { Card, CustomButton, SubmitBar } from "@djb25/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import Background from "../../../components/Background";
@@ -15,8 +15,8 @@ const LanguageSelection = () => {
     setselected(language.value);
     Digit.LocalizationService.changeLanguage(language.value, stateInfo.code);
   };
-  let sourceUrl = "https://s3.ap-south-1.amazonaws.com/egov-qa-assets";
-  const pdfUrl = "https://pg-egov-assets.s3.ap-south-1.amazonaws.com/Upyog+Code+and+Copyright+License_v1.pdf";
+  // let sourceUrl = "https://s3.ap-south-1.amazonaws.com/egov-qa-assets";
+  // const pdfUrl = "https://pg-egov-assets.s3.ap-south-1.amazonaws.com/Upyog+Code+and+Copyright+License_v1.pdf";
 
   const handleSubmit = (event) => {
     history.push("/digit-ui/employee/user/login");
@@ -27,7 +27,6 @@ const LanguageSelection = () => {
   return (
     <Background>
       <Card className="bannerCard removeBottomMargin">
-       
         <div className="language-selector" style={{ justifyContent: "space-around", marginBottom: "24px", padding: "0 5%" }}>
           {languages.map((language, index) => (
             <div className="language-button-container" key={index}>
@@ -42,16 +41,27 @@ const LanguageSelection = () => {
         <SubmitBar style={{ width: "100%" }} label={t(`CORE_COMMON_CONTINUE`)} onSubmit={handleSubmit} />
       </Card>
 
-      <div style={{ width: '100%', height: "25px", position: 'fixed', bottom: 0,backgroundColor:"white",textAlign:"center" }}>
-        <div style={{ display: 'flex', justifyContent: 'center', color:"black" }}>
+      <div style={{ width: "100%", height: "25px", position: "fixed", bottom: 0, backgroundColor: "white", textAlign: "center" }}>
+        <div style={{ display: "flex", justifyContent: "center", color: "black" }}>
           {/* <span style={{ cursor: "pointer", fontSize: window.Digit.Utils.browser.isMobile()?"12px":"12px", fontWeight: "400"}} onClick={() => { window.open('https://www.digit.org/', '_blank').focus();}} >Powered by DIGIT</span>
           <span style={{ margin: "0 10px" ,fontSize: window.Digit.Utils.browser.isMobile()?"12px":"12px"}}>|</span> */}
           {/* <a style={{ cursor: "pointer", fontSize: window.Digit.Utils.browser.isMobile()?"12px":"12px", fontWeight: "400"}} href="#" target='_blank'>UPYOG License</a> */}
 
           {/* <span  className="upyog-copyright-footer" style={{ margin: "0 10px",fontSize:"12px" }} >|</span> */}
-          <span  className="upyog-copyright-footer" style={{ cursor: "pointer", fontSize: window.Digit.Utils.browser.isMobile()?"12px":"14px", fontWeight: "700"}} onClick={() => { window.open('https://delhijalboard.delhi.gov.in/', '_blank').focus();}} >Copyright © 2026 Delhi Jal Board</span>
-          <span  className="upyog-copyright-footer" style={{ margin: "0 10px",fontSize:"14px" }} >|</span>
-          <span className="upyog-copyright-footer"
+          <span
+            className="upyog-copyright-footer"
+            style={{ cursor: "pointer", fontSize: window.Digit.Utils.browser.isMobile() ? "12px" : "14px", fontWeight: "700" }}
+            onClick={() => {
+              window.open("https://delhijalboard.delhi.gov.in/", "_blank").focus();
+            }}
+          >
+            Copyright © 2026 Delhi Jal Board
+          </span>
+          <span className="upyog-copyright-footer" style={{ margin: "0 10px", fontSize: "14px" }}>
+            |
+          </span>
+          <span
+            className="upyog-copyright-footer"
             style={{ cursor: "pointer", fontSize: window.Digit.Utils.browser.isMobile() ? "12px" : "14px", fontWeight: "700" }}
             onClick={() => {
               window.open("https://nitcon.org/", "_blank").focus();
@@ -60,7 +70,6 @@ const LanguageSelection = () => {
             Designed & Developed By NITCON Ltd
           </span>
           {/* <a style={{ cursor: "pointer", fontSize: "16px", fontWeight: "400"}} href="#" target='_blank'>UPYOG License</a> */}
-
         </div>
         {/* <div className="upyog-copyright-footer-web">
           <span className="" style={{ cursor: "pointer", fontSize:  window.Digit.Utils.browser.isMobile()?"14px":"16px", fontWeight: "400"}} onClick={() => { window.open('https://mcdonline.nic.in/', '_blank').focus();}} >Copyright © 2025 Municipal Corporation of Delhi</span>

@@ -1,8 +1,10 @@
 import Keycloak from "keycloak-js";
 
-let _kc = null;
+let _kc;
 
-export const initKeycloak = (onAuthenticatedCallback) => {
+export const initKeycloak = async () => {
+  if (_kc) return _kc;
+
   _kc = new Keycloak({
     url: "https://dev-djb.nitcon.in/keycloak",
     realm: "DL",
@@ -10,22 +12,13 @@ export const initKeycloak = (onAuthenticatedCallback) => {
     // redirectUri: window.location.origin,
   });
 
-  _kc
-    .init({
-      onLoad: "login-required",
-      pkceMethod: "S256",
-      checkLoginIframe: false,
-    })
-    .then((auth) => {
-      if (!auth) {
-        _kc.login();
-      } else {
-        onAuthenticatedCallback();
-      }
-    })
-    .catch((err) => {
-      console.error("Keycloak init failed:", err);
-    });
+  await _kc.init({
+    onLoad: "check-sso",
+    pkceMethod: "S256",
+    checkLoginIframe: false,
+  });
+
+  return _kc;
 };
 
 export const getKeycloak = () => _kc;

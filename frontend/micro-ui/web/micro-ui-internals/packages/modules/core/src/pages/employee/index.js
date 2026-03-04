@@ -26,8 +26,8 @@ const EmployeeApp = ({
   stateCode,
   modules,
   appTenants,
-  sourceUrl,
-  pathname,
+  // sourceUrl,
+  // pathname,
   initData,
 }) => {
   const history = useHistory();
@@ -37,11 +37,10 @@ const EmployeeApp = ({
   const showLanguageChange = location?.pathname?.includes("language-selection");
   const isUserProfile = userScreensExempted.some((url) => location?.pathname?.includes(url));
   useEffect(() => {
-    console.log("isMobile", window.Digit.Utils.browser.isMobile(), window.innerWidth);
     Digit.UserService.setType("employee");
   }, []);
-  sourceUrl = "https://s3.ap-south-1.amazonaws.com/egov-qa-assets";
-  const pdfUrl = "https://pg-egov-assets.s3.ap-south-1.amazonaws.com/Upyog+Code+and+Copyright+License_v1.pdf";
+  // sourceUrl = "https://s3.ap-south-1.amazonaws.com/egov-qa-assets";
+  // const pdfUrl = "https://pg-egov-assets.s3.ap-south-1.amazonaws.com/Upyog+Code+and+Copyright+License_v1.pdf";
 
   return (
     <div className="employee">
