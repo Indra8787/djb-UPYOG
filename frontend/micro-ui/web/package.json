@@ -7,7 +7,8 @@
     "micro-ui-internals/packages/libraries",
     "micro-ui-internals/packages/react-components",
     "micro-ui-internals/packages/modules/core",
-    "micro-ui-internals/packages/modules/common"  ],
+    "micro-ui-internals/packages/modules/common"
+  ],
   "engines": {
     "node": ">=18"
   },
@@ -51,7 +52,8 @@
     "**/@babel/plugin-transform-modules-commonjs": "7.14.0",
     "glob": "7.2.3",
     "minimatch": "3.1.2",
-    "filelist": "1.0.4"
+    "filelist": "1.0.4",
+    "dompurify": "3.0.6"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -63,8 +65,8 @@
       "react-app"
     ],
     "globals": {
-    "Digit": "readonly"
-  }
+      "Digit": "readonly"
+    }
   },
   "browserslist": [
     ">0.2%",
