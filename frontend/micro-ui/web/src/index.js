@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { initLibraries } from "@djb25/digit-ui-libraries";
 import "./index.css";
 import App from "./App";
+import { initKeycloak } from "@djb25/digit-ui-module-core/src/pages/employee/Login/keyCloak";
 
 window.global = window;
 window.process = {
@@ -14,8 +15,32 @@ window.process = {
 
 // import { TLCustomisations } from './Customisations/tl/TLCustomisation';
 
-initLibraries();
+// initLibraries();
 
+initLibraries().then(async () => {
+  const kc = await initKeycloak();
+  window.keycloak = kc;
+
+  // 👇 Protect employee routes manually
+  const path = window.location.pathname;
+
+  const publicRoutes = [
+    "/digit-ui/employee/user/language-selection",
+    "/digit-ui/employee/user/login",
+    "/digit-ui/citizen/select-language",
+    "/digit-ui/citizen/select-location",
+    "/digit-ui/citizen",
+  ];
+
+  if ((path.startsWith("/digit-ui/employee") || path.startsWith("/digit-ui/citizen")) && !kc.authenticated) {
+    const isPublic = publicRoutes.some((route) => path.startsWith(route));
+
+    if (!isPublic) {
+      window.location.href = "/digit-ui/employee/user/language-selection";
+      return;
+    }
+  }
+});
 // window.Digit.Customizations = { PGR: {} ,TL:TLCustomisations};
 
 const user = window.Digit.SessionStorage.get("User");
@@ -57,9 +82,7 @@ if (!user || !user.access_token || !user.info) {
   });
 
   const userDetails =
-    userType === "citizen"
-      ? getUserDetails(citizenToken, citizenInfo)
-      : getUserDetails(employeeToken, employeeInfo);
+    userType === "citizen" ? getUserDetails(citizenToken, citizenInfo) : getUserDetails(employeeToken, employeeInfo);
 
   window.Digit.SessionStorage.set("User", userDetails);
   window.Digit.SessionStorage.set("Citizen.tenantId", citizenTenantId);

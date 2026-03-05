@@ -230,7 +230,13 @@ initLibraries().then(async () => {
   // 👇 Protect employee routes manually
   const path = window.location.pathname;
 
-  const publicRoutes = ["/digit-ui/employee/user/language-selection", "/digit-ui/employee/user/login"];
+  const publicRoutes = [
+    "/digit-ui/employee/user/language-selection",
+    "/digit-ui/employee/user/login",
+    "/digit-ui/citizen/select-language",
+    "/digit-ui/citizen/select-location",
+    "/digit-ui/citizen",
+  ];
 
   if (path.startsWith("/digit-ui/employee") && !kc.authenticated) {
     const isPublic = publicRoutes.some((route) => path.startsWith(route));
