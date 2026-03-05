@@ -25,26 +25,23 @@ const EmployeeApp = ({ path, url, userType }) => {
   const getDynamicBreadcrumbs = () => {
     // 1. Base steps that are always present
     let crumbs = [
-      { icon: HomeIcon, label: t("HOME"), path: "/digit-ui/employee" },
-      { label: t("MODULE_DETAILS"), path: "/digit-ui/employee/module/details?moduleName=HRMS" }
+      { icon: HomeIcon, path: "/digit-ui/employee" },
+      { label: t("ACTION_TEST_HRMS"), path: "/digit-ui/employee/module/details?moduleName=HRMS" },
     ];
 
     const currentPath = location.pathname;
 
     // 2. Build the history based on the current route
     if (currentPath.includes("/inbox")) {
-      crumbs.push({ label: t("HR_INBOX") }); // No path = current location (unclickable)
-    }
-    else if (currentPath.includes("/create")) {
-      crumbs.push({ label: t("HR_INBOX"), path: `${path}/inbox` }); // Where I came from
-      crumbs.push({ label: t("HR_CREATE_EMPLOYEE") });              // Where I am currently
-    }
-    else if (currentPath.includes("/details")) {
-      crumbs.push({ label: t("HR_INBOX"), path: `${path}/inbox` });
-      crumbs.push({ label: t("HR_EMPLOYEE_DETAILS") });
-    }
-    else if (currentPath.includes("/edit")) {
-      crumbs.push({ label: t("HR_INBOX"), path: `${path}/inbox` });
+      crumbs.push({ label: t("HR_HOME_SEARCH_RESULTS_HEADING") }); // No path = current location (unclickable)
+    } else if (currentPath.includes("/create")) {
+      crumbs.push({ label: t("HR_HOME_SEARCH_RESULTS_HEADING"), path: `${path}/inbox` }); // Where I came from
+      crumbs.push({ label: t("HR_COMMON_CREATE_EMPLOYEE_HEADER") }); // Where I am currently
+    } else if (currentPath.includes("/details")) {
+      crumbs.push({ label: t("HR_HOME_SEARCH_RESULTS_HEADING"), path: `${path}/inbox` });
+      crumbs.push({ label: t("HR_NEW_EMPLOYEE_FORM_HEADER") });
+    } else if (currentPath.includes("/edit")) {
+      crumbs.push({ label: t("HR_HOME_SEARCH_RESULTS_HEADING"), path: `${path}/inbox` });
 
       // Extract IDs from the URL to create a functional "Back to Details" link
       const pathSegments = currentPath.split("/");
@@ -55,18 +52,16 @@ const EmployeeApp = ({ path, url, userType }) => {
         const urlId = pathSegments[editIndex + 2];
         // Add details page as the previous step
         crumbs.push({
-          label: t("HR_EMPLOYEE_DETAILS"),
-          path: `${path}/details/${urlTenantId}/${urlId}`
+          label: t("HR_COMMON_EDIT_EMPLOYEE_HEADER"),
+          path: `${path}/details/${urlTenantId}/${urlId}`,
         });
       }
 
       crumbs.push({ label: t("HR_EDIT_EMPLOYEE") }); // Where I am currently
-    }
-    else if (currentPath.includes("/response")) {
+    } else if (currentPath.includes("/response")) {
       crumbs.push({ label: t("HR_INBOX"), path: `${path}/inbox` });
       crumbs.push({ label: t("HR_RESPONSE") });
-    }
-    else {
+    } else {
       // Fallback
       crumbs.push({ label: t("HR_COMMON_HEADER") });
     }
@@ -77,7 +72,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   return (
     <Switch>
       <AppContainer>
-        <div className="ground-container employee-app-container">
+        <div className="ground-container employee-app-container form-container">
           <ModuleHeader
             leftContent={
               <React.Fragment>

@@ -1,4 +1,4 @@
-import { ModuleCardFullWidth } from "@djb25/digit-ui-react-components";
+import { EmployeeModuleCard, ModuleCardFullWidth } from "@djb25/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -47,10 +47,10 @@ const NDSSCard = () => {
     subHeader: t("ACTION_TEST_NATDASHBOARD"),
     // subHeaderLink: `/digit-ui/employee/payment/integration/dss/NURT_DASHBOARD`,
     subHeaderLink: `/digit-ui/employee/dss/landing/NURT_DASHBOARD`,
-    className: "employeeCard customEmployeeCard card-home full-width-card full-employee-card-height",
+    // className: "employeeCard customEmployeeCard card-home full-width-card full-employee-card-height",
     links: [...links],
   };
-  return <ModuleCardFullWidth {...propsForModuleCard} />;
+  return <EmployeeModuleCard {...propsForModuleCard} />;
 };
 
 const DSSCard = () => {
@@ -74,10 +74,10 @@ const DSSCard = () => {
     subHeader: t("ACTION_TEST_SURE_DASHBOARD"),
     // subHeaderLink: `/digit-ui/employee/payment/integration/dss/home`,
     subHeaderLink: `/digit-ui/employee/dss/landing/home`,
-    className: "employeeCard card-home customEmployeeCard full-width-card full-employee-card-height",
+    // className: "employeeCard card-home customEmployeeCard full-width-card full-employee-card-height",
     links: [...links],
   };
-  return <ModuleCardFullWidth {...propsForModuleCard} styles={{ width: "100%" }} />;
+  return <EmployeeModuleCard {...propsForModuleCard} styles={{ width: "100%" }} />;
 };
 
 export { DSSCard, NDSSCard };

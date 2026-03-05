@@ -873,3 +873,64 @@
 .main-home {
     padding-top: 80px !important;
 }
+
+
+
+.custom-stepper-card {
+  width: 280px;
+  background: #f3f3f3;
+  padding: 30px 24px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.stepper-row {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+}
+
+.stepper-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 18px;
+}
+
+.step-circle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #d6d9de;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #5c6670;
+  font-size: 16px;
+}
+
+.step-circle.active {
+  background: #5a6ee1;
+  color: white;
+  border: 6px solid #f5d9c8;   /* peach outer ring */
+}
+
+.step-line {
+  width: 2px;
+  height: 50px;
+  background: #d6d9de;
+}
+
+.step-label {
+  margin-top: 10px;
+  font-size: 15px;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.step-label.active-text {
+  color: #5a6ee1;
+  font-weight: 600;
+}

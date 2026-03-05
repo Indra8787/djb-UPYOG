@@ -13,22 +13,53 @@ export const UserService = {
       url: Urls.Authenticate,
       data,
       headers: {
-        authorization: `Basic ${window?.globalConfigs?.getConfig("JWT_TOKEN")||"ZWdvdi11c2VyLWNsaWVudDo="}`,
+        authorization: `Basic ${window?.globalConfigs?.getConfig("JWT_TOKEN") || "ZWdvdi11c2VyLWNsaWVudDo="}`,
         "Content-Type": "application/x-www-form-urlencoded",
       },
     });
   },
-  logoutUser: () => {
-    let user = UserService.getUser();
-    if (!user || !user.info || !user.access_token) return false;
-    const { type } = user.info;
-    return ServiceRequest({
-      serviceName: "logoutUser",
-      url: Urls.UserLogout,
-      data: { access_token: user?.access_token },
-      auth: true,
-      params: { tenantId: type === "CITIZEN" ? Digit.ULBService.getStateId() : Digit.ULBService.getCurrentTenantId() },
-    });
+  logoutUser: async () => {
+    try {
+      const user = UserService.getUser();
+      const kc = window.keycloak;
+
+      // 1️⃣ Call backend logout (optional but good practice)
+      if (user?.access_token) {
+        try {
+          await ServiceRequest({
+            serviceName: "logoutUser",
+            url: Urls.UserLogout,
+            data: { access_token: user.access_token },
+            auth: true,
+            params: {
+              tenantId: user?.info?.type === "CITIZEN" ? Digit.ULBService.getStateId() : Digit.ULBService.getCurrentTenantId(),
+            },
+          });
+        } catch (e) {
+          console.warn("Backend logout failed (continuing):", e);
+        }
+      }
+
+      // 2️⃣ Clear Digit session
+      await Digit.SessionStorage.clear();
+      sessionStorage.clear();
+      localStorage.clear();
+      localStorage.removeItem("token");
+      localStorage.removeItem("Employee.token");
+      localStorage.removeItem("Employee.user-info");
+
+      // 3️⃣ Logout from Keycloak (THIS IS IMPORTANT)
+      if (kc) {
+        await kc.logout({
+          redirectUri: window.location.origin + "/digit-ui/employee/user/language-selection",
+        });
+      }
+
+      return true;
+    } catch (error) {
+      console.error("Logout failed:", error);
+      return false;
+    }
   },
   getType: () => {
     return Storage.get("userType") || "citizen";
@@ -45,8 +76,7 @@ export const UserService = {
     try {
       await UserService.logoutUser();
     } catch (e) {
-    }
-    finally{
+    } finally {
       window.localStorage.clear();
       window.sessionStorage.clear();
       if (userType === "citizen") {
@@ -93,19 +123,19 @@ export const UserService = {
       },
       params: { tenantId: stateCode },
     }),
-   
-    //create address for user
-      createAddressV2: async (details, stateCode, userUuid) =>
-        ServiceRequest({
-          serviceName: "createAddress",
-          url: Urls.UserCreateAddressV2,
-          auth: true,
-          data: {
-            address: details,
-            userUuid: userUuid,
-          },
-          params: { tenantId: stateCode },
-        }),
+
+  //create address for user
+  createAddressV2: async (details, stateCode, userUuid) =>
+    ServiceRequest({
+      serviceName: "createAddress",
+      url: Urls.UserCreateAddressV2,
+      auth: true,
+      data: {
+        address: details,
+        userUuid: userUuid,
+      },
+      params: { tenantId: stateCode },
+    }),
   hasAccess: (accessTo) => {
     const user = Digit.UserService.getUser();
     if (!user || !user.info) return false;
@@ -166,9 +196,8 @@ export const UserService = {
       url: Urls.UserUpdateAddressV2,
       auth: true,
       data: {
-        address: details
+        address: details,
       },
       params: { tenantId: stateCode },
     }),
-
 };

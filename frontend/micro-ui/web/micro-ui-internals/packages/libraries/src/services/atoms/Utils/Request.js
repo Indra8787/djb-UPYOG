@@ -13,7 +13,9 @@ Axios.interceptors.response.use(
     const isEmployee = window.location.pathname.split("/").includes("employee");
     if (err?.response?.data?.Errors) {
       for (const error of err.response.data.Errors) {
-        if (error.message.includes("InvalidAccessTokenException")) {
+        console.error("🚀🚀🚀🚀 API ERROR:", error);
+
+        if (error?.message?.includes("InvalidAccessTokenException")) {
           localStorage.clear();
           sessionStorage.clear();
           window.location.href =
@@ -26,7 +28,7 @@ Axios.interceptors.response.use(
           window.location.href =
             (isEmployee ? "/digit-ui/employee/user/error" : "/digit-ui/citizen/error") +
             `?type=maintenance&from=${encodeURIComponent(window.location.pathname + window.location.search)}`;
-        } else if (error.message.includes("ZuulRuntimeException")) {
+        } else if (error.message?.includes("ZuulRuntimeException")) {
           window.location.href =
             (isEmployee ? "/digit-ui/employee/user/error" : "/digit-ui/citizen/error") +
             `?type=notfound&from=${encodeURIComponent(window.location.pathname + window.location.search)}`;
@@ -37,12 +39,12 @@ Axios.interceptors.response.use(
   }
 );
 
-const requestInfo = () => ({
-  authToken: Digit.UserService.getUser()?.access_token || null,
+const requestInfo = (token) => ({
+  authToken: token || null,
 });
 
-const authHeaders = () => ({
-  "auth-token": Digit.UserService.getUser()?.access_token || null,
+const authHeaders = (token) => ({
+  "auth-token": token || null,
 });
 
 const userServiceData = () => ({ userInfo: Digit.UserService.getUser()?.info });
@@ -67,15 +69,16 @@ export const Request = async ({
   multipartFormData = false,
   multipartData = {},
   reqTimestamp = false,
-  plainAccessRequest = null
+  plainAccessRequest = null,
 }) => {
+  const token = window.keycloak?.token;
   if (method.toUpperCase() === "POST") {
     const ts = new Date().getTime();
     data.RequestInfo = {
       apiId: "Rainmaker",
     };
-    if (auth || !!Digit.UserService.getUser()?.access_token) {
-      data.RequestInfo = { ...data.RequestInfo, ...requestInfo() };
+    if (auth || token) {
+      data.RequestInfo = { ...data.RequestInfo, ...requestInfo(token) };
     }
     if (userService) {
       data.RequestInfo = { ...data.RequestInfo, ...userServiceData() };
@@ -100,10 +103,9 @@ export const Request = async ({
       data.RequestInfo = { ...data.RequestInfo, plainAccessRequest: { ...privacy } };
     }
 
-    if(plainAccessRequest){
+    if (plainAccessRequest) {
       data.RequestInfo = { ...data.RequestInfo, plainAccessRequest };
     }
-
   }
 
   const headers1 = {
@@ -111,7 +113,7 @@ export const Request = async ({
     Accept: window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE") ? "application/pdf,application/json" : "application/pdf",
   };
 
-  if (authHeader) headers = { ...headers, ...authHeaders() };
+  if (authHeader && token) headers = { ...headers, ...authHeaders(token) };
 
   if (userDownload) headers = { ...headers, ...headers1 };
 
@@ -140,7 +142,7 @@ export const Request = async ({
       url: _url,
       data: multipartData.data,
       params,
-      headers: { "Content-Type": "multipart/form-data", "auth-token": Digit.UserService.getUser()?.access_token || null },
+      headers: { "Content-Type": "multipart/form-data", "auth-token": token || null },
     });
     return multipartFormDataRes;
   }

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-
 /*
    Renders a card displaying dynamic links related to the Water Tanker.
    Links are filtered based on the provided businessService and the user's roles.

@@ -1,19 +1,18 @@
-import React, { Fragment, useCallback, useEffect, useMemo, useReducer } from "react";
+import React, { useCallback, useEffect, useReducer } from "react";
 import InboxLinks from "../../atoms/InboxLinks";
 import Table from "../../atoms/Table";
 import { SearchField, SearchForm } from "../../molecules/SearchForm";
-import { FilterForm, FilterFormField } from "../../molecules/FilterForm";
+import { FilterForm } from "../../molecules/FilterForm";
 import SubmitBar from "../../atoms/SubmitBar";
 import { useTranslation } from "react-i18next";
 import Card from "../../atoms/Card";
 import { Loader } from "../../atoms/Loader";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import SearchAction from "../../molecules/SearchAction";
 import FilterAction from "../../molecules/FilterAction";
 import SortAction from "../../molecules/SortAction";
 import DetailsCard from "../../molecules/DetailsCard";
 import PopUp from "../../atoms/PopUp";
-import { CloseSvg } from "../../atoms/svgindex";
 import MobileComponentDirectory from "./MobileComponentDirectory";
 
 const InboxComposer = ({
@@ -23,14 +22,14 @@ const InboxComposer = ({
   searchFormDefaultValues,
   onSearchFormSubmit,
   onSearchFormReset,
-  resetSearchFormDefaultValues,
   FilterFormFields,
   filterFormDefaultValues,
   propsForInboxTable,
   propsForInboxMobileCards,
   onFilterFormSubmit,
   onFilterFormReset,
-  resetFilterFormDefaultValues,
+  // resetSearchFormDefaultValues,
+  // resetFilterFormDefaultValues,
   onMobileSortOrderData,
   sortFormDefaultValues,
   onSortFormReset,
@@ -130,11 +129,11 @@ const InboxComposer = ({
 
     const getSearchActionText = () => {
       if (window.location.href.includes("/obps")) {
-        return t("ES_INBOX_COMMON_SEARCH")
+        return t("ES_INBOX_COMMON_SEARCH");
       } else {
-        return t("ES_COMMON_SEARCH")
+        return t("ES_COMMON_SEARCH");
       }
-    }
+    };
 
     return (
       <div className="InboxComposerWrapper">
@@ -157,24 +156,30 @@ const InboxComposer = ({
           </PopUp>
         ) : null}
         {/* {isInboxLoading ? <Loader /> : <DetailsCard {...propsForInboxMobileCards} />} */}
-        {isInboxLoading ? <Loader /> :
+        {isInboxLoading ? (
+          <Loader />
+        ) : (
           <div>
-            {propsForInboxMobileCards?.data?.length < 1 ?
+            {propsForInboxMobileCards?.data?.length < 1 ? (
               <Card className="margin-unset text-align-center">
                 {propsForInboxTable?.noResultsMessage ? t(propsForInboxTable?.noResultsMessage) : t("CS_MYAPPLICATIONS_NO_APPLICATION")}
-              </Card> : <DetailsCard {...propsForInboxMobileCards} />}
-          </div>}
+              </Card>
+            ) : (
+              <DetailsCard {...propsForInboxMobileCards} />
+            )}
+          </div>
+        )}
       </div>
     );
   }
 
-  const isEnabledCommonModules =
-    window.location.href.includes("/obps/") ||
-    window.location.href.includes("/noc/") ;
+  const isEnabledCommonModules = window.location.href.includes("/obps/") || window.location.href.includes("/noc/");
 
-  const isEnabledWSCommonModules = window.location.href.includes("/ws/water/inbox") || window.location.href.includes("/ws/sewerage/inbox") ||
-  window.location.href.includes("/ws/water/bill-amendment/inbox") ||
-  window.location.href.includes("/ws/sewerage/bill-amendment/inbox");
+  const isEnabledWSCommonModules =
+    window.location.href.includes("/ws/water/inbox") ||
+    window.location.href.includes("/ws/sewerage/inbox") ||
+    window.location.href.includes("/ws/water/bill-amendment/inbox") ||
+    window.location.href.includes("/ws/sewerage/bill-amendment/inbox");
 
   if (isEnabledCommonModules) {
     return (
@@ -190,14 +195,14 @@ const InboxComposer = ({
             </FilterForm>
           </div>
         </div>
-        <div style={propsForInboxTable?.tableStyle ? { flex: 1, ...propsForInboxTable?.tableStyle}:{flex: 1}}>
+        <div style={propsForInboxTable?.tableStyle ? { flex: 1, ...propsForInboxTable?.tableStyle } : { flex: 1 }}>
           <SearchForm onSubmit={onSearchFormSubmit} handleSubmit={handleSearchFormSubmit} id="search-form" className="rm-mb form-field-flex-one">
             <SearchFormFields
               registerRef={registerSearchFormField}
               searchFormState={searchFormState}
               {...{ controlSearchForm }}
               searchFieldComponents={
-                <div style={window.location.href.includes("/citizen/obps") ? {display : "flex"} : {}}>
+                <div style={window.location.href.includes("/citizen/obps") ? { display: "flex" } : {}}>
                   <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form" className="submit-bar-search" />
                   <p onClick={onResetSearchForm} className="clear-search" style={{ paddingTop: "9px", color: " #a82227" }}>
                     {t(`ES_COMMON_CLEAR_SEARCH`)}
@@ -252,14 +257,16 @@ const InboxComposer = ({
         {isInboxLoading ? (
           <Loader />
         ) : (
-          <div>
-            {propsForInboxTable?.data?.length < 1 ? (
-              <Card className="margin-unset text-align-center">
-                {propsForInboxTable.noResultsMessage ? t(propsForInboxTable.noResultsMessage) : t("CS_MYAPPLICATIONS_NO_APPLICATION")}
-              </Card>
-            ) : (
-              <Table t={t} {...propsForInboxTable} />
-            )}
+          <div className="result">
+            <div style={{ background: "#fff", height: "inherit" }}>
+              {propsForInboxTable?.data?.length < 1 ? (
+                <Card className="margin-unset text-align-center inboxLinks">
+                  {propsForInboxTable.noResultsMessage ? t(propsForInboxTable.noResultsMessage) : t("CS_MYAPPLICATIONS_NO_APPLICATION")}
+                </Card>
+              ) : (
+                <Table t={t} {...propsForInboxTable} />
+              )}
+            </div>
           </div>
         )}
       </div>

@@ -114,7 +114,7 @@ const Inbox = ({ parentRoute, businessService = "HRMS", initialStates = {}, filt
           searchParams={searchParams}
           sortParams={sortParams}
           totalRecords={totalRecords}
-          linkPrefix={'/digit-ui/employee/hrms/details/'}
+          linkPrefix={"/digit-ui/employee/hrms/details/"}
           filterComponent={filterComponent}
         />
         // <div></div>
@@ -122,7 +122,7 @@ const Inbox = ({ parentRoute, businessService = "HRMS", initialStates = {}, filt
     } else {
       return (
         <div>
-          {isInbox && <Header>{t("HR_HOME_SEARCH_RESULTS_HEADING")}</Header>}
+          {/* {isInbox && <Header>{t("HR_HOME_SEARCH_RESULTS_HEADING")}</Header>} */}
           <DesktopInbox
             businessService={businessService}
             data={data}

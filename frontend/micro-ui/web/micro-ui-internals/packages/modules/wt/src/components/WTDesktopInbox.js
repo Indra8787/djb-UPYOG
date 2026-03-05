@@ -13,13 +13,12 @@ import SearchApplication from "./inbox/search";
  * - Shows a "no application" message or a custom empty result component if no data is available.
  * - Renders an application table if data exists, supporting pagination, sorting, and filtering.
  * The component also handles the display of filters and search components, and conditionally shows additional links related to the WT service.
- * 
+ *
  * @param {Object} props - The properties passed to the component.
  * @returns {JSX.Element} A desktop inbox UI for Water Tanker applications, with search, filter, and table display.
  */
 
 const WTDesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
-  
   const { data, useNewInboxAPI } = props;
   const { t } = useTranslation();
   const [FilterComponent, setComp] = useState(() => Digit.ComponentRegistryService?.getComponent(filterComponent));
@@ -114,7 +113,7 @@ const WTDesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
           searchParams={props.searchParams}
           clearSearch={() => setClearSearchCalled(true)}
         />
-        <div className="result" style={{ marginLeft: !props?.isSearch ? "24px" : "", flex: 1 }}>
+        <div className="result" style={{ marginLeft: !props?.isSearch ? "16px" : "", flex: 1 }}>
           {result}
         </div>
       </div>

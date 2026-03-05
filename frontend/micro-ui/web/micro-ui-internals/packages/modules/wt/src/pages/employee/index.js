@@ -23,25 +23,22 @@ const EmployeeApp = ({ path }) => {
     if (pathname.includes("/tp/")) moduleName = "TP";
 
     let crumbs = [
-      { icon: HomeIcon, label: t("HOME"), path: "/digit-ui/employee" },
-      { label: t("MODULE_DETAILS"), path: `/digit-ui/employee/module/details?moduleName=${moduleName}` }
+      { icon: HomeIcon, path: "/digit-ui/employee" },
+      { label: t("WT_MODULE_NAME"), path: `/digit-ui/employee/module/details?moduleName=${moduleName}` },
     ];
 
     if (pathname.includes("/inbox")) {
       let label = "ES_COMMON_INBOX";
       if (pathname.includes("/tp/inbox")) label = "TP_INBOX";
       crumbs.push({ label: t(label) });
-    }
-    else if (pathname.includes("/my-bookings")) {
+    } else if (pathname.includes("/my-bookings")) {
       let label = "WT_SEARCH_BOOKINGS";
       if (pathname.includes("/mt/my-bookings")) label = "MT_SEARCH_BOOKINGS";
       if (pathname.includes("/tp/my-bookings")) label = "TP_SEARCH_BOOKINGS";
       crumbs.push({ label: t(label) });
-    }
-    else if (pathname.includes("/request-service")) {
+    } else if (pathname.includes("/request-service")) {
       crumbs.push({ label: t("WT_REQUEST_SERVICE") });
-    }
-    else if (pathname.includes("/booking-details") || pathname.includes("/bookingsearch/booking-details")) {
+    } else if (pathname.includes("/booking-details") || pathname.includes("/bookingsearch/booking-details")) {
       const isSearch = pathname.includes("/bookingsearch");
       if (isSearch) {
         crumbs.push({ label: t("WT_SEARCH_BOOKINGS"), path: `${path}/my-bookings` });
@@ -96,7 +93,7 @@ const EmployeeApp = ({ path }) => {
   return (
     <Switch>
       <AppContainer>
-        <div className="ground-container employee-app-container">
+        <div className="form-container">
           {/* -------------------------- MODULE HEADER -------------------------- */}
           <ModuleHeader
             leftContent={
@@ -108,9 +105,7 @@ const EmployeeApp = ({ path }) => {
             onLeftClick={() => window.history.back()}
             breadcrumbs={getDynamicBreadcrumbs()}
           />
-
           {/* ----------------------------- ROUTES ----------------------------- */}
-
           {/* WT Inbox */}
           <PrivateRoute
             path={`${path}/inbox`}
@@ -126,7 +121,6 @@ const EmployeeApp = ({ path }) => {
               />
             )}
           />
-
           {/* MT Inbox */}
           <PrivateRoute
             path={`${path}/mt/inbox`}
@@ -142,7 +136,6 @@ const EmployeeApp = ({ path }) => {
               />
             )}
           />
-
           {/* TP Inbox */}
           <PrivateRoute
             path={`${path}/tp/inbox`}
@@ -158,22 +151,16 @@ const EmployeeApp = ({ path }) => {
               />
             )}
           />
-
           {/* Request Service */}
           <PrivateRoute path={`${path}/request-service`} component={WTCreate} />
           <PrivateRoute path={`${path}/mt/request-service`} component={WTCreate} />
           <PrivateRoute path={`${path}/tp/request-service`} component={WTCreate} />
-
           {/* Booking Details */}
           <PrivateRoute path={`${path}/booking-details/:id`} component={() => <ApplicationDetails parentRoute={path} />} />
-
           <PrivateRoute path={`${path}/bookingsearch/booking-details/:id`} component={() => <ApplicationDetails parentRoute={path} />} />
-
           {/* My Bookings */}
           <PrivateRoute path={`${path}/my-bookings`} component={(props) => <SearchApp {...props} parentRoute={path} moduleCode="WT" />} />
-
           <PrivateRoute path={`${path}/mt/my-bookings`} component={(props) => <SearchApp {...props} parentRoute={path} moduleCode="MT" />} />
-
           <PrivateRoute path={`${path}/tp/my-bookings`} component={(props) => <SearchApp {...props} parentRoute={path} moduleCode="TP" />} />
         </div>
       </AppContainer>

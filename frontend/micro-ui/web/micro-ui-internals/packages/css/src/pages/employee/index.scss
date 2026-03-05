@@ -13,62 +13,13 @@
   }
 
   .card-home {
-    font-size: 16px;
-    /* padding: 0 0 16px 0; */
-    /* width: 23%; */
-    border-radius: 10px;
-    display: inline-block;
-    margin: 8px auto;
     cursor: pointer;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   }
 
   .card-home:hover {
-    box-shadow: 0px 6px 0 0px #764ba2;
-  }
-
-  .topbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background: white;
-    box-shadow: rgba(0, 0, 0, 0.24) 0 1px 4px;
-    z-index: 9999;
-
-    .topbar-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-    }
-
-    img {
-      display: inline;
-
-      &.city {
-        height: 60px;
-      }
-
-      &.spect-icon {
-        width: auto;
-        max-height: 50px;
-      }
-
-      &.state {
-        height: 20px;
-        max-height: 20px;
-        width: auto;
-      }
-    }
-
-    .ulb {
-      font-weight: bold;
-    }
-
-    .right {
-      float: right;
-    }
+    box-shadow: 0px 6px 0 0px #1a67a3;
   }
 
   .main {
@@ -261,8 +212,7 @@
       &.active {
         border-left: 4px solid theme(colors.primary.main);
 
-        &.level-0 {
-        }
+        &.level-0 {}
 
         &.level-1 {
           border-left: 8.5px solid theme(colors.primary.main);
@@ -272,8 +222,7 @@
           border-left: 4px solid theme(colors.primary.main);
         }
 
-        &.level-3 {
-        }
+        &.level-3 {}
 
         color: theme(colors.primary.main) !important;
         border-right: none;
@@ -433,32 +382,77 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-left: 30px;
-  padding-right: 30px;
+
   .header-top-section {
-    display: flex;
+    position: relative;
     width: 100%;
-    background: linear-gradient(98deg, rgba(110, 192, 221, 0.71) -24.44%, rgba(97, 119, 236, 0.9) 93.53%);
-    padding: 14px;
-    border-radius: 11px;
-
-    justify-content: space-between;
+    padding: 20px 50px;
+    border-radius: 18px;
+    display: flex;
     align-items: center;
+    justify-content: flex-end;
 
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    background: linear-gradient(98deg,
+        rgba(110, 192, 221, 0.71) -24.44%,
+        rgba(97, 119, 236, 0.9) 93.53%);
+
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+
+    border: 1px solid rgba(255, 255, 255, 0.35);
+
+    box-shadow:
+      inset 0 2px 6px rgba(255, 255, 255, 0.5),
+      inset 0 -2px 6px rgba(255, 255, 255, 0.2),
+      0 20px 40px rgba(0, 0, 0, 0.18),
+      0 8px 16px rgba(0, 0, 0, 0.12);
+
+    transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(120deg,
+          rgba(255, 255, 255, 0.45) 0%,
+          rgba(255, 255, 255, 0.1) 40%,
+          rgba(255, 255, 255, 0.05) 100%);
+      pointer-events: none;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: 0 0 30px rgba(97, 119, 236, 0.25);
+      transition: opacity 0.3s ease;
+    }
+
+    &:hover {
+
+      box-shadow:
+        inset 0 3px 8px rgba(255, 255, 255, 0.6),
+        inset 0 -3px 8px rgba(255, 255, 255, 0.25),
+        0 30px 60px rgba(0, 0, 0, 0.25),
+        0 10px 20px rgba(0, 0, 0, 0.15);
+
+      &::after {
+        opacity: 1;
+      }
+    }
 
     .title {
       margin: 0;
-      font-size: 25px;
-      font-weight: 700;
-      color: #0f172a;
-    }
+      font-size: 26px;
+      font-weight: 800;
+      color: #ffffff;
 
-    .subtitle {
-      margin: 0;
-       font-size: 20px;
-      font-weight: 700;
-      color: #0f172a;
+      /* More premium glass text effect */
+      text-shadow:
+        0 1px 2px rgba(255, 255, 255, 0.6),
+        0 4px 8px rgba(52, 51, 51, 0.15);
     }
   }
 
@@ -470,21 +464,24 @@
 
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: flex-start;
     color: #fff;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     font-size: 14px;
     font-weight: 500;
+
     .icon {
       width: 35px;
       aspect-ratio: 1/1;
       fill: #fff;
     }
+
     .home-icon {
       width: 24px;
       aspect-ratio: 1/1;
       fill: #fff;
     }
+
     .iconn {
       font-feature-settings: "kern";
       font-size: 16px;
@@ -498,6 +495,18 @@
       align-items: center;
       justify-content: center;
       padding-left: 20px;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .extra-right-content {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .left-section {
@@ -522,12 +531,6 @@
       margin-left: 0;
     }
 
-    .card-home {
-      /* width: 23%; */
-      margin-right: 10px;
-      margin-bottom: 10px;
-    }
-
     .card-home-hrms {
       width: 405px;
       padding: 0px;
@@ -539,6 +542,7 @@
       display: flex;
       flex-direction: column;
       padding-top: 80px;
+      height: 100vh;
       /* margin-left: 72px; */
       /* width: calc(100%-83px); */
     }
@@ -561,8 +565,7 @@
       justify-content: center;
     }
 
-    .center-container {
-    }
+    .center-container {}
   }
 }
 
@@ -693,7 +696,359 @@
   }
 }
 
-/* TODO fix required NABEEL/ANIL for home screen card */
 .customEmployeeCard {
   @apply m-sm !important;
+}
+
+.employee-home-main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .employee-home-main-content {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .moduleCardWrapper {
+    flex: 1;
+    margin-right: 0 !important;
+  }
+
+  .employee-recent-activity-wrapper {
+    flex-shrink: 0;
+    height: stretch;
+  }
+}
+
+.recent-activity-wrapper {
+  background: linear-gradient(145deg, #ffffff, #f0f4f8);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.05),
+    inset 0 2px 0 rgba(255, 255, 255, 1);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #6ec0dd, #6177ec);
+  }
+}
+
+.recent-activity-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+
+  .title-icon {
+    color: #6177ec;
+    font-size: 24px;
+    margin-right: 10px;
+    background: rgba(97, 119, 236, 0.1);
+    padding: 6px;
+    border-radius: 8px;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #2c3e50;
+    flex: 1;
+  }
+
+  .view-all-btn {
+    background: none;
+    border: none;
+    color: #6177ec;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: #3b50c1;
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Anchors the whole component to the right edge */
+.ra-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  
+  /* Change from relative/static to absolute/fixed */
+  position: absolute; 
+  right: 0;
+  top: 0;
+  height: 100%; /* Or calc(100% - 40px) depending on your padding */
+  
+  /* Ensure it sits on top of everything else */
+  z-index: 1000; 
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  
+  /* Prevents the wrapper itself from blocking clicks on the page when closed */
+  pointer-events: none; 
+}
+
+/* The parent container sets the outer shape and shadow */
+.ra-container {
+  pointer-events: auto; /* Re-enable clicks for the card itself */
+  display: flex;
+  flex-direction: row;
+  background: rgba(255, 255, 255, 0.7); /* Slightly more opaque for overlay readability */
+  border-radius: 24px 0 0 24px; /* Rounded only on the left side since it's flush right */
+  
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  
+  /* Stronger shadow to emphasize the 'float' effect */
+  box-shadow: 
+    -10px 0 30px rgba(0, 0, 0, 0.1), 
+    0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    
+  overflow: hidden;
+  height: 100%;
+  transition: transform 0.3s ease;
+}
+
+/* --- THE FIX: Sliding Door Approach --- */
+/* When closed, width is exactly 0px, causing NO gaps. */
+.ra-content-door {
+  width: 0px;
+  overflow: hidden;
+  transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  background: linear-gradient(
+    135deg, 
+    rgba(255, 255, 255, 0.4) 0%, 
+    rgba(255, 255, 255, 0.2) 100%
+  );
+}
+.ra-container.open .ra-content-door {
+  width: 380px;
+  border-right: 1px solid rgba(0,0,0,0.05);
+}
+
+/* The inner content stays a fixed size so it doesn't wrap/squish while the door is opening */
+.ra-content-inner {
+  width: 380px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Header & Layout Alignments --- */
+.ra-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 24px;
+}
+
+.ra-header h3 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.ra-subtitle {
+  margin: 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.ra-view-all {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: #3b82f6;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.ra-view-all:hover {
+  background: #eff6ff;
+}
+
+/* --- Timeline Area --- */
+.ra-timeline::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ra-timeline::-webkit-scrollbar {
+  width: 4px;
+}
+
+.ra-timeline::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ra-timeline::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.ra-item {
+  display: flex;
+}
+
+.ra-item:not(:last-child) {
+  margin-bottom: 16px;
+}
+
+/* Indicator column strictly aligned */
+.ra-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 16px;
+  width: 36px;
+}
+
+.ra-icon-wrapper {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.ra-icon-wrapper svg {
+  display: block;
+}
+
+.ra-line {
+  width: 2px;
+  background: #e2e8f0;
+  flex: 1;
+  margin-top: 6px;
+  margin-bottom: -10px;
+}
+
+.ra-details {
+  flex: 1;
+  padding-bottom: 8px;
+  padding-top: 2px;
+  /* Micro-adjustment for text alignment */
+}
+
+.ra-text {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: #334155;
+  line-height: 1.4;
+}
+
+.ra-user {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.ra-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ra-module {
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-size: 11px;
+  background: rgba(255, 255, 255, 0.4); /* Glassy tag */
+  color: #1e293b;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+}
+
+.ra-time {
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* --- Right Side Toggle Strip (Redesigned UI) --- */
+.ra-strip {
+  width: 50px; /* Slimmer strip since it's an overlay */
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 0;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.ra-strip:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.ra-chevron-icon {
+  color: #64748b;
+  margin-bottom: 40px;
+  transition: color 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ra-strip:hover .ra-chevron-icon {
+  color: #0f172a;
+  transform: scale(1.1);
+}
+
+.ra-strip-text {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.ra-strip:hover .ra-strip-text {
+  opacity: 1;
+  color: #0f172a;
+}
+
+.ra-history-icon {
+  transform: rotate(90deg);
+  /* Re-orients the clock icon in vertical mode */
 }

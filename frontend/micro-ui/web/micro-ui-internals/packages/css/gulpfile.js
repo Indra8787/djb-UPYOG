@@ -6,6 +6,7 @@ const postcssPresetEnv = require("postcss-preset-env");
 const cleanCSS = require("gulp-clean-css");
 const rename = require("gulp-rename");
 const livereload = require("gulp-livereload");
+const touch = require("gulp-touch-fd");
 
 let output = "./dist";
 if (true) {
@@ -32,21 +33,31 @@ function styles() {
   return src("src/index.scss")
     .pipe(postcss(plugins)) // Tailwind+Apply+Theme → CSS
     .pipe(rename("index.css"))
-    .pipe(dest(output));
+    .pipe(dest(output))
+    .pipe(touch());
 }
 
 function minify() {
   return src(`${output}/index.css`).pipe(cleanCSS()).pipe(rename("index.min.css")).pipe(dest(output));
 }
 
+// function stylesLive() {
+//   styles().pipe(livereload({ start: true }));
+// }
+
 function stylesLive() {
-  styles().pipe(livereload({ start: true }));
+  return styles().pipe(livereload());
 }
 
 function livereloadStyles() {
   livereload.listen();
-  watch("src/**/*.scss", series(stylesLive));
+  watch("src/**/*.scss", stylesLive);
 }
+
+// function livereloadStyles() {
+//   livereload.listen();
+//   watch("src/**/*.scss", series(stylesLive));
+// }
 
 exports.styles = styles;
 

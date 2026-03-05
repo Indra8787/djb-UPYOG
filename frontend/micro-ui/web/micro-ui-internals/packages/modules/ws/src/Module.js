@@ -5,7 +5,6 @@ import { Loader, CitizenHomeCard, WSICon } from "@djb25/digit-ui-react-component
 import CitizenApp from "./pages/citizen";
 import EmployeeApp from "./pages/employee";
 
-
 //Page Components
 import WSServiceName from "./pageComponents/WSServiceName";
 import WSWaterConnectionDetails from "./pageComponents/WSWaterConnectionDetails";
@@ -28,7 +27,7 @@ import WSActivationPageDetails from "./pageComponents/WSActivationPageDetails";
 import WSActivationCommentsDetails from "./pageComponents/WSActivationCommentsDetails";
 import WSActivationSupportingDocuments from "./pageComponents/WSActivationSupportingDocuments";
 import WSDocumentsEmployee from "./pageComponents/WSDocumentsEmployee";
-import WSEditConnectionDetails from"./pageComponents/WSEditConnectionDetails";
+import WSEditConnectionDetails from "./pageComponents/WSEditConnectionDetails";
 import WSDisconnectionDocsRequired from "./pageComponents/WSDisconnectionDocsRequired";
 import WSDisconnectionForm from "./pageComponents/WSDisconnectionForm";
 import WSRestorationForm from "./pageComponents/WSRestorationForm";
@@ -42,7 +41,7 @@ import WSInbox from "./components/WSInbox";
 import BillAmendmentCard from "./components/BillAmendmentCard";
 import SearchApplication from "./components/SearchApplication";
 import SearchWaterConnection from "./components/SearchWaterConnection";
-import BulkBillSearch from "./components/SearchWaterConnection/BulkBillSearch"
+import BulkBillSearch from "./components/SearchWaterConnection/BulkBillSearch";
 import WSCard from "./components/WSCard";
 import SWCard from "./components/SWCard";
 import BillIAmendMentInbox from "./components/BillIAmendMentInbox";
@@ -65,13 +64,13 @@ import WSMyConnections from "./pages/citizen/MyConnection";
 import WSAcknowledgement from "./pages/citizen/WSCreate/WSAcknowledgement";
 import WSDisconnectionCheckPage from "./pages/citizen/WSDisconnection/CheckPage";
 import WSRestorationCheckPage from "./pages/citizen/WSRestoration/CheckPage";
-import WSReSubmitDisconnectionCheckPage from "./pages/citizen/ReSubmitDisconnection/CheckPage"
+import WSReSubmitDisconnectionCheckPage from "./pages/citizen/ReSubmitDisconnection/CheckPage";
 import WNSMyBillsComponent from "./pages/citizen/WnSMyBills";
 
 //Employee Components
 import ApplicationBillAmendment from "./pages/employee/ApplicationBillAmendment";
 import RequiredDocuments from "./pages/employee/RequiredDocuments";
-import NewApplication from "./pages/employee/NewApplication" ;
+import NewApplication from "./pages/employee/NewApplication";
 import ApplicationDetails from "./pages/employee/ApplicationDetails";
 import GetConnectionDetails from "./pages/employee/connectionDetails/connectionDetails";
 import ActivateConnection from "./pages/employee/ActivateConnection";
@@ -84,7 +83,7 @@ import ModifyApplication from "./pages/employee/ModifyApplication";
 import EditModifyApplication from "./pages/employee/EditModifyApplication";
 import DisconnectionApplication from "./pages/employee/DisconnectionApplication";
 import RestorationApplication from "./pages/employee/RestorationApplication";
-import WSEditApplicationByConfig from './pages/employee/EditApplication/WSEditApplicationByConfig';
+import WSEditApplicationByConfig from "./pages/employee/EditApplication/WSEditApplicationByConfig";
 import GetDisconnectionDetails from "./pages/employee/DisconnectionDetails";
 import ModifyApplicationDetails from "./pages/employee/ModifyApplicationDetails";
 import EditDisconnectionApplication from "./pages/employee/EditDisconnectionApplication";
@@ -93,14 +92,12 @@ import ResubmitDisconnection from "./pages/employee/EditDisconnectionApplication
 //import IntegratedBill from "./pages/employee/SearchWaterConnectionIntegrated";
 import SearchWaterConnectionIntegrated from "./pages/employee/SearchWaterConnectionIntegrated";
 import SearchIntegrated from "./pages/employee/SearchIntegrated";
-import SearchWaterConnectionViewIntegrated
- from "./pages/employee/SearchWaterConnection/SearchWaterConnectionViewIntegrated";
- import BulkBillGeneration from "./pages/employee/BulkBillGeneration"
+import SearchWaterConnectionViewIntegrated from "./pages/employee/SearchWaterConnection/SearchWaterConnectionViewIntegrated";
+import BulkBillGeneration from "./pages/employee/BulkBillGeneration";
 
-
-const WSModule = ({ stateCode, userType, tenants }) => {
+export const WSModule = ({ stateCode, userType, tenants }) => {
   const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || Digit.ULBService.getCurrentTenantId();
-  const moduleCode = ["ws", "pt", "common", tenantId, "bill-amend","abg"];
+  const moduleCode = ["ws", "pt", "common", tenantId, "bill-amend", "abg"];
   const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({
@@ -123,7 +120,7 @@ const WSModule = ({ stateCode, userType, tenants }) => {
   return <EmployeeApp path={path} stateCode={stateCode} />;
 };
 
-const WSLinks = ({ matchPath, userType }) => {
+export const WSLinks = ({ matchPath, userType }) => {
   const { t } = useTranslation();
 
   const links = [
@@ -154,6 +151,13 @@ const WSLinks = ({ matchPath, userType }) => {
   ];
 
   return <CitizenHomeCard header={t("ACTION_TEST_WATER_AND_SEWERAGE")} links={links} Icon={() => <WSICon />} />;
+};
+
+// export the components outside of module to enable and access of module
+export const WSComponents = {
+  WSCard,
+  WSModule,
+  WSLinks,
 };
 
 const componentsToRegister = {
@@ -196,7 +200,7 @@ const componentsToRegister = {
   BillAmendmentCard,
   WSSearchApplication: SearchApplication,
   WSSearchWaterConnection: SearchWaterConnection,
-  WSBulkBillSearch:BulkBillSearch,
+  WSBulkBillSearch: BulkBillSearch,
   WSCard,
   SWCard,
   WSBillIAmendMentInbox: BillIAmendMentInbox,
@@ -204,7 +208,7 @@ const componentsToRegister = {
   //Citizen Components
   WSCreate: WSCreate,
   WSDisconnection: WSDisconnection,
-  WSRestoration:WSRestoration,
+  WSRestoration: WSRestoration,
   WSSearchConnectionComponent: SearchConnectionComponent,
   WSSearchResultsComponent: SearchResultsComponent,
   WSCitizenApplicationDetails: WSCitizenApplicationDetails,
@@ -237,17 +241,17 @@ const componentsToRegister = {
   WSModifyApplication: ModifyApplication,
   WSEditModifyApplication: EditModifyApplication,
   WSDisconnectionApplication: DisconnectionApplication,
-  WSRestorationApplication:RestorationApplication,
+  WSRestorationApplication: RestorationApplication,
   WSEditApplicationByConfig: WSEditApplicationByConfig,
   WSGetDisconnectionDetails: GetDisconnectionDetails,
   WSModifyApplicationDetails: ModifyApplicationDetails,
   WSEditDisconnectionApplication: EditDisconnectionApplication,
   WSEditDisconnectionByConfig: EditDisconnectionByConfig,
   WSResubmitDisconnection: ResubmitDisconnection,
-  WSSearchWaterConnectionIntegrated:SearchWaterConnectionIntegrated,
-  WSSearchIntegrated:SearchIntegrated,
-  WSSearchWaterConnectionViewIntegrated :SearchWaterConnectionViewIntegrated,
-  WSBulkBillGeneration:BulkBillGeneration
+  WSSearchWaterConnectionIntegrated: SearchWaterConnectionIntegrated,
+  WSSearchIntegrated: SearchIntegrated,
+  WSSearchWaterConnectionViewIntegrated: SearchWaterConnectionViewIntegrated,
+  WSBulkBillGeneration: BulkBillGeneration,
 };
 
 export const initWSComponents = () => {

@@ -22,6 +22,11 @@ import {
 import { DigitUI } from "@djb25/digit-ui-module-core";
 import { initLibraries } from "@djb25/digit-ui-libraries";
 import { HRMSModule, initHRMSComponents } from "@djb25/digit-ui-module-hrms";
+// import { initFormioComponents } from "@djb25/digit-ui-module-formio";
+// import { FormioModule } from "@djb25/digit-ui-module-formio";
+import { initEkycComponents } from "@djb25/digit-ui-module-ekyc";
+import { EkycModule } from "@djb25/digit-ui-module-ekyc";
+
 // import {
 //   TLModule,
 //   TLLinks,
@@ -85,6 +90,8 @@ const enabledModules = [
   "MCollect",
   "HRMS",
   // "TL",
+  // "FORMIO",
+  "EKYC",
   "Receipts",
   // "OBPS",
   // "NOC",
@@ -122,6 +129,8 @@ window.Digit.ComponentRegistryService.setupRegistry({
   FinanceModule,
   // TLModule,
   // TLLinks,
+  // FormioModule,
+  EkycModule,
   ReceiptsModule,
   // PTRModule,
   // PTRLinks,
@@ -155,6 +164,8 @@ initDSSComponents();
 initMCollectComponents();
 initHRMSComponents();
 // initTLComponents();
+// initFormioComponents();
+initEkycComponents();
 initReceiptsComponents();
 // initOBPSComponents();
 // initNOCComponents();

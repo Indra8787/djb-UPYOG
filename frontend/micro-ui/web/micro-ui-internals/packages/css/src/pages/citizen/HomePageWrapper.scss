@@ -62,6 +62,113 @@
       width: 100%;
     }
   }
+
+  /* ===== Citizen Theme (Matching Employee Dashboard) ===== */
+  .citizen-app-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 24px;
+    margin-top: 45px;
+  }
+
+  .citizen-module-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    .citizen-header-top-section {
+      width: 100% !important;
+      background: #7a99f1 !important;
+      padding: 16px 32px !important;
+      border-radius: 8px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: flex-end !important;
+      min-height: 56px !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    .citizen-header-title {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+  }
+
+  .citizen-module-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    padding: 0;
+    width: 100%;
+
+    @media (max-width: 1024px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 480px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+  }
+
+  .citizen-service-card {
+    background: #ffffff !important;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+    padding: 24px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    border: 1px solid #eeeeee !important;
+    min-height: 100px !important;
+    gap: 16px !important;
+
+    &:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
+    }
+
+    &__icon {
+      width: 40px !important;
+      height: 40px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      flex-shrink: 0 !important;
+
+      svg {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      img {
+        width: 100% !important;
+        height: 100% !important;
+      }
+    }
+
+    &__label {
+      margin: 0 !important;
+      font-size: 16px !important;
+      font-weight: 500 !important;
+      color: #333333 !important;
+      text-align: left !important;
+      width: auto !important;
+      flex: 1 !important;
+    }
+  }
 }
 
 @media (min-width: 780px) {

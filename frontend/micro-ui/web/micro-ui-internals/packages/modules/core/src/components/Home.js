@@ -17,6 +17,7 @@ import {
 import React from "react";
 import { useTranslation } from "react-i18next";
 import EmployeeDashboard from "./EmployeeDashboard";
+import RecentActivity from "./RecentActivity";
 
 /* 
 Feature :: Citizen All service screen cards
@@ -116,21 +117,24 @@ const CitizenHome = ({ modules, getCitizenMenu, fetchedCitizen, isLoading }) => 
                     Info={
                       code === "OBPS"
                         ? () => (
-                            <CitizenInfoLabel
-                              style={{ margin: "0px", padding: "10px" }}
-                              info={t("CS_FILE_APPLICATION_INFO_LABEL")}
-                              text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)}
-                            />
-                          )
+                          <CitizenInfoLabel
+                            style={{ margin: "0px", padding: "10px" }}
+                            info={t("CS_FILE_APPLICATION_INFO_LABEL")}
+                            text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)}
+                          />
+                        )
                         : null
                     }
                     isInfo={code === "OBPS" ? true : false}
                   />
+
                 );
               } else return <React.Fragment />;
             })}
         </div>
+
       </div>
+
     </React.Fragment>
   );
 };
@@ -150,20 +154,27 @@ const EmployeeHome = ({ modules }) => {
     },
   });
   return (
-    <div className="employee-app-container">
+    <div className="employee-app-homepage-container">
       {dashboardConfig && dashboardCemp ? <EmployeeDashboard modules={modules} /> : null}
       <div className="home-header">
         <div className="header-top-section">
-          <span className="title">{t("MY_WORKSPACE")}</span>
-          <span className="subtitle">{name}</span>
+          <span style={{ color: "white", fontSize: "20px", fontWeight: "800" }}>{t('Welcome!')}</span>
+
+          <span style={{ color: "white", fontSize: "20px", fontWeight: "800", marginLeft: "10px" }}>{name}</span>
+
         </div>
       </div>
-      <div className="ground-container moduleCardWrapper gridModuleWrapper">
-        {modules.map(({ code }, index) => {
-          const Card = Digit.ComponentRegistryService.getComponent(`${code}Card`) || (() => <React.Fragment />);
-          return <Card key={index} />;
-        })}
+      <div className="employee-home-main-content">
+        <div className="ground-container moduleCardWrapper gridModuleWrapper">
+          {modules.map(({ code }, index) => {
+            const Card = Digit.ComponentRegistryService.getComponent(`${code}Card`) || (() => <React.Fragment />);
+            return <Card key={index} />;
+          })}
+        </div>
+        <RecentActivity />
       </div>
+     
+    
     </div>
   );
 };

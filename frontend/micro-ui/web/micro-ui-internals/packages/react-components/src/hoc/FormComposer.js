@@ -28,13 +28,11 @@ export const FormComposer = (props) => {
     getValues,
     reset,
     watch,
-    trigger,
     control,
     formState,
     errors,
     setError,
     clearErrors,
-    unregister,
   } = useForm({
     defaultValues: props.defaultValues,
   });
@@ -229,7 +227,7 @@ export const FormComposer = (props) => {
         </>
       );
     } else {
-      return <div></div>;
+      return <React.Fragment></React.Fragment>;
     }
   };
 
@@ -277,7 +275,7 @@ export const FormComposer = (props) => {
                   </React.Fragment>
                 );
               return (
-                <Fragment>
+                <Fragment key={index}>
                   <LabelFieldPair key={index}>
                     {!field.withoutLabel && (
                       <CardLabel style={{ color: field.isSectionText ? "#505A5F" : "", marginBottom: props.inline ? "8px" : "revert" }}>

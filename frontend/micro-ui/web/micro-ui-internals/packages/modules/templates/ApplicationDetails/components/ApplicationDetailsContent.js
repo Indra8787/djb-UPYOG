@@ -12,10 +12,9 @@ import {
   PDFSvg,
   EditIcon,
   ViewsIcon,
-  DeleteIcon,
+  // DeleteIcon,
 } from "@djb25/digit-ui-react-components";
-import { values } from "lodash";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment,  useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import BPADocuments from "./BPADocuments";
@@ -64,7 +63,6 @@ function ApplicationDetailsContent({
   let { id: applicationNo } = useParams(); // Extracts PG-1013-2025-I-001019
   const ownersSequences = applicationDetails?.applicationData?.owners;
   console.log("ownersSequences:- ", ownersSequences);
-
   function OpenImage(imageSource, index, thumbnailsToShow) {
     window.open(thumbnailsToShow?.fullImage?.[0], "_blank");
   }
@@ -183,7 +181,7 @@ function ApplicationDetailsContent({
   };
 
   const checkLocation =
-  window.location.href.includes("employee/tl") || window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc");
+    window.location.href.includes("employee/tl") || window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc");
   const isNocLocation = window.location.href.includes("employee/noc");
   const isBPALocation = window.location.href.includes("employee/obps");
   const isWS = window.location.href.includes("employee/ws");
@@ -236,7 +234,6 @@ function ApplicationDetailsContent({
     }
   };
 
-
   const [showAllTimeline, setShowAllTimeline] = useState(false);
   const getClickInfoDetails1 = () => {
     if (window.location.href.includes("disconnection") || window.location.href.includes("application")) {
@@ -279,11 +276,9 @@ function ApplicationDetailsContent({
   };
 
   const handleViewClick = (data) => {
-    
     setSelectedData(data);
     setShowPopup(true);
-};
-
+  };
 
   return (
     <Card style={{ position: "relative" }} className={"employeeCard-override"}>
@@ -302,30 +297,33 @@ function ApplicationDetailsContent({
       {applicationDetails?.applicationDetails?.map((detail, index) => (
         <React.Fragment key={index}>
           <div style={getMainDivStyles()}>
-            {index === 0 && !detail.asSectionHeader ? (
-              <CardSubHeader style={{ marginBottom: "16px", fontSize: "24px" }}>{t(detail.title)}</CardSubHeader>
-            ) : (
-              <React.Fragment>
+            {detail?.title?.trim() &&
+              (index === 0 && !detail.asSectionHeader ? (
+                <CardSubHeader style={{ marginBottom: "16px", fontSize: "24px" }}>{t(detail.title)}</CardSubHeader>
+              ) : (
                 <CardSectionHeader
                   style={
-                    index == 0 && checkLocation
+                    index === 0 && checkLocation
                       ? { marginBottom: "16px", fontSize: "24px" }
                       : { marginBottom: "16px", marginTop: "32px", fontSize: "24px" }
                   }
                 >
-                  {isNocLocation ? `${t(detail.title)}` : t(detail.title)}
+                  {t(detail.title)}
                   {detail?.Component ? <detail.Component /> : null}
                 </CardSectionHeader>
-              </React.Fragment>
-            )}
+              ))}
             {/* TODO, Later will move to classes */}
             {/* Here Render the table for adjustment amount details detail.isTable is true for that table*/}
 
             {detail?.isTable && (
-              <table style={{ tableLayout: "fixed", width: "100%", borderCollapse: "collapse", borderCollapse: "collapse", border: "1px solid black"}}>
+              <table
+                style={{ tableLayout: "fixed", width: "100%", borderCollapse: "collapse", borderCollapse: "collapse", border: "1px solid black" }}
+              >
                 <tr style={{ textAlign: "left" }}>
-                  {detail?.headers.map((header) => (
-                    <th style={{ padding: "10px", paddingLeft: "5px", border: "1px solid black"}}>{t(header)}</th>
+                  {detail?.headers.map((header, index) => (
+                    <th style={{ padding: "10px", paddingLeft: "5px", border: "1px solid black" }} key={index}>
+                      {t(header)}
+                    </th>
                   ))}
                 </tr>
 
@@ -339,8 +337,7 @@ function ApplicationDetailsContent({
                   //   </>
                   // }
                   return (
-                    <tr>
-                      
+                    <tr key={index}>
                       {row.map((element, idx) =>
                         Array.isArray(element) && element.length > 1 && detail.isMaintenance === true ? (
                           <td style={{ paddingTop: "20px", textAlign: "left", border: "1px solid black", verticalAlign: "middle" }} key={idx}>
@@ -358,7 +355,7 @@ function ApplicationDetailsContent({
                             </div>
                           </td>
                         ) : (
-                          <td key={idx} style={{ paddingTop: "20px", textAlign: "left" , border: "1px solid black", verticalAlign: "middle"}}>
+                          <td key={idx} style={{ paddingTop: "20px", textAlign: "left", border: "1px solid black", verticalAlign: "middle" }}>
                             {console.log("Comming Maintainaince data row:- ", element.data)}
                             {element && element.editButton === true ? (
                               <span style={{ display: "inline-flex", gap: "10px", alignItems: "center" }}>
@@ -368,14 +365,17 @@ function ApplicationDetailsContent({
                                     state: { data: element.data },
                                   }}
                                 >
-                                  <button> <EditIcon /> </button>
+                                  <button>
+                                    {" "}
+                                    <EditIcon />{" "}
+                                  </button>
                                 </Link>
                                 {/* <div onClick={() => handleEdit("view", element.data)} style={{ cursor: "pointer" }}>
                                   <ViewsIcon />
                                 </div> */}
-                                
+
                                 <div key={index} onClick={() => handleViewClick(element.data)} style={{ cursor: "pointer" }}>
-                                   <ViewsIcon />
+                                  <ViewsIcon />
                                 </div>
 
                                 {/* <Link to={`/maintenance/view/${row.id}`} style={{ marginRight: "10px" }}>
@@ -446,7 +446,7 @@ function ApplicationDetailsContent({
                     );
                   }
                   return (
-                    <div>
+                    <div key={index}>
                       {window.location.href.includes("modify") ? (
                         <Row
                           className="border-none"
@@ -617,17 +617,15 @@ function ApplicationDetailsContent({
           )}
         </React.Fragment>
       )}
-       <div>
-      {
-        showPopup&&(
-          <RenewPopup 
-          t={t}
-          closeModal={() => setRnewButton(false)}  // Close modal when "BACK" is clicked
-          actionCancelOnSubmit={() => setRnewButton(false)}  // Close modal when "BACK" is clicked
-          application={application}
+      <div>
+        {showPopup && (
+          <RenewPopup
+            t={t}
+            closeModal={() => setRnewButton(false)} // Close modal when "BACK" is clicked
+            actionCancelOnSubmit={() => setRnewButton(false)} // Close modal when "BACK" is clicked
+            application={application}
           />
-        )
-      }
+        )}
       </div>
     </Card>
   );

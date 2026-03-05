@@ -22,11 +22,17 @@ import { FinanceModule } from "@djb25/digit-ui-module-finance";
 // import { initOBPSComponents } from "@djb25/digit-ui-module-obps";
 import { initEngagementComponents } from "@djb25/digit-ui-module-engagement";
 // import { initNOCComponents } from "@djb25/digit-ui-module-noc";
-import { initWSComponents } from "@djb25/digit-ui-module-ws";
 import { DigitUI } from "@djb25/digit-ui-module-core";
 import { initCommonPTComponents } from "@djb25/digit-ui-module-commonpt";
 import { initBillsComponents, BillsModule } from "@djb25/digit-ui-module-bills";
-
+// import { initFormioComponents } from "@djb25/digit-ui-module-formio";
+import { initEkycComponents } from "@djb25/digit-ui-module-ekyc";
+// import { initOBPSComponents } from "@upyog/digit-ui-module-obps";
+// import { FormioModule } from "@djb25/digit-ui-module-formio";
+import { EkycModule } from "@djb25/digit-ui-module-ekyc";
+// import { initEngagementComponents } from "@upyog/digit-ui-module-engagement";
+// import { initNOCComponents } from "@upyog/digit-ui-module-noc";
+// import { initWSComponents } from "@upyog/digit-ui-module-ws";@nudmcdgnpm/upyog-ui-module-ads
 // import {initCustomisationComponents} from "./customisations";
 
 // import { PGRModule, PGRLinks } from "@djb25/digit-ui-module-pgr";
@@ -46,6 +52,7 @@ import { ASSETComponents, ASSETLinks, ASSETModule, initAssetComponents } from "@
 // import {CHBModule,CHBLinks,CHBComponents} from "@djb25/djb25-ui-module-chb";
 // import {ADSModule,ADSLinks,ADSComponents} from "@djb25/djb25-ui-module-ads";
 import { WTModule, WTLinks, WTComponents, initWTComponents } from "@djb25/digit-ui-module-wt";
+import { WSModule, WSLinks, WSComponents, initWSComponents } from "@djb25/digit-ui-module-ws";
 import { VENDORComponents, VENDORLinks, VENDORModule } from "@djb25/digit-ui-module-vendor";
 
 // import * as comps from "@djb25/digit-ui-react-components";
@@ -53,6 +60,7 @@ import { VENDORComponents, VENDORLinks, VENDORModule } from "@djb25/digit-ui-mod
 // import { subFormRegistry } from "@djb25/digit-ui-libraries";
 
 import { pgrCustomizations, pgrComponents } from "./pgr";
+import { initKeycloak } from "@djb25/digit-ui-module-core/src/pages/employee/Login/keyCloak";
 
 var Digit = window.Digit || {};
 
@@ -66,6 +74,8 @@ const enabledModules = [
   "MCollect",
   "HRMS",
   // "TL",
+  // "FORMIO",
+  "EKYC",
   "Receipts",
   "Reports",
   // "OBPS",
@@ -95,16 +105,16 @@ const enabledModules = [
 const initTokens = (stateCode) => {
   const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
 
-  const token = window.localStorage.getItem("token") || process.env[`REACT_APP_${userType}_TOKEN`];
+  const token = window.keycloak?.token || null;
 
   const citizenInfo = window.localStorage.getItem("Citizen.user-info");
-
   const citizenTenantId = window.localStorage.getItem("Citizen.tenant-id") || stateCode;
 
   const employeeInfo = window.localStorage.getItem("Employee.user-info");
   const employeeTenantId = window.localStorage.getItem("Employee.tenant-id");
 
   const userTypeInfo = userType === "CITIZEN" || userType === "QACT" ? "citizen" : "employee";
+
   window.Digit.SessionStorage.set("user_type", userTypeInfo);
   window.Digit.SessionStorage.set("userType", userTypeInfo);
 
@@ -132,6 +142,8 @@ const initDigitUI = () => {
     MCollectModule,
     HRMSModule,
     FinanceModule,
+    // FormioModule,
+    EkycModule,
     ReceiptsModule,
     BillsModule,
     // PTRModule,
@@ -154,6 +166,9 @@ const initDigitUI = () => {
     // CHBModule,
     // CHBLinks,
     // ...CHBComponents,
+    WSModule,
+    WSLinks,
+    ...WSComponents,
     WTModule,
     WTLinks,
     ...WTComponents,
@@ -168,6 +183,8 @@ const initDigitUI = () => {
   initMCollectComponents();
   initHRMSComponents();
   // initTLComponents();
+  // initFormioComponents();
+  initEkycComponents();
   initReceiptsComponents();
   // initReportsComponents();
   // initOBPSComponents();
@@ -202,6 +219,27 @@ const initDigitUI = () => {
   ReactDOM.render(<DigitUI stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />, document.getElementById("root"));
 };
 
-initLibraries().then(() => {
+// initLibraries().then(() => {
+//   initDigitUI();
+// });
+
+initLibraries().then(async () => {
+  const kc = await initKeycloak();
+  window.keycloak = kc;
+
+  // 👇 Protect employee routes manually
+  const path = window.location.pathname;
+
+  const publicRoutes = ["/digit-ui/employee/user/language-selection", "/digit-ui/employee/user/login"];
+
+  if (path.startsWith("/digit-ui/employee") && !kc.authenticated) {
+    const isPublic = publicRoutes.some((route) => path.startsWith(route));
+
+    if (!isPublic) {
+      window.location.href = "/digit-ui/employee/user/language-selection";
+      return;
+    }
+  }
+
   initDigitUI();
 });

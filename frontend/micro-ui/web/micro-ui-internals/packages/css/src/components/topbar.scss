@@ -22,8 +22,15 @@
       height: 60px;
     }
 
+    &.spect-icon {
+      width: auto;
+      padding-right: 20px;
+      max-height: 50px;
+    }
+
     &.state {
       height: 50px;
+      max-height: 20px;
       width: auto;
     }
   }
@@ -44,11 +51,12 @@
     .user-img-txt {
       background: theme(colors.primary.main);
       padding: 10px 15px;
-      border-radius: 8px;
+      border-radius: 2px;
       color: white;
       height: 43px;
       width: 43px;
       font-weight: 700;
+      text-align: center;
     }
   }
 

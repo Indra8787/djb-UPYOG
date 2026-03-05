@@ -1,6 +1,7 @@
-import { StatusTable, Row, CardSubHeader } from "@djb25/digit-ui-react-components";
 import React, { Fragment } from "react";
+import { StatusTable, Row, CardSubHeader } from "@djb25/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
+import { getQueryStringParams } from "../../../ws/src/utils";
 
 const cardSubHeaderStyles = () => {
   return { fontSize: "24px", marginBottom: "16px", marginTop: "32px" };
@@ -8,7 +9,8 @@ const cardSubHeaderStyles = () => {
 
 const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
   const { t } = useTranslation();
-  let filters = window.Digit.Utils.getQueryStringParams(location.search);
+
+  let filters = getQueryStringParams(location.search);
   const isModify = filters?.mode;
 
   var { connectionDetails, plumberDetails, roadCuttingDetails, activationDetails } = wsAdditionalDetails?.additionalDetails || {
@@ -17,7 +19,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
   };
 
   return (
-    <Fragment>
+    <React.Fragment>
       <div style={{ lineHeight: "19px", maxWidth: "950px", minWidth: "280px" }}>
         {wsAdditionalDetails?.additionalDetails?.connectionDetails && (
           <StatusTable>
@@ -26,7 +28,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
               <div className="connection-details-new-value-wrapper">
                 {connectionDetails?.map((value, index) => {
                   return (
-                    <div>
+                    <div key={index}>
                       <Row
                         className="border-none"
                         key={`${value.title}`}
@@ -65,9 +67,10 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
             <CardSubHeader style={cardSubHeaderStyles()}>{t("WS_ROAD_CUTTING_DETAILS")}</CardSubHeader>
             <div>
               <div className="plumber-details-new-value-wrapper">
-                {roadCuttingDetails?.map((value) => {
+                {roadCuttingDetails?.map((value, index) => {
                   return (
                     <div
+                      key={index}
                       style={
                         roadCuttingDetails?.length > 1
                           ? {
@@ -115,7 +118,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
           </StatusTable>
         )}
       </div>
-    </Fragment>
+    </React.Fragment>
   );
 };
 

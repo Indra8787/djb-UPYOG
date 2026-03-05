@@ -29,7 +29,7 @@ const InfoPage = ({ t, onSelect, formData, config, userType }) => {
 
   return (
     <React.Fragment>
-      <Card>
+      <Card className="search-form-wrapper" style={{ flexDirection: "column", gap: "12px" }}>
         {moduleKey && <CardHeader>{t(moduleKey)}</CardHeader>}
         <div>
           <CardText className="primaryColor">{t("SV_DOC_REQ_SCREEN_SUB_HEADER")}</CardText>

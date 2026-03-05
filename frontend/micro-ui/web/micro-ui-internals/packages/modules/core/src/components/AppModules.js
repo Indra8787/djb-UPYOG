@@ -31,31 +31,38 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
       <Route key={index} path={`${path}/${code.toLowerCase()}`}>
         <Module stateCode={stateCode} moduleCode={code} userType={userType} tenants={getTenants(tenants, appTenants)} />
       </Route>
-    ) : <Route key={index} path={`${path}/${code.toLowerCase()}`}>
-      <Redirect to={{ pathname: "/digit-ui/employee/user/error?type=notfound", state: { from: location.pathname + location.search } }} />
-    </Route>;
+    ) : (
+      <Route key={index} path={`${path}/${code.toLowerCase()}`}>
+        <Redirect to={{ pathname: "/digit-ui/employee/user/error?type=notfound", state: { from: location.pathname + location.search } }} />
+      </Route>
+    );
   });
 
   const renderSidebar = () => {
     const pathname = location.pathname;
-    const isTopLevelPage = pathname.includes("/login") || pathname.includes("/forgot-password") || pathname.includes("/change-password") || pathname.endsWith("/employee") || pathname.includes("/module/details");
+    const isTopLevelPage =
+      pathname.includes("/login") ||
+      pathname.includes("/forgot-password") ||
+      pathname.includes("/change-password") ||
+      pathname.endsWith("/employee") ||
+      pathname.includes("/module/details");
 
     if (isTopLevelPage) return null;
 
     const modulePrefix = `/digit-ui/employee/`;
     const modulePathPart = pathname.replace(modulePrefix, "").split("/")[0];
-    const activeModule = modules.find(m => m.code.toLowerCase() === modulePathPart.toLowerCase());
+    const activeModule = modules.find((m) => m.code.toLowerCase() === modulePathPart.toLowerCase());
 
     if (!activeModule) return null;
 
     let CardComponent = Digit.ComponentRegistryService.getComponent(`${activeModule.code}Card`);
 
     if (CardComponent) {
-      if (window.Digit.Utils.browser.isMobile()) {
-        return null;
-      }
       return (
-        <div className=" collapsible-sidebar-container" style={{ lexShrink: 0, borderRight: "1px solid #e0e0e0", background: "#f8f9fa", transition: "width 0.3s ease" }}>
+        <div
+          className="collapsible-sidebar-container"
+          style={{ lexShrink: 0, borderRight: "1px solid #e0e0e0", background: "#f8f9fa", transition: "width 0.3s ease", marginRight: "10px" }}
+        >
           <ExpandedViewContext.Provider value={{ isModuleSidebar: true }}>
             <CardComponent />
           </ExpandedViewContext.Provider>
@@ -68,9 +75,9 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
   const sidebarContent = renderSidebar();
 
   return (
-    <div className="ground-container" style={{ display: "flex", width: "100%", minHeight: "calc(100vh - 90px)" }}>
+    <div style={{ display: "flex", width: "100%", height: "inherit" }}>
       {sidebarContent}
-      <div style={{ flex: 1, overflowX: "hidden" }}>
+      <div className="app-wrapper">
         <Switch>
           {appRoutes}
           <Route path={`${path}/login`}>

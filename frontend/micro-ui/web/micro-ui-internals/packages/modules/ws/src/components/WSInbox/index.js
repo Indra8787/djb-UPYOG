@@ -1,5 +1,5 @@
-import React, { Fragment, useCallback, useMemo, useReducer, useEffect } from "react";
-import { InboxComposer, ComplaintIcon, Header, DropIcon } from "@djb25/digit-ui-react-components";
+import React, { useCallback, useMemo, useReducer } from "react";
+import { InboxComposer, DropIcon } from "@djb25/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import SearchFormFieldsComponents from "./SearchFormFieldsComponent";
 import FilterFormFieldsComponent from "./FilterFormFieldsComponent";
@@ -20,7 +20,9 @@ const WSInbox = ({ parentRoute }) => {
     consumerNo: "",
   };
   const filterFormDefaultValues = {
-    businessService: checkPathName ? ["NewWS1", "ModifyWSConnection", "DisconnectWSConnection"] : ["NewSW1", "ModifySWConnection", "DisconnectSWConnection"],
+    businessService: checkPathName
+      ? ["NewWS1", "ModifyWSConnection", "DisconnectWSConnection"]
+      : ["NewSW1", "ModifySWConnection", "DisconnectSWConnection"],
     moduleName: checkPathName ? "ws-services" : "sw-services",
     locality: [],
     assignee: "ASSIGNED_TO_ALL",
@@ -205,7 +207,7 @@ const WSInbox = ({ parentRoute }) => {
   };
 
   const onFilterFormSubmit = (data) => {
-    data.hasOwnProperty("") && delete data?.[""] ;
+    data.hasOwnProperty("") && delete data?.[""];
     dispatch({ action: "mutateTableForm", data: { ...tableOrderFormDefaultValues } });
     dispatch({ action: "mutateFilterForm", data });
   };
@@ -227,19 +229,27 @@ const WSInbox = ({ parentRoute }) => {
     onFilterFormReset,
   };
 
-  const propsForInboxTable = useInboxTableConfig({ ...{ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch, onSortingByData,tenantId, inboxStyles:{overflowX:"scroll", overflowY:"hidden"}, tableStyle:{width:"70%"} } });
-
+  const propsForInboxTable = useInboxTableConfig({
+    ...{
+      parentRoute,
+      onPageSizeChange,
+      formState,
+      totalCount,
+      table,
+      dispatch,
+      onSortingByData,
+      tenantId,
+      inboxStyles: { overflowX: "scroll", overflowY: "hidden" },
+      tableStyle: { width: "70%" },
+    },
+  });
 
   const propsForInboxMobileCards = useInboxMobileCardsData({ parentRoute, table });
 
   const propsForMobileSortForm = { onMobileSortOrderData, sortFormDefaultValues: formState?.tableForm, onSortFormReset };
 
   return (
-    <>
-      <Header>
-        {t("ES_COMMON_INBOX")}
-        {totalCount ? <p className="inbox-count">{totalCount}</p> : null}
-      </Header>
+    <React.Fragment>
       <InboxComposer
         {...{
           isInboxLoading,
@@ -252,7 +262,7 @@ const WSInbox = ({ parentRoute }) => {
           formState,
         }}
       ></InboxComposer>
-    </>
+    </React.Fragment>
   );
 };
 

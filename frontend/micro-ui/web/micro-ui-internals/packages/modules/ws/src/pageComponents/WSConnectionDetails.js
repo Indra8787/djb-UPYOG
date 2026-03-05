@@ -89,7 +89,7 @@ const WSConnectionDetails = ({ config, onSelect, userType, formData, setError, f
   return (
     <React.Fragment>
       {connectionDetails.map((connectionDetail, index) => (
-        <ConnectionDetails key={connectionDetail.key} index={index} connectionDetail={connectionDetail} {...commonProps} />
+        <ConnectionDetails key={connectionDetail.key||index} index={index} connectionDetail={connectionDetail} {...commonProps} />
       ))}
     </React.Fragment>
   );

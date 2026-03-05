@@ -3,7 +3,7 @@ import { Header, MultiLink } from "@djb25/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
 import * as func from "../../utils";
-import getModifyPDFData from "../../utils/getWsAckDataForModifyPdfs"
+import getModifyPDFData from "../../utils/getWsAckDataForModifyPdfs";
 import { getBusinessService } from "../../utils";
 import _ from "lodash";
 import { ifUserRoleExists } from "../../utils";
@@ -20,20 +20,27 @@ const ModifyApplicationDetails = () => {
   const stateCode = Digit.ULBService.getStateId();
   const menuRef = useRef();
 
-  let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSModifyDetailsPage(t, tenantId, applicationNumber, serviceType, userInfo, { privacy: Digit.Utils.getPrivacyObject() });
-  const { isServicesMasterLoading, data: servicesMasterData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-masters", ["WSEditApplicationByConfigUser"]);
-
-  let workflowDetails = Digit.Hooks.useWorkflowDetails(
-    {
-      tenantId: tenantId,
-      id: applicationNumber,
-      moduleCode: applicationDetails?.processInstancesDetails?.[0]?.businessService,
-      config: {
-        enabled: applicationDetails?.processInstancesDetails?.[0]?.businessService ? true : false,
-        privacy: Digit.Utils.getPrivacyObject()
-      }
-    },
+  let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSModifyDetailsPage(
+    t,
+    tenantId,
+    applicationNumber,
+    serviceType,
+    userInfo,
+    { privacy: Digit.Utils.getPrivacyObject() }
   );
+  const { isServicesMasterLoading, data: servicesMasterData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-masters", [
+    "WSEditApplicationByConfigUser",
+  ]);
+
+  let workflowDetails = Digit.Hooks.useWorkflowDetails({
+    tenantId: tenantId,
+    id: applicationNumber,
+    moduleCode: applicationDetails?.processInstancesDetails?.[0]?.businessService,
+    config: {
+      enabled: applicationDetails?.processInstancesDetails?.[0]?.businessService ? true : false,
+      privacy: Digit.Utils.getPrivacyObject(),
+    },
+  });
 
   const {
     isLoading: updatingApplication,
@@ -52,16 +59,17 @@ const ModifyApplicationDetails = () => {
     const noOfTaps = applicationDetails?.applicationData?.noOfTaps === 0 ? null : applicationDetails?.applicationData?.noOfTaps;
     const pipeSize = applicationDetails?.applicationData?.pipeSize === 0 ? null : applicationDetails?.applicationData?.pipeSize;
     const waterSource = applicationDetails?.applicationData?.waterSource;
-    const noOfWaterClosets = applicationDetails?.applicationData?.noOfWaterClosets === 0 ? null : applicationDetails?.applicationData?.noOfWaterClosets;
+    const noOfWaterClosets =
+      applicationDetails?.applicationData?.noOfWaterClosets === 0 ? null : applicationDetails?.applicationData?.noOfWaterClosets;
     const noOfToilets = applicationDetails?.applicationData?.noOfToilets === 0 ? null : applicationDetails?.applicationData?.noOfToilets;
     const plumberDetails = applicationDetails?.applicationData?.additionalDetails?.detailsProvidedBy;
     const roadCuttingInfo = applicationDetails?.applicationData?.roadCuttingInfo;
 
     if (!connectionType || !((noOfTaps && pipeSize && waterSource) || (noOfWaterClosets && noOfToilets)) || !plumberDetails || !roadCuttingInfo) {
-      return false
+      return false;
     }
     return true;
-  }
+  };
   let dowloadOptions = [],
     appStatus = applicationDetails?.applicationData?.applicationStatus || "";
 
@@ -85,7 +93,7 @@ const ModifyApplicationDetails = () => {
         isFieldInspector = ifUserRoleExists(role);
         if (isFieldInspector) return false;
         else return true;
-      })
+      });
 
       if (isFieldInspector && appStatus === mdmsApplicationStatus) {
         pathName = `/digit-ui/employee/ws/edit-application-by-config?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
@@ -96,7 +104,7 @@ const ModifyApplicationDetails = () => {
         pathname: pathName,
         state: {
           applicationDetails: applicationDetails,
-          action: "RESUBMIT_APPLICATION"
+          action: "RESUBMIT_APPLICATION",
         },
       };
     }
@@ -135,7 +143,7 @@ const ModifyApplicationDetails = () => {
         isFieldInspector = ifUserRoleExists(role);
         if (isFieldInspector) return false;
         else return true;
-      })
+      });
 
       if (isFieldInspector && appStatus === mdmsApplicationStatus) {
         pathName = `/digit-ui/employee/ws/edit-application-by-config?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
@@ -146,7 +154,7 @@ const ModifyApplicationDetails = () => {
         pathname: pathName,
         state: {
           applicationDetails: applicationDetails,
-          action: "VERIFY_AND_FORWARD"
+          action: "VERIFY_AND_FORWARD",
         },
       };
     }
@@ -168,8 +176,9 @@ const ModifyApplicationDetails = () => {
   workflowDetails?.data?.nextActions?.forEach((action) => {
     if (action?.action === "PAY") {
       action.redirectionUrll = {
-        pathname: `${getBusinessService(filters)}/${applicationDetails?.applicationNo}/${applicationDetails?.tenantId}?tenantId=${applicationDetails?.tenantId
-          }&ISWSAPP&applicationNumber=${applicationDetails?.applicationNo}`,
+        pathname: `${getBusinessService(filters)}/${applicationDetails?.applicationNo}/${applicationDetails?.tenantId}?tenantId=${
+          applicationDetails?.tenantId
+        }&ISWSAPP&applicationNumber=${applicationDetails?.applicationNo}`,
         state: applicationDetails?.tenantId,
       };
     }
@@ -178,8 +187,9 @@ const ModifyApplicationDetails = () => {
   workflowDetails?.data?.actionState?.nextActions?.forEach((action) => {
     if (action?.action === "PAY") {
       action.redirectionUrll = {
-        pathname: `${getBusinessService(filters)}/${applicationDetails?.applicationNo}/${applicationDetails?.tenantId}?tenantId=${applicationDetails?.tenantId
-          }&ISWSAPP&applicationNumber=${applicationDetails?.applicationNo}`,
+        pathname: `${getBusinessService(filters)}/${applicationDetails?.applicationNo}/${applicationDetails?.tenantId}?tenantId=${
+          applicationDetails?.tenantId
+        }&ISWSAPP&applicationNumber=${applicationDetails?.applicationNo}`,
         state: applicationDetails?.tenantId,
       };
     }
@@ -189,8 +199,8 @@ const ModifyApplicationDetails = () => {
     const tenantInfo = applicationDetails?.applicationData?.tenantId;
     let result = applicationDetails?.applicationData;
     let oldApplication = applicationDetails?.oldApplication;
-    const PDFdata = getModifyPDFData({ ...result }, { ...applicationDetails?.propertyDetails }, tenantInfo, t, oldApplication)
-    PDFdata.then((ress) => Digit.Utils.pdf.generateModifyPdf(ress))
+    const PDFdata = getModifyPDFData({ ...result }, { ...applicationDetails?.propertyDetails }, tenantInfo, t, oldApplication);
+    PDFdata.then((ress) => Digit.Utils.pdf.generateModifyPdf(ress));
   };
 
   const applicationDownloadObject = {
@@ -211,7 +221,7 @@ const ModifyApplicationDetails = () => {
 
   const closeMenu = () => {
     setShowOptions(false);
-  }
+  };
   Digit.Hooks.useClickOutside(menuRef, closeMenu, showOptions);
 
   dowloadOptions.sort(function (a, b) {

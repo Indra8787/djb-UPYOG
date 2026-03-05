@@ -1,0 +1,33 @@
+{
+    "name": "@djb25/digit-ui-module-formio",
+    "version": "1.0.0",
+    "description": "Digit Formio Module",
+    "license": "MIT",
+    "author": "Shivam Nishad",
+    "main": "dist/index.js",
+    "module": "dist/index.modern.js",
+    "source": "src/Module.js",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "start": "microbundle-crl watch --no-compress --format modern,cjs",
+        "build": "microbundle-crl --compress --no-sourcemap --format cjs",
+        "prepublish": "yarn build"
+    },
+    "dependencies": {
+        "@formio/react": "^5.2.0",
+        "@djb25/digit-ui-react-components": "1.0.0",
+        "bootstrap": "^4.6.0",
+        "font-awesome": "^4.7.0",
+        "formiojs": "^4.14.0",
+        "microbundle-crl": "^0.13.11",
+        "react": "17.0.2",
+        "react-dom": "17.0.2",
+        "react-hook-form": "6.15.8",
+        "react-i18next": "11.16.2",
+        "react-query": "3.6.1",
+        "react-router-dom": "5.3.0",
+        "rooks": "^4.4.0"
+    }
+}

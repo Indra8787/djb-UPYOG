@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { EmployeeModuleCard } from "@djb25/digit-ui-react-components";
+import { EmployeeModuleCard, PropertyHouse } from "@djb25/digit-ui-react-components";
 
 const VENDORCard = () => {
   const { t } = useTranslation();
 
   const [total, setTotal] = useState("-");
-  
 
-  
+
+
 
   if (!Digit.Utils.vendorAccess()) {
     return null;
   }
-  const links=[
+  const links = [
     // {
     //   count: isLoading ? "0" : total?.totalCount,
     //   label: t("Inbox"),
@@ -39,14 +39,14 @@ const VENDORCard = () => {
     //   label: t("AST_REPORT"),
     //   link: `/digit-ui/employee/asset/assetservice/report`,
     // }
-   
+
   ]
-  
+
   const VENDORRole = Digit.UserService.hasAccess(["VENDOR"]) || false;
 
 
   const propsForModuleCard = {
-    // Icon: <PropertyHouse />,
+    Icon: <PropertyHouse />,
     moduleName: t("TITLE_VENDOR_MANAGEMENT"),
     kpis: [
       {
@@ -54,9 +54,9 @@ const VENDORCard = () => {
         label: t("Inbox"),
         link: `/digit-ui/employee/asset/assetservice/inbox`
       },
-      
+
     ],
-    links:links.filter(link=>!link?.role || VENDORRole ),
+    links: links.filter(link => !link?.role || VENDORRole),
   };
 
   return <EmployeeModuleCard {...propsForModuleCard} />;

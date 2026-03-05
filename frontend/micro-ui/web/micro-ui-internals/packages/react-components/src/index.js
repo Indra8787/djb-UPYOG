@@ -192,6 +192,7 @@ import EventCalendarView from "./atoms/EventCalendarView";
 import InboxLinks from "./atoms/InboxLinks";
 import PopupHeadingLabel from "./atoms/PopupHeadingLabel";
 import ModuleHeader from "./atoms/ModuleHeader";
+import BreadcrumbHeader from "./atoms/BreadcrumbHeader";
 
 import { FormComposer } from "./hoc/FormComposer";
 import Modal from "./hoc/Modal";
@@ -476,6 +477,7 @@ export {
   ApplicantDetails,
   Timeline,
   ModuleHeader,
+  BreadcrumbHeader,
   ExpandedViewContext,
   ExpandedViewPage,
   CollapsibleModuleSidebar,

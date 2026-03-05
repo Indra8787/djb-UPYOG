@@ -8,8 +8,6 @@ export const convertDotValues = (value = "") => {
   );
 };
 
-
-
 export const getFixedFilename = (filename = "", size = 5) => {
   if (filename.length <= size) {
     return filename;
@@ -21,34 +19,21 @@ export const shouldHideBackButton = (config = []) => {
   return config.filter((key) => window.location.href.includes(key.screenPath)).length > 0 ? true : false;
 };
 
-
 export const CompareTwoObjects = (ob1, ob2) => {
   let comp = 0;
-Object.keys(ob1).map((key) =>{
-  if(typeof ob1[key] == "object")
-  {
-    if(key == "institution")
-    {
-      if((ob1[key].name || ob2[key].name) && ob1[key]?.name !== ob2[key]?.name)
-      comp=1
-      else if(ob1[key]?.type?.code !== ob2[key]?.type?.code)
-      comp=1
-      
+  Object.keys(ob1).map((key) => {
+    if (typeof ob1[key] == "object") {
+      if (key == "institution") {
+        if ((ob1[key].name || ob2[key].name) && ob1[key]?.name !== ob2[key]?.name) comp = 1;
+        else if (ob1[key]?.type?.code !== ob2[key]?.type?.code) comp = 1;
+      } else if (ob1[key]?.code !== ob2[key]?.code) comp = 1;
+    } else {
+      if ((ob1[key] || ob2[key]) && ob1[key] !== ob2[key]) comp = 1;
     }
-    else if(ob1[key]?.code !== ob2[key]?.code)
-    comp=1
-  }
-  else
-  {
-    if((ob1[key] || ob2[key]) && ob1[key] !== ob2[key])
-    comp=1
-  }
-});
-if(comp==1)
-return false
-else
-return true;
-}
+  });
+  if (comp == 1) return false;
+  else return true;
+};
 
 /*   method to check value  if not returns NA*/
 export const checkForNA = (value = "") => {
@@ -78,40 +63,27 @@ export const pdfDocumentName = (documentLink = "", index = 0) => {
 };
 
 /* methid to get date from epoch */
-export const convertEpochToDate = (dateEpoch,businessService) => {
+export const convertEpochToDate = (dateEpoch, businessService) => {
   // Returning null in else case because new Date(null) returns initial date from calender
   const dateFromApi = new Date(dateEpoch);
   if (dateEpoch) {
-    
     let month = dateFromApi.getMonth() + 1;
     let day = dateFromApi.getDate();
     let year = dateFromApi.getFullYear();
     month = (month > 9 ? "" : "0") + month;
     day = (day > 9 ? "" : "0") + day;
-    if(businessService == "asset-create")
-    return `${day}-${month}-${year}`;
-    else
-    return `${day}/${month}/${year}`;
+    if (businessService == "asset-create") return `${day}-${month}-${year}`;
+    else return `${day}/${month}/${year}`;
   } else {
     return null;
   }
 };
 
-
-
-
-
-
-
-
-
-
 export const VendorData = (data) => {
   const formdata = {
-  
     VendorAdditionalDetails: {
       //vendorAdditionalDetailsId: crypto.randomUUID(), // Generate unique ID
-      tenantId: "pg.citya",
+      tenantId: Digit.ULBService.getCurrentTenantId(),
       code: "VENDOR12345454",
       name: "kunal",
       vendorCompany: data?.vendordet?.Company,
@@ -120,35 +92,29 @@ export const VendorData = (data) => {
       vendorEmail: "vendor@example.com",
       contactPerson: data?.vendordet?.ContactPerson,
       vendorMobileNumber: "9876543210",
-      bankAccountNumber:data?.vendordet?.AccountNo,
-      bank:data?.vendordet?.Bank,
-      bankBranchName:data?.vendordet?.BankbranchName,
-      micrNo:data?.vendordet?.micrNo,
-      epfNo:data?.vendordet?.EpfNo,
-      esiNo:data?.vendordet?.EsiNo,
-      gstRegisteredState:data?.vendordet?.GstState,
-      ifscCode:data?.vendordet?.IFSC,
-      panNo:data?.vendordet?.PanNo,
-      registrationNo:data?.vendordet?.RegistrationNo,
-      status:data?.vendordet?.Status?.code,
-      vendorCategory:data?.vendordet?.VendorCategory?.code,
-      vendorId: data?.vendordet?.VendorId, 
-      gstTinNo:data?.vendordet?.GstNo, 
+      bankAccountNumber: data?.vendordet?.AccountNo,
+      bank: data?.vendordet?.Bank,
+      bankBranchName: data?.vendordet?.BankbranchName,
+      micrNo: data?.vendordet?.micrNo,
+      epfNo: data?.vendordet?.EpfNo,
+      esiNo: data?.vendordet?.EsiNo,
+      gstRegisteredState: data?.vendordet?.GstState,
+      ifscCode: data?.vendordet?.IFSC,
+      panNo: data?.vendordet?.PanNo,
+      registrationNo: data?.vendordet?.RegistrationNo,
+      status: data?.vendordet?.Status?.code,
+      vendorCategory: data?.vendordet?.VendorCategory?.code,
+      vendorId: data?.vendordet?.VendorId,
+      gstTinNo: data?.vendordet?.GstNo,
       serviceType: data?.vendordet?.VendorType?.code,
       documents: data?.documents?.documents,
       active: null,
       vendorAdditionalDetailsId: null,
-
-
-    }
+    },
   };
 
   return formdata;
 };
-
-
-
-
 
 export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
   if (searcher == "") return str;
@@ -172,9 +138,7 @@ export const checkArrayLength = (obj = [], length = 0) => {
 
 export const getWorkflow = (data = {}) => {
   // return {
-
   //   businessService: `asset-create`,
   //   moduleName: "asset-services",
   // };
 };
-

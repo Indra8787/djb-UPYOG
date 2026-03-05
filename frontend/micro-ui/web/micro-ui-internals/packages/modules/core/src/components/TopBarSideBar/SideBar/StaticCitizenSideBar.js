@@ -71,9 +71,6 @@ const Profile = ({ info, stateName, t }) => {
       >
         <img className="img-responsive img-circle img-Profile" src={info?.photo ? info?.photo : defaultImage} />
       </div>
-      <div id="profile-name" className="label-container name-Profile" onClick={redirectToProfile} style={{ cursor: "pointer" }}>
-        <div className="label-text"> {info?.name} </div>
-      </div>
       <div id="profile-location" className="label-container loc-Profile" onClick={redirectToProfile} style={{ cursor: "pointer" }}>
         <div className="label-text"> {info?.mobileNumber} </div>
       </div>
@@ -98,7 +95,7 @@ const IconsObject = {
   FSMIcon: <FSMIcon className="icon" />,
   WSIcon: <WSICon className="icon" />,
   MCollectIcon: <MCollectIcon className="icon" />,
-  CHBIcon:<CHBIcon className="icon" />,
+  CHBIcon: <CHBIcon className="icon" />,
   BillsIcon: <CollectionIcon className="icon" />,
   BirthIcon: <BirthIcon className="icon" />,
   DeathIcon: <DeathIcon className="icon" />,
@@ -264,7 +261,7 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
           }}
         >
           {profileItem}
-          <div className="drawer-desktop" style={{"backgroundColor":"white"}}>
+          <div className="drawer-desktop" style={{ "backgroundColor": "white" }}>
             {menuItems?.map((item, index) => (
               <div className={`sidebar-list ${pathname === item?.link || pathname === item?.sidebarURL ? "active" : ""}`} key={index}>
                 <MenuItem item={item} />

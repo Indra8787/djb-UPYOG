@@ -1,21 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import {
-  TextInput,
-  Label,
-  SubmitBar,
-  LinkLabel,
-  ActionBar,
-  CloseSvg,
-  DatePicker,
-  MobileNumber,
-  Dropdown,
-} from "@djb25/digit-ui-react-components";
+import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, MobileNumber, Dropdown } from "@djb25/digit-ui-react-components";
 
 import { useTranslation } from "react-i18next";
 
 const fieldComponents = {
-  mobileNumber: MobileNumber
+  mobileNumber: MobileNumber,
 };
 
 /*
@@ -43,7 +33,6 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
   };
 
   const mobileView = innerWidth <= 640;
-
 
   const onSubmitInput = (data) => {
     if (!data.mobileNumber) {
@@ -89,8 +78,8 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
   return (
     <form onSubmit={handleSubmit(onSubmitInput)}>
       <React.Fragment>
-        <div className="search-container" style={{ width: "auto", marginLeft: isInboxPage ? "24px" : "revert" }}>
-          <div className="search-complaint-container" style={{width: "100%"}}>
+        <div className="search-container" style={{ width: "auto", marginBottom: "16px", marginLeft: isInboxPage ? "16px" : "revert" }}>
+          <div className="search-complaint-container" style={{ width: "100%" }}>
             {(type === "mobile" || mobileView) && (
               <div className="complaint-header">
                 <h2>{t("ES_COMMON_SEARCH_BY")}</h2>

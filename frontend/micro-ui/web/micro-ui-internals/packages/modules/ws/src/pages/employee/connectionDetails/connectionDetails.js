@@ -2,9 +2,9 @@ import React, { useEffect, useState, Fragment, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import ApplicationDetailsTemplate from "../../../../../templates/ApplicationDetails";
 import { useHistory } from "react-router-dom";
-import { Header, ActionBar, MultiLink, SubmitBar, Menu, Modal, ButtonSelector, Toast } from "@djb25/digit-ui-react-components";
+import { Header, ActionBar, MultiLink, SubmitBar, Menu, Modal,  Toast } from "@djb25/digit-ui-react-components";
 import * as func from "../../../utils";
-import { ifUserRoleExists, downloadPdf, downloadAndOpenPdf } from "../../../utils";
+import { ifUserRoleExists,  downloadAndOpenPdf } from "../../../utils";
 import WSInfoLabel from "../../../pageComponents/WSInfoLabel";
 import getConnectionDetailsPDF from "../../../utils/getConnectionDetails";
 
@@ -39,13 +39,22 @@ const GetConnectionDetails = () => {
   const [showModal, setshowModal] = useState(false);
   const [billData, setBilldata] = useState([]);
   const [showActionToast, setshowActionToast] = useState(null);
-  const checkifPrivacyenabled = Digit.Hooks.ws.useToCheckPrivacyEnablement({privacy : { uuid:(applicationDetails?.applicationData?.applicationNo?.includes("WS") ? applicationDetails?.applicationData?.WaterConnection?.[0]?.connectionHolders?.[0]?.uuid : applicationDetails?.applicationData?.SewerageConnections?.[0]?.connectionHolders?.[0]?.uuid), fieldName: ["connectionHoldersMobileNumber"], model: "WnSConnectionOwner" }}) || false;
+  const checkifPrivacyenabled =
+    Digit.Hooks.ws.useToCheckPrivacyEnablement({
+      privacy: {
+        uuid: applicationDetails?.applicationData?.applicationNo?.includes("WS")
+          ? applicationDetails?.applicationData?.WaterConnection?.[0]?.connectionHolders?.[0]?.uuid
+          : applicationDetails?.applicationData?.SewerageConnections?.[0]?.connectionHolders?.[0]?.uuid,
+        fieldName: ["connectionHoldersMobileNumber"],
+        model: "WnSConnectionOwner",
+      },
+    }) || false;
 
   const {
-    isLoading: updatingApplication,
-    isError: updateApplicationError,
-    data: updateResponse,
-    error: updateError,
+    // isLoading: updatingApplication,
+    // isError: updateApplicationError,
+    // data: updateResponse,
+    // error: updateError,
     mutate,
   } = Digit.Hooks.ws.useWSApplicationActions(serviceType);
   const mobileView = Digit.Utils.browser.isMobile();
@@ -60,7 +69,7 @@ const GetConnectionDetails = () => {
   let commonPayInfo = "";
   if (index > -1) commonPayInfo = commonPayDetails[index];
   else commonPayInfo = commonPayDetails && commonPayDetails.filter((item) => item.code === "DEFAULT");
-  const receiptKey = commonPayInfo?.receiptKey || "consolidatedreceipt";
+  // const receiptKey = commonPayInfo?.receiptKey || "consolidatedreceipt";
 
   useEffect(async () => {
     let businessService = serviceType === "WATER" ? "WS" : "SW";
@@ -163,42 +172,38 @@ const GetConnectionDetails = () => {
   const getDisconnectionButton = () => {
     let pathname = `/digit-ui/employee/ws/new-disconnection`;
 
-    if(!checkWorkflow){
+    if (!checkWorkflow) {
       setshowActionToast({
         key: "error",
         label: "WORKFLOW_IN_PROGRESS",
       });
-    }
-    else{
-      console.log("due",due,applicationDetails)
-        if (billData[0]?.status === "ACTIVE" || applicationDetails?.fetchBillsData?.length <=0 || due == "0" || due < 0) {
-          Digit.SessionStorage.set("WS_DISCONNECTION", applicationDetails);
-          history.push(`${pathname}`);
-        } 
-       
-        else {
-          setshowModal(true);
-        }
+    } else {
+      console.log("due", due, applicationDetails);
+      if (billData[0]?.status === "ACTIVE" || applicationDetails?.fetchBillsData?.length <= 0 || due == "0" || due < 0) {
+        Digit.SessionStorage.set("WS_DISCONNECTION", applicationDetails);
+        history.push(`${pathname}`);
+      } else {
+        setshowModal(true);
+      }
     }
   };
   const getRestorationButton = () => {
     let pathname = `/digit-ui/employee/ws/new-restoration`;
 
-    if(!checkWorkflow){
+    if (!checkWorkflow) {
       setshowActionToast({
         key: "error",
         label: "WORKFLOW_IN_PROGRESS",
       });
+    } else {
+      if (billData[0]?.status === "ACTIVE" || applicationDetails?.fetchBillsData?.length <= 0 || due === "0") {
+        Digit.SessionStorage.set("WS_DISCONNECTION", applicationDetails);
+        history.push(`${pathname}`);
+      } else {
+        setshowModal(true);
+      }
     }
-    else{
-        if (billData[0]?.status === "ACTIVE" || applicationDetails?.fetchBillsData?.length <=0 || due === "0") {
-          Digit.SessionStorage.set("WS_DISCONNECTION", applicationDetails);
-          history.push(`${pathname}`);
-        } else {
-          setshowModal(true);
-        }
-    }
-  }; 
+  };
   function onActionSelect(action) {
     if (action === "MODIFY_CONNECTION_BUTTON") {
       getModifyConnectionButton();
@@ -206,18 +211,16 @@ const GetConnectionDetails = () => {
       getBillAmendmentButton();
     } else if (action === "DISCONNECTION_BUTTON") {
       getDisconnectionButton();
-    }
-    else if(action === "RESTORATION_BUTTON")
-    {
+    } else if (action === "RESTORATION_BUTTON") {
       getRestorationButton();
     }
   }
 
   //all options needs to be shown
   //const showAction = due !== "0" ? actionConfig : actionConfig.filter((item) => item !== "BILL_AMENDMENT_BUTTON");
-  const checkApplicationStatusForDisconnection =  applicationDetails?.applicationData?.status === "Active" ? true : false
-  const showAction= checkApplicationStatusForDisconnection ? actionConfig : actionConfig.filter((item) => item !== "DISCONNECTION_BUTTON");
-const showActionRestoration = ["RESTORATION_BUTTON"]
+  const checkApplicationStatusForDisconnection = applicationDetails?.applicationData?.status === "Active" ? true : false;
+  const showAction = checkApplicationStatusForDisconnection ? actionConfig : actionConfig.filter((item) => item !== "DISCONNECTION_BUTTON");
+  const showActionRestoration = ["RESTORATION_BUTTON"];
 
   async function getBillSearch() {
     if (applicationDetails?.fetchBillsData?.length > 0) {
@@ -281,31 +284,25 @@ const showActionRestoration = ["RESTORATION_BUTTON"]
     <Fragment>
       <div>
         <div className={"employee-application-details"} style={{ marginBottom: "15px" }}>
-        <style>{`
-  .multilinkWrapper employee-mulitlink-main-divNew {
-   max-width:100%;
-   maegin-top:-20px
-  }`
-}
-</style>
-<div style={{display:"flex"}}>
-  <div style={{width:"80%"}}>
-          <Header styles={{ marginLeft: "0px", paddingTop: "10px", fontSize: "32px" }}>{t("WS_CONNECTION_DETAILS")}</Header>
-          </div>
-          {dowloadOptions && dowloadOptions.length > 0 && (
-            <div style={{maxWidth:"100% !imnportant", zIndex:"10"}}>
-            <MultiLink
-              className="multilinkWrapper employee-mulitlink-main-divNew"
-              onHeadClick={() => setShowOptions(!showOptions)}
-              displayOptions={showOptions}
-              options={dowloadOptions}
-              downloadBtnClassName={"employee-download-btn-className"}
-              optionsClassName={"employee-options-btn-className"}
-              ref={menuRef}
-              style={{maxWidth:"100%"}}
-            />
+          <style>{`.multilinkWrapper employee-mulitlink-main-divNew { max-width:100%; maegin-top:-20px}`}</style>
+          <div style={{ display: "flex" }}>
+            <div style={{ width: "80%" }}>
+              <Header styles={{ marginLeft: "0px", paddingTop: "10px", fontSize: "32px" }}>{t("WS_CONNECTION_DETAILS")}</Header>
             </div>
-          )}
+            {dowloadOptions && dowloadOptions.length > 0 && (
+              <div style={{ maxWidth: "100% !imnportant", zIndex: "10" }}>
+                <MultiLink
+                  className="multilinkWrapper employee-mulitlink-main-divNew"
+                  onHeadClick={() => setShowOptions(!showOptions)}
+                  displayOptions={showOptions}
+                  options={dowloadOptions}
+                  downloadBtnClassName={"employee-download-btn-className"}
+                  optionsClassName={"employee-options-btn-className"}
+                  ref={menuRef}
+                  style={{ maxWidth: "100%" }}
+                />
+              </div>
+            )}
           </div>
         </div>
         <ApplicationDetailsTemplate
@@ -328,17 +325,22 @@ const showActionRestoration = ["RESTORATION_BUTTON"]
 
             <SubmitBar ref={actionMenuRef} label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
           </ActionBar>
-        ) : applicationDetails?.applicationData?.isDisconnectionTemporary && applicationDetails?.applicationData?.status !== "Active"  && applicationDetails?.applicationData?.applicationStatus == "DISCONNECTION_EXECUTED"?
-        <ActionBar>
+        ) : applicationDetails?.applicationData?.isDisconnectionTemporary &&
+          applicationDetails?.applicationData?.status !== "Active" &&
+          applicationDetails?.applicationData?.applicationStatus == "DISCONNECTION_EXECUTED" ? (
+          <ActionBar>
             {displayMenu ? <Menu options={showActionRestoration} localeKeyPrefix={"WS"} t={t} onSelect={onActionSelect} /> : null}
 
             <SubmitBar ref={actionMenuRef} label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
-          </ActionBar>:  <ActionBar>
+          </ActionBar>
+        ) : (
+          <ActionBar>
             {displayMenu ? <Menu options={showAction} localeKeyPrefix={"WS"} t={t} onSelect={onActionSelect} /> : null}
 
             <SubmitBar ref={actionMenuRef} label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
-          </ActionBar>}
-       
+          </ActionBar>
+        )}
+
         {showModal ? (
           <Modal
             open={showModal}
@@ -368,7 +370,7 @@ const showActionRestoration = ["RESTORATION_BUTTON"]
             <div className="modal-header-ws">{t("WS_CLEAR_DUES_DISCONNECTION_SUB_HEADER_LABEL")} </div>
             <div className="modal-body-ws">
               <span>
-                {t("WS_COMMON_TABLE_COL_AMT_DUE_LABEL")}: ₹{due?due:applicationDetails?.fetchBillsData?.[0]?.totalAmount}
+                {t("WS_COMMON_TABLE_COL_AMT_DUE_LABEL")}: ₹{due ? due : applicationDetails?.fetchBillsData?.[0]?.totalAmount}
               </span>
             </div>
           </Modal>

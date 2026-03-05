@@ -95,8 +95,6 @@ export const filterFunctions = {
     return { searchFilters, workflowFilters, limit, offset, sortBy, sortOrder };
   },
   ASSET: (filtersArg) => {
-    
-    console.log("filtersArgss",filtersArg);
         let { uuid } = Digit.UserService.getUser()?.info || {};
     
         const searchFilters = {};
@@ -331,8 +329,6 @@ export const filterFunctions = {
   },
 
   SV: (filtersArg) => {
-    
-    console.log("filtersArgssIN NEWFILTERFN",filtersArg);
         let { uuid } = Digit.UserService.getUser()?.info || {};
     
         const searchFilters = {};

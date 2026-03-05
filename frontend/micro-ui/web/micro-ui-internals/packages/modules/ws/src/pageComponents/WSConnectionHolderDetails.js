@@ -176,7 +176,7 @@ const WSConnectionHolderDetails = ({ config, onSelect, userType, formData, setEr
   return (
     <React.Fragment>
       {connectionHolderDetails.map((connectionHolderDetail, index) => (
-        <ConnectionDetails key={connectionHolderDetail.key} index={index} connectionHolderDetail={connectionHolderDetail} {...commonProps} />
+        <ConnectionDetails key={connectionHolderDetail.key||index} index={index} connectionHolderDetail={connectionHolderDetail} {...commonProps} />
       ))}
     </React.Fragment>
   );
