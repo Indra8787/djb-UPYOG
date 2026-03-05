@@ -16,8 +16,8 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"org.egov.wscalculation"})
-@EnableAutoConfiguration
+//@ComponentScan(basePackages = {"org.egov.wscalculation"})
+//@EnableAutoConfiguration
 @Import({ TracerConfiguration.class })
 public class WsCalculationApplication {
 	@Value("${app.timezone}")
