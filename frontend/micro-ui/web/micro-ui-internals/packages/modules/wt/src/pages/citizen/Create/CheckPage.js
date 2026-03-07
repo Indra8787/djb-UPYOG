@@ -170,7 +170,7 @@ const WTCheckPage = ({ onSubmit, value = {} }) => {
           <CheckBox
             label={t("FINAL_DECLARATION_MESSAGE")}
             onChange={setdeclarationhandler}
-            styles={{ height: "auto", marginBottom: "30px", marginTop: "10px" }}
+            checked={agree}
           />
         </div>
         <SubmitBar label={t("COMMON_BUTTON_SUBMIT")} onSubmit={onSubmit} disabled={!agree} />
