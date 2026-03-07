@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 const ErrorConfig = {
@@ -21,10 +21,23 @@ const ErrorConfig = {
 
 const ErrorComponent = (props) => {
   const { type = "error" } = Digit.Hooks.useQueryParams();
-  const config = ErrorConfig[type];
+  const config = ErrorConfig[type] || ErrorConfig.error;
   const { t } = useTranslation();
 
-  const stateInfo = props.stateInfo;
+  const kc = window.keycloak;
+
+  useEffect(() => {
+    const isEmployee = window.location.pathname.split("/").includes("employee");
+    if (!kc)
+      window.location.href =
+        (isEmployee ? "/digit-ui/employee/user/login" : "/digit-ui/citizen/select-language") +
+        `?from=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+    if (kc && !kc.authenticated) {
+      kc.login();
+    }
+    kc.logout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="error-boundary">

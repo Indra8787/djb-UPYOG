@@ -180,7 +180,6 @@
 }
 
 @screen dt {
-
   .submit-bar,
   .submit-bar-disabled {
     width: 240px;
@@ -298,7 +297,6 @@
       flex-direction: column;
       gap: 8px;
       /* Adjust spacing between label and field */
-      margin-bottom: 16px;
       /* Space between form groups */
     }
 
@@ -308,6 +306,7 @@
       color: #333;
       font-size: 14px;
       line-height: 1.4;
+      width: 100%;
     }
 
     .label-field-pair .field {
@@ -343,8 +342,9 @@
     }
 
     /* Remove any default margins that might interfere */
-    .label-field-pair>* {
+    .label-field-pair > * {
       margin: 0;
+      width: 100%;
     }
 
     /* Ensure proper spacing for the mandatory asterisk */
@@ -374,7 +374,8 @@
       margin-right: auto;
     }
 
-    .header-content {}
+    .header-content {
+    }
 
     .header-end {
       margin-left: auto;
@@ -414,8 +415,6 @@
     margin-right: 24px;
     margin-bottom: 24px;
   }
-
-  .info-banner-wrap-citizen-override {}
 
   .oc-aknowledgement-screen {
     width: auto;
@@ -497,7 +496,7 @@
   z-index: 0;
 }
 
-.new-employee-card>* {
+.new-employee-card > * {
   position: relative;
   z-index: 1;
 }
@@ -685,8 +684,6 @@
   background-color: #0f172a;
 }
 
-
-
 /* --- NEW: EXPANDED VIEW OVERLAY --- */
 .expanded-overlay {
   position: fixed;
@@ -815,13 +812,6 @@
   gap: 12px;
 }
 
-.content-section-title {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #1a365d;
-  margin-bottom: 16px;
-}
-
 .content-links-list {
   display: flex;
   flex-direction: column;
@@ -863,7 +853,7 @@
 .expanded-page-container {
   display: flex;
   width: 100%;
-  
+
   min-height: calc(100vh - 100px);
   overflow: hidden;
   gap: 20px;
@@ -902,13 +892,6 @@
   flex-direction: column;
   padding: 20px;
   flex-shrink: 0;
-}
-
-.sidebar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
 }
 
 .sidebar-title {
@@ -991,19 +974,6 @@
   overflow-y: auto;
   border-radius: 8px;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.02);
-}
-
-.content-header {
-  border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 16px;
-  margin-bottom: 24px;
-}
-
-.content-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #1a365d;
-  margin: 0;
 }
 
 .content-section-title {
@@ -1236,7 +1206,7 @@
   display: flex;
   align-items: center;
   padding: 12px;
-          }
+}
 
 .nav-icon-wrapper {
   width: 24px;

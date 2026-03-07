@@ -78,8 +78,6 @@
 //   );
 // };
 
-
-
 import React, { useEffect } from "react";
 import { Redirect, Route, Switch, useHistory, useLocation } from "react-router-dom";
 import EmployeeApp from "./pages/employee";

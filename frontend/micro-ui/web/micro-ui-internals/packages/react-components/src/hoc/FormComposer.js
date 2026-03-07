@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, Fragment } from "react";
+import React, { useEffect, useMemo, Fragment } from "react";
 import { useForm, Controller } from "react-hook-form";
 import BreakLine from "../atoms/BreakLine";
 import Card from "../atoms/Card";
@@ -21,19 +21,7 @@ import MobileNumber from "../atoms/MobileNumber";
 import _ from "lodash";
 
 export const FormComposer = (props) => {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    getValues,
-    reset,
-    watch,
-    control,
-    formState,
-    errors,
-    setError,
-    clearErrors,
-  } = useForm({
+  const { register, handleSubmit, setValue, getValues, reset, watch, control, formState, errors, setError, clearErrors } = useForm({
     defaultValues: props.defaultValues,
   });
   const { t } = useTranslation();
@@ -41,7 +29,13 @@ export const FormComposer = (props) => {
 
   useEffect(() => {
     const iseyeIconClicked = sessionStorage.getItem("eyeIconClicked");
-    if (props?.appData && !(props?.appData?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails) && iseyeIconClicked && Object.keys(props?.appData)?.length > 0 && (!(_.isEqual(props?.appData?.ConnectionHolderDetails?.[0],formData?.ConnectionHolderDetails?.[0] ))) ) {
+    if (
+      props?.appData &&
+      !props?.appData?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails &&
+      iseyeIconClicked &&
+      Object.keys(props?.appData)?.length > 0 &&
+      !_.isEqual(props?.appData?.ConnectionHolderDetails?.[0], formData?.ConnectionHolderDetails?.[0])
+    ) {
       reset({ ...props?.appData });
     }
   }, [props?.appData, formData, props?.appData?.ConnectionHolderDetails]);
@@ -96,9 +90,9 @@ export const FormComposer = (props) => {
       case "mobileNumber":
         return (
           <Controller
-          render={(props) => (
-            <MobileNumber className={populators?.className || "field"} onChange={props.onChange} value={props.value} disable={disable} />
-          )}
+            render={(props) => (
+              <MobileNumber className={populators?.className || "field"} onChange={props.onChange} value={props.value} disable={disable} />
+            )}
             defaultValue={populators.defaultValue}
             name={populators?.name}
             control={control}
@@ -141,7 +135,7 @@ export const FormComposer = (props) => {
 
       case "form":
         return (
-          <form>
+          <form className="">
             <Component
               userType={"employee"}
               t={t}
@@ -238,7 +232,7 @@ export const FormComposer = (props) => {
           <React.Fragment key={index}>
             {section && getCombinedComponent(section)}
             {section.body.map((field, index) => {
-              if (props.inline)
+              if (props.inline) {
                 return (
                   <React.Fragment key={index}>
                     <div style={field.isInsideBox ? getCombinedStyle(field?.placementinbox) : {}}>
@@ -274,11 +268,17 @@ export const FormComposer = (props) => {
                     </div>
                   </React.Fragment>
                 );
+              }
               return (
                 <Fragment key={index}>
-                  <LabelFieldPair key={index}>
+                  <LabelFieldPair key={index} style={{ gridColumn: field?.colSpan ? field.colSpan : "span 1" }}>
                     {!field.withoutLabel && (
-                      <CardLabel style={{ color: field.isSectionText ? "#505A5F" : "", marginBottom: props.inline ? "8px" : "revert" }}>
+                      <CardLabel
+                        style={{
+                          color: field.isSectionText ? "#505A5F" : "",
+                          marginBottom: props.inline ? "8px" : "revert",
+                        }}
+                      >
                         {t(field.label)}
                         {field.isMandatory ? " * " : null}
                         {field.labelChildren && field.labelChildren}
@@ -317,6 +317,7 @@ export const FormComposer = (props) => {
       e.preventDefault();
     }
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} onKeyDown={(e) => checkKeyDown(e)} id={props.formId} className={props.className}>
       <Card style={getCardStyles()} className={props?.cardClassName ? props.cardClassName : ""}>

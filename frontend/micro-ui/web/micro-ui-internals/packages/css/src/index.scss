@@ -114,6 +114,7 @@
 @import "./components//sidebar.scss";
 @import "./components/moduleHeader.scss";
 @import "./components/VerticalTimeline.scss";
+@import "./components/juridictions.scss";
 
 .display-none {
   display: none;
@@ -540,6 +541,17 @@ input[type="number"] {
   @apply flex;
 }
 
+.form-search-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  overflow-x: scroll;
+  border-radius: 6px;
+}
 .inbox-search-container {
   .result {
     @apply mt-lg;
@@ -698,6 +710,7 @@ input[type="number"] {
 .app-wrapper {
   width: 100%;
   flex: 1;
+  min-width: 0;
   overflow-y: scroll;
 }
 

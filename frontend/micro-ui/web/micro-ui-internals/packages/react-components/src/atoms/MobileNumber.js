@@ -20,12 +20,14 @@ const MobileNumber = (props) => {
             +91
           </span>
         ) : null}
-        <div className={`text-input ${user_type === "employee"? "" : "text-mobile-input-width"} ${props.className}`}>
+        <div className={`text-input ${user_type === "employee" ? "" : "text-mobile-input-width"} ${props.className}`}>
           <input
             type={"text"}
             name={props.name}
             id={props.id}
-            className={`${user_type ? "employee-card-input" : "citizen-card-input"} ${props.disable && "disabled"} focus-visible ${props.errorStyle && "employee-card-input-error"}`}
+            className={`${user_type ? "employee-card-input" : "citizen-card-input"} ${props.disable && "disabled"} focus-visible ${
+              props.errorStyle && "employee-card-input-error"
+            }`}
             placeholder={props.placeholder}
             onChange={onChange}
             ref={props.inputRef}

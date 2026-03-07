@@ -15,7 +15,7 @@ import {
   StatusTable,
   Row,
   EditIcon,
-  LinkButton
+  LinkButton,
 } from "@djb25/digit-ui-react-components";
 import React, { useEffect, useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
@@ -57,8 +57,8 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
   const [userDetails, setUserDetails] = useState(null);
   const [userAddresses, setUserAddresses] = useState([]); // Separate state for addresses
   const [name, setName] = useState(userInfo?.name ? userInfo.name : "");
-  const dateOfBirth= userDetails?.dob
-  const formattedDob=(dateOfBirth!==undefined) ?format(new Date(dateOfBirth), 'MM/dd/yyyy') : ""
+  const dateOfBirth = userDetails?.dob;
+  const formattedDob = dateOfBirth !== undefined ? format(new Date(dateOfBirth), "MM/dd/yyyy") : "";
   //const dateOfBirth1= (dateOfBirth!==undefined) ?dateOfBirth.split("-").reverse().join("-") : ""
   const [dob, setDob] = useState(dateOfBirth);
   const [email, setEmail] = useState(userInfo?.emailId ? userInfo.emailId : "");
@@ -140,8 +140,8 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
         value: userDetails.gender,
       });
 
-    const thumbs = userDetails?.photo?.split(",");
-    setProfileImg(thumbs?.at(0));
+      const thumbs = userDetails?.photo?.split(",");
+      setProfileImg(thumbs?.at(0));
 
       setLoading(false);
     }
@@ -187,30 +187,30 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
   const TogleforPassword = () => setChangepassword(!changepassword);
   const setGenderName = (value) => setGender(value);
 
-  const setUserDOB =(value)=> {
-      setDob(value);
-  }
+  const setUserDOB = (value) => {
+    setDob(value);
+  };
   const closeFileUploadDrawer = () => setOpenUploadSide(false);
 
   const setUserName = (value) => {
     setName(value);
 
-    if(!new RegExp(/^[a-zA-Z ]+$/i).test(value) || value.length === 0 || value.length > 50){
-      setErrors({...errors, userName : {type: "pattern", message: t("CORE_COMMON_PROFILE_NAME_INVALID")}});
-    }else{
-      setErrors({...errors, userName : null})
+    if (!new RegExp(/^[a-zA-Z ]+$/i).test(value) || value.length === 0 || value.length > 50) {
+      setErrors({ ...errors, userName: { type: "pattern", message: t("CORE_COMMON_PROFILE_NAME_INVALID") } });
+    } else {
+      setErrors({ ...errors, userName: null });
     }
-  }
-  
+  };
+
   //const setUserEmailAddress = (value) => {
-   // setEmail(value);
-    //const emailPattern=/^[a-zA-Z0-9._%+-]+@[a-z.-]+\.(com|org|in)$/
-    //if(value.length && !emailPattern.test(value)){
-      //setErrors({...errors, emailAddress: {type: "pattern", message: t("CORE_COMMON_PROFILE_EMAIL_INVALID")}})
-    //}else{
-      //setEmail(value);
-      //setErrors({ ...errors, emailAddress: null });
-    //}
+  // setEmail(value);
+  //const emailPattern=/^[a-zA-Z0-9._%+-]+@[a-z.-]+\.(com|org|in)$/
+  //if(value.length && !emailPattern.test(value)){
+  //setErrors({...errors, emailAddress: {type: "pattern", message: t("CORE_COMMON_PROFILE_EMAIL_INVALID")}})
+  //}else{
+  //setEmail(value);
+  //setErrors({ ...errors, emailAddress: null });
+  //}
   //};
   const setUserEmailAddress = (value) => {
     setEmail(value);
@@ -237,9 +237,9 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
     setMobileNo(value);
 
     if (userType === "employee" && !new RegExp(/^[6-9]{1}[0-9]{9}$/).test(value)) {
-      setErrors({...errors, mobileNumber: {type: 'pattern', message: t("CORE_COMMON_PROFILE_MOBILE_NUMBER_INVALID")}})
-    }else{
-      setErrors({...errors, mobileNumber: null});
+      setErrors({ ...errors, mobileNumber: { type: "pattern", message: t("CORE_COMMON_PROFILE_MOBILE_NUMBER_INVALID") } });
+    } else {
+      setErrors({ ...errors, mobileNumber: null });
     }
   };
 
@@ -257,31 +257,31 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
     setCurrentPassword(value);
 
     if (!new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(value)) {
-      setErrors({...errors, currentPassword: {type: "pattern", message: t("CORE_COMMON_PROFILE_PASSWORD_INVALID")}})
-    }else{
-      setErrors({...errors, currentPassword: null});
+      setErrors({ ...errors, currentPassword: { type: "pattern", message: t("CORE_COMMON_PROFILE_PASSWORD_INVALID") } });
+    } else {
+      setErrors({ ...errors, currentPassword: null });
     }
-  }
+  };
 
   const setUserNewPassword = (value) => {
     setNewPassword(value);
 
     if (!new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(value)) {
-      setErrors({...errors, newPassword: {type: "pattern", message: t("CORE_COMMON_PROFILE_PASSWORD_INVALID")}})
-    }else{
-      setErrors({...errors, newPassword: null});
+      setErrors({ ...errors, newPassword: { type: "pattern", message: t("CORE_COMMON_PROFILE_PASSWORD_INVALID") } });
+    } else {
+      setErrors({ ...errors, newPassword: null });
     }
-  }
+  };
 
   const setUserConfirmPassword = (value) => {
     setConfirmPassword(value);
 
     if (!new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(value)) {
-      setErrors({...errors, confirmPassword: {type: "pattern", message: t("CORE_COMMON_PROFILE_PASSWORD_INVALID")}})
-    }else{
-      setErrors({...errors, confirmPassword: null});
+      setErrors({ ...errors, confirmPassword: { type: "pattern", message: t("CORE_COMMON_PROFILE_PASSWORD_INVALID") } });
+    } else {
+      setErrors({ ...errors, confirmPassword: null });
     }
-  }
+  };
 
   const removeProfilePic = () => {
     setProfilePic(null);
@@ -301,12 +301,12 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
       const requestData = {
         ...userInfo,
         name,
-        dob: dob!== undefined ? dob.split("-").reverse().join("/") : "",
+        dob: dob !== undefined ? dob.split("-").reverse().join("/") : "",
         gender: gender?.value,
         emailId: email,
         altContactNumber: altMobileNumber,
         photo: profilePic,
-        correspondenceAddress:city
+        correspondenceAddress: city,
       };
 
       if (!new RegExp(/^([a-zA-Z ])*$/).test(name) || name === "" || name.length > 50 || name.length < 1) {
@@ -322,7 +322,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
       }
 
       //if (email.length && !/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
-        //throw JSON.stringify({ type: "error", message: t("CORE_COMMON_PROFILE_EMAIL_INVALID") });
+      //throw JSON.stringify({ type: "error", message: t("CORE_COMMON_PROFILE_EMAIL_INVALID") });
       //}
       if (email.length && !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}$/.test(email)) {
         throw JSON.stringify({ type: "error", message: t("CORE_COMMON_PROFILE_EMAIL_INVALID") });
@@ -341,7 +341,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
           throw JSON.stringify({ type: "error", message: t("CORE_COMMON_PROFILE_PASSWORD_INVALID") });
         }
       }
-      requestData["locale"]=Digit.StoreData.getCurrentLanguage();
+      requestData["locale"] = Digit.StoreData.getCurrentLanguage();
       const { responseInfo, user } = await Digit.UserService.updateUser(requestData, stateCode);
 
       if (responseInfo && responseInfo.status === "200") {
@@ -359,7 +359,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
               emailId: email,
               permanentCity: city,
               photo: profileImg,
-              correspondenceAddress:city,
+              correspondenceAddress: city,
             },
           });
         }
@@ -766,7 +766,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                     isMandatory={false}
                     name="name"
                     value={name}
-                    onChange={(e)=>setUserName(e.target.value)}
+                    onChange={(e) => setUserName(e.target.value)}
                     placeholder="Enter Your Name"
                     {...(validation = {
                       isRequired: true,
@@ -776,7 +776,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                     })}
                     disable={editScreen}
                   />
-                  {errors?.userName && <CardLabelError style={{margin: 0, padding: 0}}> {errors?.userName?.message} </CardLabelError>}
+                  {errors?.userName && <CardLabelError style={{ margin: 0, padding: 0 }}> {errors?.userName?.message} </CardLabelError>}
                 </div>
               </LabelFieldPair>
 
@@ -801,7 +801,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                 <CardLabel className="profile-label-margin" style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
                   "CORE_COMMON_PROFILE_CITY"
                 )}`}</CardLabel>
-                <div style={{width: "100%"}}>
+                <div style={{ width: "100%" }}>
                   <TextInput
                     t={t}
                     type={"text"}
@@ -821,7 +821,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                   <CardLabelError></CardLabelError>
                 </div>
               </LabelFieldPair>
-              
+
               <LabelFieldPair style={{ display: "flex" }}>
                 <CardLabel className="profile-label-margin" style={{ width: "300px" }}>{`${t("CORE_COMMON_PROFILE_MOBILE_NUMBER")}*`}</CardLabel>
                 <div style={{ width: "100%" }}>
@@ -834,15 +834,15 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                     disable={true}
                     {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_PROFILE_MOBILE_NUMBER_INVALID") }}
                   />
-                  {errors?.mobileNumber && <CardLabelError style={{margin: 0, padding: 0}}> {errors?.mobileNumber?.message} </CardLabelError>}
+                  {errors?.mobileNumber && <CardLabelError style={{ margin: 0, padding: 0 }}> {errors?.mobileNumber?.message} </CardLabelError>}
                 </div>
               </LabelFieldPair>
-              
-               <LabelFieldPair style={{ display: "flex" }}>
+
+              <LabelFieldPair style={{ display: "flex" }}>
                 <CardLabel className="profile-label-margin" style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
                   "CORE_COMMON_PROFILE_EMAIL"
                 )}`}</CardLabel>
-                <div style={{width: "100%"}}>
+                <div style={{ width: "100%" }}>
                   <TextInput
                     t={t}
                     type={"email"}
@@ -851,7 +851,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                     optionKey="i18nKey"
                     name="email"
                     value={email}
-                    onChange={(e)=>setUserEmailAddress(e.target.value)}
+                    onChange={(e) => setUserEmailAddress(e.target.value)}
                     disable={editScreen}
                   />
                   {errors?.emailAddress && <CardLabelError> {errors?.emailAddress?.message} </CardLabelError>}
@@ -861,24 +861,28 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                 <CardLabel className="profile-label-margin" style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
                   "CORE_COMMON_PROFILE_DOB"
                 )}`}</CardLabel>
-                <div style={{width: "100%"}}>
-                <DatePicker date={dob || dateOfBirth} onChange={setUserDOB} disable={true}  />
-                 {/* {errors?.emailAddress && <CardLabelError> {errors?.emailAddress?.message} </CardLabelError>} */}
+                <div style={{ width: "100%" }}>
+                  <DatePicker date={dob || dateOfBirth} onChange={setUserDOB} disable={true} />
+                  {/* {errors?.emailAddress && <CardLabelError> {errors?.emailAddress?.message} </CardLabelError>} */}
                 </div>
-              </LabelFieldPair>             
+              </LabelFieldPair>
 
               <LabelFieldPair>
                 <div>
-                  <a style={{ color: "#a82227", cursor: "default", marginBottom: "5", cursor: "pointer",position:"relative" }} onClick={TogleforPassword}>
+                  <a
+                    style={{ color: "#a82227", cursor: "default", marginBottom: "5", cursor: "pointer", position: "relative" }}
+                    onClick={TogleforPassword}
+                  >
                     {t("CORE_COMMON_CHANGE_PASSWORD")}
                   </a>
                   {changepassword ? (
                     <div style={{ marginTop: "10px" }}>
                       <LabelFieldPair style={{ display: "flex" }}>
-                        <CardLabel  className="profile-label-margin" style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
-                          "CORE_COMMON_PROFILE_CURRENT_PASSWORD"
-                        )}`}</CardLabel>
-                        <div style={{width: "100%"}}>
+                        <CardLabel
+                          className="profile-label-margin"
+                          style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}
+                        >{`${t("CORE_COMMON_PROFILE_CURRENT_PASSWORD")}`}</CardLabel>
+                        <div style={{ width: "100%" }}>
                           <TextInput
                             t={t}
                             type={"password"}
@@ -893,10 +897,11 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                       </LabelFieldPair>
 
                       <LabelFieldPair style={{ display: "flex" }}>
-                        <CardLabel  className="profile-label-margin" style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
-                          "CORE_COMMON_PROFILE_NEW_PASSWORD"
-                        )}`}</CardLabel>
-                        <div style={{width: "100%"}}>
+                        <CardLabel
+                          className="profile-label-margin"
+                          style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}
+                        >{`${t("CORE_COMMON_PROFILE_NEW_PASSWORD")}`}</CardLabel>
+                        <div style={{ width: "100%" }}>
                           <TextInput
                             t={t}
                             type={"password"}
@@ -907,14 +912,15 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                             disable={editScreen}
                           />
                           {errors?.newPassword && <CardLabelError>{errors?.newPassword?.message}</CardLabelError>}
-                      </div>
+                        </div>
                       </LabelFieldPair>
 
                       <LabelFieldPair style={{ display: "flex" }}>
-                        <CardLabel  className="profile-label-margin" style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>{`${t(
-                          "CORE_COMMON_PROFILE_CONFIRM_PASSWORD"
-                        )}`}</CardLabel>
-                        <div style={{width: "100%"}}>
+                        <CardLabel
+                          className="profile-label-margin"
+                          style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}
+                        >{`${t("CORE_COMMON_PROFILE_CONFIRM_PASSWORD")}`}</CardLabel>
+                        <div style={{ width: "100%" }}>
                           <TextInput
                             t={t}
                             type={"password"}
@@ -945,56 +951,49 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
        * - Each address is displayed using a `StatusTable` with rows for various address fields such as:
        * - If no addresses are available, it displays a fallback message card with "No Address Available".
        */}
-      
+
       {activeTab === "address" && (
         <>
           {userAddresses.length > 0 ? (
-              <>
-                {userAddresses.map((address, index) => (
-                  <Card key={index}>
-                    <StatusTable>
-                      <>
-                        <Row
-                          className="border-none"
-                          label={t(`${address.addressType}`)}
-                          text=""
-                          actionButton={
-                            <ActionButton
-                              onClick={() => {
-                                setSelectedAddress(address);
-                                setShowModal(true);
-                                setisEdit(true);
-                              }}
-                            />
-                          }
-                        />
-                        <Row className="border-none" label={t("COMMON_HOUSE_NO")} text={address.houseNumber || t("CS_NA")} />
-                        <Row className="border-none" label={t("COMMON_STREET_NAME")} text={address.streetName || t("CS_NA")} />
-                        <Row className="border-none" label={t("COMMON_ADDRESS_LINE1")} text={address.address || t("CS_NA")} />
-                        <Row className="border-none" label={t("COMMON_ADDRESS_LINE2")} text={address.address2 || t("CS_NA")} />
-                        <Row className="border-none" label={t("COMMON_LANDMARK")} text={address.landmark || t("CS_NA")} />
-                        <Row className="border-none" label={t("COMMON_CITY")} text={address.city || t("CS_NA")} />
-                        <Row className="border-none" label={t("COMMON_LOCALITY")} text={address.locality || t("CS_NA")} />
-                        <Row className="border-none" label={t("COMMON_ADDRESS_PINCODE")} text={address.pinCode || t("CS_NA")} />
-                      </>
-                    </StatusTable>
-                  </Card>
-                ))}
+            <>
+              {userAddresses.map((address, index) => (
+                <Card key={index}>
+                  <StatusTable>
+                    <>
+                      <Row
+                        className="border-none"
+                        label={t(`${address.addressType}`)}
+                        text=""
+                        actionButton={
+                          <ActionButton
+                            onClick={() => {
+                              setSelectedAddress(address);
+                              setShowModal(true);
+                              setisEdit(true);
+                            }}
+                          />
+                        }
+                      />
+                      <Row className="border-none" label={t("COMMON_HOUSE_NO")} text={address.houseNumber || t("CS_NA")} />
+                      <Row className="border-none" label={t("COMMON_STREET_NAME")} text={address.streetName || t("CS_NA")} />
+                      <Row className="border-none" label={t("COMMON_ADDRESS_LINE1")} text={address.address || t("CS_NA")} />
+                      <Row className="border-none" label={t("COMMON_ADDRESS_LINE2")} text={address.address2 || t("CS_NA")} />
+                      <Row className="border-none" label={t("COMMON_LANDMARK")} text={address.landmark || t("CS_NA")} />
+                      <Row className="border-none" label={t("COMMON_CITY")} text={address.city || t("CS_NA")} />
+                      <Row className="border-none" label={t("COMMON_LOCALITY")} text={address.locality || t("CS_NA")} />
+                      <Row className="border-none" label={t("COMMON_ADDRESS_PINCODE")} text={address.pinCode || t("CS_NA")} />
+                    </>
+                  </StatusTable>
+                </Card>
+              ))}
 
-                {showModal && selectedAddress && (
-                  <Address
-                    isEdit={isEdit}
-                    address={selectedAddress}
-                    actionCancelOnSubmit={() => setShowModal(false)}
-                  />
-                )}
-              </>
-            ) : (
-              <Card>
-                <p>{t("CS_NO_ADDRESS_AVAILABLE")}</p>
-              </Card>
-            )}
-
+              {showModal && selectedAddress && <Address isEdit={isEdit} address={selectedAddress} actionCancelOnSubmit={() => setShowModal(false)} />}
+            </>
+          ) : (
+            <Card>
+              <p>{t("CS_NO_ADDRESS_AVAILABLE")}</p>
+            </Card>
+          )}
         </>
       )}
 
@@ -1014,9 +1013,8 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
               marginRight: windowWidth < 768 ? "16px" : "31px",
               color: "white",
               borderBottom: "1px solid black",
-              cursor:"pointer",
-              "zIndex":"999"
-
+              cursor: "pointer",
+              zIndex: "999",
             }}
           >
             {t("CORE_COMMON_SAVE")}

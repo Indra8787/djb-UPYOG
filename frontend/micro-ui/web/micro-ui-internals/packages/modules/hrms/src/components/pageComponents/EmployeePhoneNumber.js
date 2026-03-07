@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { LabelFieldPair, CardLabel, TextInput, CardLabelError } from "@djb25/digit-ui-react-components";
-import { useLocation } from "react-router-dom";
 
 const SelectEmployeePhoneNumber = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
-  const { pathname: url } = useLocation();
   const [iserror, setError] = useState(false);
   let isMobile = window.Digit.Utils.browser.isMobile();
   const inputs = [
@@ -39,28 +37,43 @@ const SelectEmployeePhoneNumber = ({ t, config, onSelect, formData = {}, userTyp
               {t(input.label)}
               {input.isMandatory ? " * " : null}
             </CardLabel>
-            <div className="field-container" style={{ width: isMobile ? "100%" : "50%", display: "block" }}>
+            <div className="field-container" style={{ width: isMobile ? "100%" : "", display: "block" }}>
               <div>
                 <div style={{ display: "flex" }}>
-                  <div className="employee-card-input employee-card-input--front">+91</div>
+                  <div className="employee-card-input employee-card-input--front phone-country-code" style={{ borderRadius: "6px 0 0 6px" }}>
+                    +91
+                  </div>
                   <TextInput
                     className="field desktop-w-full"
                     key={input.name}
                     value={(formData && formData[config.key] && formData[config.key][input.name]) || ""}
-                    onChange={(e) => { setValue(e.target.value, input.name, validate(e.target.value, input)) }}
+                    onChange={(e) => {
+                      setValue(e.target.value, input.name, validate(e.target.value, input));
+                    }}
                     disable={false}
                     defaultValue={""}
                     onBlur={(e) => validate(e.target.value, input)}
                     {...input.validation}
+                    style={{ borderRadius: "0 6px 6px 0", marginBottom: "10px" }}
                   />
                 </div>
-                <div>{iserror ? <CardLabelError style={{ width: "100%" }}>{t(input.populators.error)}</CardLabelError> : <span style={{
-                  color: "gray", width: "100%", border: "none",
-                  background: "none",
-                  justifyContent: "start"
-                }}>
-                  {t("HR_MOBILE_NO_CHECK")}
-                </span>}</div>
+                <div>
+                  {iserror ? (
+                    <CardLabelError style={{ width: "100%" }}>{t(input.populators.error)}</CardLabelError>
+                  ) : (
+                    <span
+                      style={{
+                        color: "gray",
+                        width: "100%",
+                        border: "none",
+                        background: "none",
+                        justifyContent: "start",
+                      }}
+                    >
+                      {t("HR_MOBILE_NO_CHECK")}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           </LabelFieldPair>

@@ -138,9 +138,11 @@
 }
 
 .inbox-container {
+  gap: 16px;
   .filters-container {
     .filter {
       .filter-card {
+        border-radius: 6px;
         @apply bg-white;
         padding: 10px;
 
@@ -190,9 +192,6 @@
               cursor: pointer;
             }
           }
-        }
-
-        .mobile-input {
         }
       }
     }
@@ -324,6 +323,7 @@
       width: 874px;
 
       .search-complaint-container {
+        border-radius: 6px;
         width: 100%;
         margin: auto;
         @apply flex flex-col items-start mb-md bg-white p-md;
@@ -407,10 +407,6 @@
               }
             }
           }
-
-          .mobile-input {
-            @apply ml-sm;
-          }
         }
 
         .search-action-wrapper {
@@ -424,9 +420,6 @@
             max-width: 300px !important;
           }
         }
-      }
-
-      .search-complaint-container-for-search {
       }
     }
   }

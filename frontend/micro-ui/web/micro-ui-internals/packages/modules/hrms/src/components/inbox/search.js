@@ -46,10 +46,10 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
   return (
     <form onSubmit={handleSubmit(onSubmitInput)}>
       <React.Fragment>
-        <div className="search-container" style={{ width: "auto", marginLeft: isInboxPage ? "24px" : "revert" }}>
+        <div className="search-container" style={{ width: "auto" }}>
           <div className="search-complaint-container">
             {(type === "mobile" || mobileView) && (
-              <div className="complaint-header" style={{ display: 'flex', justifyContent: "space-between" }}>
+              <div className="complaint-header" style={{ display: "flex", justifyContent: "space-between" }}>
                 <h2>{t("ES_COMMON_SEARCH_BY")}</h2>
                 <span onClick={onClose}>
                   <CloseSvg />
@@ -91,12 +91,7 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
                 </span>
               )}
               {type === "desktop" && !mobileView && (
-                <SubmitBar
-                  style={{ marginTop: "unset" }}
-                  className="submit-bar-search"
-                  label={t("ES_COMMON_SEARCH")}
-                  submit
-                />
+                <SubmitBar style={{ marginTop: "unset" }} className="submit-bar-search" label={t("ES_COMMON_SEARCH")} submit />
               )}
             </div>
           </div>

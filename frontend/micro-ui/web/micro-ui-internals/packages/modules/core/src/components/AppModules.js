@@ -59,10 +59,7 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
 
     if (CardComponent) {
       return (
-        <div
-          className="collapsible-sidebar-container"
-          style={{ lexShrink: 0, borderRight: "1px solid #e0e0e0", background: "#f8f9fa", transition: "width 0.3s ease", marginRight: "10px" }}
-        >
+        <div className="collapsible-sidebar-container">
           <ExpandedViewContext.Provider value={{ isModuleSidebar: true }}>
             <CardComponent />
           </ExpandedViewContext.Provider>
@@ -75,7 +72,7 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
   const sidebarContent = renderSidebar();
 
   return (
-    <div style={{ display: "flex", width: "100%", height: "inherit" }}>
+    <div style={{ display: "flex", width: "100vw", height: "inherit" }}>
       {sidebarContent}
       <div className="app-wrapper">
         <Switch>

@@ -1,4 +1,4 @@
-import { CardLabel, Dropdown, LabelFieldPair, Loader, RemoveableTag ,MultiSelectDropdown} from "@djb25/digit-ui-react-components";
+import { CardLabel, Dropdown, LabelFieldPair, Loader, RemoveableTag, MultiSelectDropdown } from "@djb25/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import cleanup from "../Utils/cleanup";
 // import MultiSelectDropdown from "./Multiselect";
@@ -102,35 +102,39 @@ const Jurisdictions = ({ t, config, onSelect, userType, formData }) => {
   }
 
   function getroledata() {
-    return data?.MdmsRes?.["ACCESSCONTROL-ROLES"].roles.map(role => { return { code: role.code, name: role?.name ? role?.name : " " , labelKey: 'ACCESSCONTROL_ROLES_ROLES_' + role.code } });
+    return data?.MdmsRes?.["ACCESSCONTROL-ROLES"].roles.map((role) => {
+      return { code: role.code, name: role?.name ? role?.name : " ", labelKey: "ACCESSCONTROL_ROLES_ROLES_" + role.code };
+    });
   }
 
   if (isLoading) {
     return <Loader />;
   }
   return (
-    <div>
-      {jurisdictions?.map((jurisdiction, index) => (
-        <Jurisdiction
-          t={t}
-          formData={formData}
-          jurisdictions={jurisdictions}
-          key={index}
-          keys={jurisdiction.key}
-          data={data}
-          jurisdiction={jurisdiction}
-          setjurisdictions={setjurisdictions}
-          index={index}
-          focusIndex={focusIndex}
-          setFocusIndex={setFocusIndex}
-          gethierarchylistdata={gethierarchylistdata}
-          hierarchylist={hierarchylist}
-          boundaryTypeoption={boundaryTypeoption}
-          getboundarydata={getboundarydata}
-          getroledata={getroledata}
-          handleRemoveUnit={handleRemoveUnit}
-        />
-      ))}
+    <div className="juridictions-wrapper">
+      <div className="juridictions">
+        {jurisdictions?.map((jurisdiction, index) => (
+          <Jurisdiction
+            t={t}
+            formData={formData}
+            jurisdictions={jurisdictions}
+            key={index}
+            keys={jurisdiction.key}
+            data={data}
+            jurisdiction={jurisdiction}
+            setjurisdictions={setjurisdictions}
+            index={index}
+            focusIndex={focusIndex}
+            setFocusIndex={setFocusIndex}
+            gethierarchylistdata={gethierarchylistdata}
+            hierarchylist={hierarchylist}
+            boundaryTypeoption={boundaryTypeoption}
+            getboundarydata={getboundarydata}
+            getroledata={getroledata}
+            handleRemoveUnit={handleRemoveUnit}
+          />
+        ))}
+      </div>
       <label onClick={handleAddUnit} className="link-label" style={{ width: "12rem" }}>
         {t("HR_ADD_JURISDICTION")}
       </label>
@@ -158,12 +162,20 @@ function Jurisdiction({
         .filter((ele) => {
           return ele?.hierarchyType?.code == jurisdiction?.hierarchy?.code;
         })
-        .map((item) => { return { ...item.boundary, i18text: Digit.Utils.locale.convertToLocale(item.boundary.label, 'EGOV_LOCATION_BOUNDARYTYPE') } })
+        .map((item) => {
+          return { ...item.boundary, i18text: Digit.Utils.locale.convertToLocale(item.boundary.label, "EGOV_LOCATION_BOUNDARYTYPE") };
+        })
     );
   }, [jurisdiction?.hierarchy, data?.MdmsRes]);
   const tenant = Digit.ULBService.getCurrentTenantId();
   useEffect(() => {
-    selectboundary(data?.MdmsRes?.tenant?.tenants.filter(city => city.code != Digit.ULBService.getStateId()).map(city => { return { ...city, i18text: Digit.Utils.locale.getCityLocale(city.code) } }));
+    selectboundary(
+      data?.MdmsRes?.tenant?.tenants
+        .filter((city) => city.code != Digit.ULBService.getStateId())
+        .map((city) => {
+          return { ...city, i18text: Digit.Utils.locale.getCityLocale(city.code) };
+        })
+    );
   }, [jurisdiction?.boundaryType, data?.MdmsRes]);
 
   useEffect(() => {
@@ -194,26 +206,27 @@ function Jurisdiction({
     //   res = [{ ...data }, ...jurisdiction?.roles];
     // }
     let res = [];
-    e && e?.map((ob) => {
-      res.push(ob?.[1]);
-    });
+    e &&
+      e?.map((ob) => {
+        res.push(ob?.[1]);
+      });
 
-    res?.forEach(resData => {resData.labelKey = 'ACCESSCONTROL_ROLES_ROLES_' + resData.code})
+    res?.forEach((resData) => {
+      resData.labelKey = "ACCESSCONTROL_ROLES_ROLES_" + resData.code;
+    });
 
     setjurisdictions((pre) => pre.map((item) => (item.key === jurisdiction.key ? { ...item, roles: res } : item)));
   };
-
 
   const onRemove = (index, key) => {
     let afterRemove = jurisdiction?.roles.filter((value, i) => {
       return i !== index;
     });
     setjurisdictions((pre) => pre.map((item) => (item.key === jurisdiction.key ? { ...item, roles: afterRemove } : item)));
-
   };
   return (
-    <div key={jurisdiction?.keys} style={{ marginBottom: "16px" }}>
-      <div style={{ border: "1px solid #E3E3E3", padding: "16px", marginTop: "8px" }}>
+    <div key={jurisdiction?.keys}>
+      <div className="juridiction-form" style={{ border: "1px solid #E3E3E3", padding: "16px" }}>
         <LabelFieldPair>
           <div className="label-field-pair" style={{ width: "100%" }}>
             <h2 className="card-label card-label-smaller" style={{ color: "#505A5F" }}>

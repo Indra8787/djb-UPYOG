@@ -30,11 +30,7 @@ const LanguageSelection = () => {
         <div className="language-selector" style={{ justifyContent: "space-around", marginBottom: "24px", padding: "0 5%" }}>
           {languages.map((language, index) => (
             <div className="language-button-container" key={index}>
-              <CustomButton
-                selected={language.value === selected}
-                text={language.label}
-                onClick={() => handleChangeLanguage(language)}
-              ></CustomButton>
+              <CustomButton selected={language.value === selected} text={language.label} onClick={() => handleChangeLanguage(language)} />
             </div>
           ))}
         </div>

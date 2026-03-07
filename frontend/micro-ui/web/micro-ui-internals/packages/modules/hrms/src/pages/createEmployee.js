@@ -327,6 +327,8 @@ const CreateEmployee = () => {
             label={isFinalStep ? t("HR_COMMON_BUTTON_SUBMIT") : t("CS_COMMON_NEXT")}
             // secondaryActionLabel={activeStep !== 0 ? t("CS_COMMON_BACK") : null}
             onSecondayActionClick={handleSecondaryAction}
+            cardClassName="stepper-form-wrapper"
+            sectionHeadStyle={{ gridColumn: "span 2" }}
           />
         </div>
       </div>

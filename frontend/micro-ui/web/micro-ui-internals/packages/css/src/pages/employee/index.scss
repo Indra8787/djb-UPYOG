@@ -212,7 +212,8 @@
       &.active {
         border-left: 4px solid theme(colors.primary.main);
 
-        &.level-0 {}
+        &.level-0 {
+        }
 
         &.level-1 {
           border-left: 8.5px solid theme(colors.primary.main);
@@ -222,7 +223,8 @@
           border-left: 4px solid theme(colors.primary.main);
         }
 
-        &.level-3 {}
+        &.level-3 {
+        }
 
         color: theme(colors.primary.main) !important;
         border-right: none;
@@ -392,19 +394,14 @@
     align-items: center;
     justify-content: flex-end;
 
-    background: linear-gradient(98deg,
-        rgba(110, 192, 221, 0.71) -24.44%,
-        rgba(97, 119, 236, 0.9) 93.53%);
+    background: linear-gradient(98deg, rgba(110, 192, 221, 0.71) -24.44%, rgba(97, 119, 236, 0.9) 93.53%);
 
     backdrop-filter: blur(18px) saturate(140%);
     -webkit-backdrop-filter: blur(18px) saturate(140%);
 
     border: 1px solid rgba(255, 255, 255, 0.35);
 
-    box-shadow:
-      inset 0 2px 6px rgba(255, 255, 255, 0.5),
-      inset 0 -2px 6px rgba(255, 255, 255, 0.2),
-      0 20px 40px rgba(0, 0, 0, 0.18),
+    box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.5), inset 0 -2px 6px rgba(255, 255, 255, 0.2), 0 20px 40px rgba(0, 0, 0, 0.18),
       0 8px 16px rgba(0, 0, 0, 0.12);
 
     transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
@@ -414,10 +411,7 @@
       position: absolute;
       inset: 0;
       border-radius: inherit;
-      background: linear-gradient(120deg,
-          rgba(255, 255, 255, 0.45) 0%,
-          rgba(255, 255, 255, 0.1) 40%,
-          rgba(255, 255, 255, 0.05) 100%);
+      background: linear-gradient(120deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.1) 40%, rgba(255, 255, 255, 0.05) 100%);
       pointer-events: none;
     }
 
@@ -431,11 +425,7 @@
     }
 
     &:hover {
-
-      box-shadow:
-        inset 0 3px 8px rgba(255, 255, 255, 0.6),
-        inset 0 -3px 8px rgba(255, 255, 255, 0.25),
-        0 30px 60px rgba(0, 0, 0, 0.25),
+      box-shadow: inset 0 3px 8px rgba(255, 255, 255, 0.6), inset 0 -3px 8px rgba(255, 255, 255, 0.25), 0 30px 60px rgba(0, 0, 0, 0.25),
         0 10px 20px rgba(0, 0, 0, 0.15);
 
       &::after {
@@ -450,9 +440,7 @@
       color: #ffffff;
 
       /* More premium glass text effect */
-      text-shadow:
-        0 1px 2px rgba(255, 255, 255, 0.6),
-        0 4px 8px rgba(52, 51, 51, 0.15);
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6), 0 4px 8px rgba(52, 51, 51, 0.15);
     }
   }
 
@@ -522,9 +510,8 @@
 
 @media (min-width: 640px) {
   .employee {
-    .ground-container {
-      /* @apply block; */
-    }
+    display: flex;
+    flex-direction: column;
 
     .breadcrumb {
       @apply mb-lg;
@@ -565,7 +552,8 @@
       justify-content: center;
     }
 
-    .center-container {}
+    .center-container {
+    }
   }
 }
 
@@ -728,16 +716,14 @@
   background: linear-gradient(145deg, #ffffff, #f0f4f8);
   border-radius: 20px;
   padding: 24px;
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.05),
-    inset 0 2px 0 rgba(255, 255, 255, 1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), inset 0 2px 0 rgba(255, 255, 255, 1);
   border: 1px solid rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(10px);
   position: relative;
   overflow: hidden;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -790,19 +776,19 @@
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
-  
+
   /* Change from relative/static to absolute/fixed */
-  position: absolute; 
+  position: absolute;
   right: 0;
   top: 0;
   height: 100%; /* Or calc(100% - 40px) depending on your padding */
-  
+
   /* Ensure it sits on top of everything else */
-  z-index: 1000; 
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  
+  z-index: 1000;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+
   /* Prevents the wrapper itself from blocking clicks on the page when closed */
-  pointer-events: none; 
+  pointer-events: none;
 }
 
 /* The parent container sets the outer shape and shadow */
@@ -812,17 +798,15 @@
   flex-direction: row;
   background: rgba(255, 255, 255, 0.7); /* Slightly more opaque for overlay readability */
   border-radius: 24px 0 0 24px; /* Rounded only on the left side since it's flush right */
-  
+
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
-  
+
   border: 1px solid rgba(255, 255, 255, 0.4);
-  
+
   /* Stronger shadow to emphasize the 'float' effect */
-  box-shadow: 
-    -10px 0 30px rgba(0, 0, 0, 0.1), 
-    0 8px 32px 0 rgba(31, 38, 135, 0.15);
-    
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1), 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+
   overflow: hidden;
   height: 100%;
   transition: transform 0.3s ease;
@@ -834,15 +818,11 @@
   width: 0px;
   overflow: hidden;
   transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-  background: linear-gradient(
-    135deg, 
-    rgba(255, 255, 255, 0.4) 0%, 
-    rgba(255, 255, 255, 0.2) 100%
-  );
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 100%);
 }
 .ra-container.open .ra-content-door {
   width: 380px;
-  border-right: 1px solid rgba(0,0,0,0.05);
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 /* The inner content stays a fixed size so it doesn't wrap/squish while the door is opening */
@@ -979,7 +959,7 @@
 }
 
 .ra-module {
-  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-family: "SFMono-Regular", Consolas, monospace;
   font-size: 11px;
   background: rgba(255, 255, 255, 0.4); /* Glassy tag */
   color: #1e293b;

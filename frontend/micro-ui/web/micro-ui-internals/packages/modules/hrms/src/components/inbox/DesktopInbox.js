@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ApplicationTable from "../inbox/ApplicationTable";
 import { Card, Loader } from "@djb25/digit-ui-react-components";
@@ -11,7 +11,11 @@ const DesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
   const tenantIds = Digit.SessionStorage.get("HRMS_TENANTS");
   const GetCell = (value) => <span className="cell-text">{t(value)}</span>;
   const GetSlaCell = (value) => {
-    return value == "INACTIVE" ? <span className="sla-cell-error">{ t(value )|| ""}</span> : <span className="sla-cell-success">{ t(value) || ""}</span>;
+    return value === "INACTIVE" ? (
+      <span className="sla-cell-error">{t(value) || ""}</span>
+    ) : (
+      <span className="sla-cell-success">{t(value) || ""}</span>
+    );
   };
   const data = props?.data?.Employees;
 
@@ -44,7 +48,7 @@ const DesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
             <div className="tooltip">
               {" "}
               {GetCell(`${row.original?.user?.roles.length}`)}
-              <span className="tooltiptext" style={{whiteSpace: "nowrap"}}>
+              <span className="tooltiptext" style={{ whiteSpace: "nowrap" }}>
                 {row.original?.user?.roles.map((ele, index) => (
                   <span>
                     {`${index + 1}. ` + t(`ACCESSCONTROL_ROLES_ROLES_${ele.code}`)} <br />{" "}
@@ -90,6 +94,7 @@ const DesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
         },
       },
     ];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   let result;
@@ -117,7 +122,7 @@ const DesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
         getCellProps={(cellInfo) => {
           return {
             style: {
-              maxWidth: cellInfo.column.Header == t("HR_EMP_ID_LABEL") ? "150px" : "",
+              maxWidth: cellInfo.column.Header === t("HR_EMP_ID_LABEL") ? "150px" : "",
               padding: "20px 18px",
               fontSize: "16px",
               minWidth: "150px",
@@ -131,7 +136,6 @@ const DesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
         pageSizeLimit={props.pageSizeLimit}
         onSort={props.onSort}
         disableSort={props.disableSort}
-        onPageSizeChange={props.onPageSizeChange}
         sortParams={props.sortParams}
         totalRecords={props.totalRecords}
       />
@@ -168,7 +172,7 @@ const DesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
           </div>
         </div>
       )}
-      <div style={{ flex: 1 }}>
+      <div className="form-search-wrapper" style={{ flex: 1 }}>
         <SearchApplication
           defaultSearchParams={props.defaultSearchParams}
           onSearch={props.onSearch}
@@ -178,7 +182,7 @@ const DesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
           isInboxPage={!props?.isSearch}
           searchParams={props.searchParams}
         />
-        <div className="result" style={{ marginLeft: !props?.isSearch ? "24px" : "", flex: 1 }}>
+        <div className="result" style={{ flex: 1 }}>
           {result}
         </div>
       </div>

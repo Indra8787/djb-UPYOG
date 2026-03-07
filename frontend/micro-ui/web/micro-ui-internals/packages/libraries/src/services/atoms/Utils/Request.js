@@ -19,7 +19,7 @@ Axios.interceptors.response.use(
           localStorage.clear();
           sessionStorage.clear();
           window.location.href =
-            (isEmployee ? "/digit-ui/employee/user/login" : "/digit-ui/citizen/login") +
+            (isEmployee ? "/digit-ui/employee/user/login" : "/digit-ui/citizen/select-language") +
             `?from=${encodeURIComponent(window.location.pathname + window.location.search)}`;
         } else if (
           error?.message?.toLowerCase()?.includes("internal server error") ||
@@ -91,6 +91,13 @@ export const Request = async ({
     }
     if (reqTimestamp) {
       data.RequestInfo = { ...data.RequestInfo, ts: Number(ts) };
+    }
+
+    if (auth && token) {
+      headers = {
+        ...headers,
+        Authorization: `Bearer ${token}`,
+      };
     }
 
     /* 

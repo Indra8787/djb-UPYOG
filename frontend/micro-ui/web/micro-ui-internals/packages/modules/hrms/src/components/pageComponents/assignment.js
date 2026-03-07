@@ -49,17 +49,17 @@ const Assignments = ({ t, config, onSelect, userType, formData }) => {
     var promises = assignments?.map((assignment) => {
       return assignment
         ? cleanup({
-          id: assignment?.id,
-          position: assignment?.position,
-          govtOrderNumber: assignment?.govtOrderNumber,
-          tenantid: assignment?.tenantid,
-          auditDetails: assignment?.auditDetails,
-          fromDate: assignment?.fromDate ? new Date(assignment?.fromDate).getTime() : undefined,
-          toDate: assignment?.toDate ? new Date(assignment?.toDate).getTime() : undefined,
-          isCurrentAssignment: assignment?.isCurrentAssignment,
-          department: assignment?.department?.code,
-          designation: assignment?.designation?.code,
-        })
+            id: assignment?.id,
+            position: assignment?.position,
+            govtOrderNumber: assignment?.govtOrderNumber,
+            tenantid: assignment?.tenantid,
+            auditDetails: assignment?.auditDetails,
+            fromDate: assignment?.fromDate ? new Date(assignment?.fromDate).getTime() : undefined,
+            toDate: assignment?.toDate ? new Date(assignment?.toDate).getTime() : undefined,
+            isCurrentAssignment: assignment?.isCurrentAssignment,
+            department: assignment?.department?.code,
+            designation: assignment?.designation?.code,
+          })
         : [];
     });
 
@@ -97,28 +97,30 @@ const Assignments = ({ t, config, onSelect, userType, formData }) => {
     return <Loader />;
   }
   return (
-    <div>
-      {assignments?.map((assignment, index) => (
-        <Assignment
-          t={t}
-          key={index}
-          keys={index.key}
-          formData={formData}
-          assignment={assignment}
-          setassignments={setassignments}
-          index={index}
-          focusIndex={focusIndex}
-          setFocusIndex={setFocusIndex}
-          getdepartmentdata={getdepartmentdata}
-          department={department}
-          designation={designation}
-          getdesignationdata={getdesignationdata}
-          assignments={assignments}
-          handleRemoveUnit={handleRemoveUnit}
-          setCurrentAssiginmentDate={setCurrentAssiginmentDate}
-          currentassignemtDate={currentassignemtDate}
-        />
-      ))}
+    <div className="juridictions-wrapper">
+      <div className="juridictions">
+        {assignments?.map((assignment, index) => (
+          <Assignment
+            t={t}
+            key={index}
+            keys={index.key}
+            formData={formData}
+            assignment={assignment}
+            setassignments={setassignments}
+            index={index}
+            focusIndex={focusIndex}
+            setFocusIndex={setFocusIndex}
+            getdepartmentdata={getdepartmentdata}
+            department={department}
+            designation={designation}
+            getdesignationdata={getdesignationdata}
+            assignments={assignments}
+            handleRemoveUnit={handleRemoveUnit}
+            setCurrentAssiginmentDate={setCurrentAssiginmentDate}
+            currentassignemtDate={currentassignemtDate}
+          />
+        ))}
+      </div>
       <label onClick={handleAddUnit} className="link-label" style={{ width: "12rem" }}>
         {t("HR_ADD_ASSIGNMENT")}
       </label>
@@ -158,9 +160,9 @@ function Assignment({
         pre.map((item) =>
           item.key === assignment.key
             ? {
-              ...item,
-              toDate: null,
-            }
+                ...item,
+                toDate: null,
+              }
             : item
         )
       );
@@ -181,8 +183,8 @@ function Assignment({
     assignments;
   };
   return (
-    <div key={index + 1} style={{ marginBottom: "16px" }}>
-      <div style={{ border: "1px solid #E3E3E3", padding: "16px", marginTop: "8px" }}>
+    <div key={index + 1}>
+      <div className="juridiction-form" style={{ border: "1px solid #E3E3E3", padding: "16px" }}>
         <LabelFieldPair>
           <div className="label-field-pair" style={{ width: "100%" }}>
             <h2 className="card-label card-label-smaller" style={{ color: "#505A5F" }}>
@@ -190,14 +192,17 @@ function Assignment({
             </h2>
           </div>
           {assignments.length > 1 && !assignment?.id && !assignment?.isCurrentAssignment ? (
-            <div onClick={() => handleRemoveUnit(assignment)} style={{ marginBottom: "16px", padding: "5px", cursor: "pointer", textAlign: "right" }}>
+            <div onClick={() => handleRemoveUnit(assignment)} style={{ padding: "5px", cursor: "pointer", textAlign: "right" }}>
               X
             </div>
           ) : null}
         </LabelFieldPair>
 
         <LabelFieldPair>
-          <CardLabel className={assignment?.id ? "card-label-smaller disabled" : "card-label-smaller"}> {`${t("HR_ASMT_FROM_DATE_LABEL")} * `} </CardLabel>
+          <CardLabel className={assignment?.id ? "card-label-smaller disabled" : "card-label-smaller"}>
+            {" "}
+            {`${t("HR_ASMT_FROM_DATE_LABEL")} * `}{" "}
+          </CardLabel>
           <div className="field">
             <DatePicker
               type="date"
