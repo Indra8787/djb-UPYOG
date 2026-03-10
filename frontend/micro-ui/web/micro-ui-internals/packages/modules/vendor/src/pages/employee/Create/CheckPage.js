@@ -165,16 +165,16 @@ const CheckPage = ({ onSubmit, value = {} }) => {
               text={
                 documents?.documents?.length > 0
                   ? documents.documents.map((doc, index) => (
-                      <div key={index}>
-                        <a
-                          href={`/digit-ui/employee/vendor/registry/additionaldetails/documents/${doc.filestoreId}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {t(doc.documentType)}
-                        </a>
-                      </div>
-                    ))
+                    <div key={index}>
+                      <a
+                        href={`/digit-ui/employee/vendor/registry/additionaldetails/documents/${doc.filestoreId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {t(doc.documentType)}
+                      </a>
+                    </div>
+                  ))
                   : t("CS_NA")
               }
             />
@@ -186,11 +186,18 @@ const CheckPage = ({ onSubmit, value = {} }) => {
             label={t("AST_FINAL_DECLARATION_MESSAGE")}
             onChange={setdeclarationhandler}
             styles={{ height: "auto" }}
-            //disabled={!agree}
+          //disabled={!agree}
           />
         </div>
         <br></br>
-        <SubmitBar label={t("COMMON_BUTTON_SUBMIT")} onSubmit={onSubmit} disabled={!agree} />
+        <SubmitBar label={t("COMMON_BUTTON_SUBMIT")} onSubmit={() => {
+          if (value) {
+            if (!value.vendordet) value.vendordet = {};
+            value.vendordet.vendorGroup = 'N/A';
+            value.vendordet.vendorType = 'N/A';
+          }
+          onSubmit(value);
+        }} disabled={!agree} />
       </Card>
     </React.Fragment>
   );

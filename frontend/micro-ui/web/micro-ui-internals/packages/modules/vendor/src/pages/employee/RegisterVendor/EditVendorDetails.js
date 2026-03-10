@@ -20,13 +20,13 @@ import {
 } from "@djb25/digit-ui-react-components";
 
 import { useQueryClient } from "react-query";
-
 import { useHistory, useParams } from "react-router-dom";
 import ConfirmationBox from "../../../components/Confirmation";
 
 const Heading = (props) => {
   return <h1 className="heading-m">{props.label}</h1>;
 };
+
 const Close = () => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFFFFF">
     <path d="M0 0h24v24H0V0z" fill="none" />
@@ -42,6 +42,12 @@ const CloseBtn = (props) => {
   );
 };
 
+// Helper function to convert camelCase to Title Case for UI labels
+const formatLabel = (key) => {
+  const result = key.replace(/([A-Z])/g, " $1");
+  return result.charAt(0).toUpperCase() + result.slice(1);
+};
+
 const EditVendorDetails = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = Digit.ULBService.getStateId();
@@ -51,29 +57,20 @@ const EditVendorDetails = (props) => {
   let { id: dsoId } = useParams();
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
-  const [config, setCurrentConfig] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showToast, setShowToast] = useState(null);
   const [vehicles, setVehicles] = useState([]);
   const [drivers, setDrivers] = useState([]);
   const [selectedOption, setSelectedOption] = useState({});
 
-  const { data: dsoData, isLoading: isLoading, isSuccess: isDsoSuccess, error: dsoError, refetch: refetchDso } = Digit.Hooks.fsm.useDsoSearch(
+  const { data: dsoData, isLoading: isLoading, refetch: refetchDso } = Digit.Hooks.fsm.useDsoSearch(
     tenantId,
     { ids: dsoId },
     { staleTime: Infinity }
   );
 
-  console.log("id in dso :: ", dsoId);
-  console.log("dsoData", dsoData);
-
-  //const filteredDsoApplication = dsoData?.filter(item => item.id === dsoId);
-
   const {
     data: vehicleData,
-    isLoading: isVehicleDataLoading,
-    isSuccess: isVehicleSuccess,
-    error: vehicleError,
     refetch: refetchVehicle,
   } = Digit.Hooks.fsm.useVehiclesSearch({
     tenantId,
@@ -87,9 +84,6 @@ const EditVendorDetails = (props) => {
 
   const {
     data: driverData,
-    isLoading: isDriverDataLoading,
-    isSuccess: isDriverSuccess,
-    error: driverError,
     refetch: refetchDriver,
   } = Digit.Hooks.fsm.useDriverSearch({
     tenantId,
@@ -101,11 +95,12 @@ const EditVendorDetails = (props) => {
     },
   });
 
+  const { data: vendorAdditionalData, isLoading: isVendorAdditionalLoading } = Digit.Hooks.vendor.useEmpvendorCommonSearch(
+    { tenantId, filters: { vendorId: dsoId } },
+    { enabled: !!dsoId }
+  );
+
   const {
-    isLoading: isUpdateLoading,
-    isError: vendorCreateError,
-    data: updateResponse,
-    error: updateError,
     mutate,
   } = Digit.Hooks.fsm.useVendorUpdate(tenantId);
 
@@ -143,7 +138,7 @@ const EditVendorDetails = (props) => {
 
   const closeModal = () => {
     setSelectedAction(null);
-    setSelectedOption({})
+    setSelectedOption({});
     setShowModal(false);
   };
 
@@ -290,11 +285,30 @@ const EditVendorDetails = (props) => {
       );
     }
   };
+
   const isMobile = window.Digit.Utils.browser.isMobile();
 
   if (isLoading) {
     return <Loader />;
   }
+
+  // Fields to exclude from the Additional Details UI rendering
+  const excludedKeys = [
+    "vendorAdditionalDetailsId",
+    "vendorId", // Hiding this as it's an internal ID
+    "tenantId",
+    "code",
+    "lastModifiedTime",
+    "createdTime",
+    "lastModifiedBy",
+    "createdBy",
+    "active",
+    "status",
+    "vendorType",
+    "vendorGroup",
+    "narration",
+    "documents" // Complex array handled separately if needed
+  ];
 
   return (
     <React.Fragment>
@@ -309,11 +323,78 @@ const EditVendorDetails = (props) => {
                   <div style={!isMobile ? { marginLeft: "-15px" } : {}}>
                     <StatusTable>
                       {detail?.values?.map((value, index) => {
+
+                        // ADDITIONAL DETAILS LOGIC
+                        if (value.title === "ES_FSM_REGISTRY_DETAILS_ADDITIONAL_DETAILS") {
+                          const additionalDetails = vendorAdditionalData?.VendorDetails?.[0]?.vendorAdditionalDetails;
+                          return (
+                            <Row
+                              key={t(value.title)}
+                              label={t(value.title)}
+                              text={
+                                isVendorAdditionalLoading ? (
+                                  <Loader />
+                                ) : (
+                                  <div>
+                                    {additionalDetails ? (
+                                      <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+                                        <div style={{ marginBottom: "8px" }}>
+                                          {typeof additionalDetails === "object" ? (
+                                            Object.entries(additionalDetails)
+                                              .filter(([key]) => !excludedKeys.includes(key))
+                                              .map(([key, val]) => {
+                                                // Skip rendering nested objects/arrays
+                                                if (typeof val === "object" && val !== null) return null;
+
+                                                const safeKey = String(key);
+                                                const safeVal = val !== null && val !== undefined ? String(val) : "";
+
+                                                return (
+                                                  <div key={safeKey} style={{ marginBottom: "6px" }}>
+                                                    <span style={{ fontWeight: "bold", marginRight: "6px", color: "#000000ff" }}>
+                                                      {t(formatLabel(safeKey))}:
+                                                    </span>
+                                                    <span>{safeVal ? t(safeVal) : "N/A"}</span>
+                                                  </div>
+                                                );
+                                              })
+                                          ) : (
+                                            <span>{t(String(additionalDetails))}</span>
+                                          )}
+                                        </div>
+                                        <span
+                                          className="link"
+                                          style={{ color: "#a82227", cursor: "pointer", textDecoration: "underline", marginTop: "8px", display: "inline-block" }}
+                                          onClick={() => history.push(`/digit-ui/employee/vendor/registry/additionaldetails/info?vendorId=${dsoId}`)}
+                                        >
+                                          {t("Edit Details")}
+                                        </span>
+                                      </div>
+                                    ) : (
+                                      <span
+                                        className="link"
+                                        style={{ color: "#a82227", cursor: "pointer", textDecoration: "underline" }}
+                                        onClick={() => history.push(`/digit-ui/employee/vendor/registry/additionaldetails/info?vendorId=${dsoId}`)}
+                                      >
+                                        {t("Add Additional Details")}
+                                      </span>
+                                    )}
+                                  </div>
+                                )
+                              }
+                              last={index === detail?.values?.length - 1}
+                              caption={value.caption}
+                              className={`border-none ${!isMobile ? "vendor-details-row" : ""}`}
+                            />
+                          );
+                        }
+
+                        // DEFAULT ROW LOGIC
                         return (
                           <Row
-                            key={t(value.title)}
-                            label={t(value.title)}
-                            text={t(value.value) || "N/A"}
+                            key={t(String(value.title))}
+                            label={t(String(value.title))}
+                            text={value.value ? t(String(value.value)) : "N/A"}
                             last={index === detail?.values?.length - 1}
                             caption={value.caption}
                             className={`border-none ${!isMobile ? "vendor-details-row" : ""}`}
@@ -322,7 +403,7 @@ const EditVendorDetails = (props) => {
                       })}
                       {detail?.child?.map((data, index) => {
                         return (
-                          <Card className="card-with-background">
+                          <Card className="card-with-background" key={data.id || index}>
                             <div className="card-head">
                               <h2>
                                 {t(detail.type)} {index + 1}
@@ -338,9 +419,9 @@ const EditVendorDetails = (props) => {
                             </div>
                             {data?.values?.map((value, index) => (
                               <Row
-                                key={t(value.title)}
-                                label={t(value.title)}
-                                text={t(value.value) || "N/A"}
+                                key={t(String(value.title))}
+                                label={t(String(value.title))}
+                                text={value.value ? t(String(value.value)) : "N/A"}
                                 last={index === detail?.values?.length - 1}
                                 caption={value.caption}
                                 className="border-none"
@@ -373,8 +454,8 @@ const EditVendorDetails = (props) => {
                     selectedAction === "DELETE"
                       ? "ES_FSM_REGISTRY_DELETE_POPUP_HEADER"
                       : selectedAction === "ADD_VEHICLE"
-                      ? "ES_FSM_REGISTRY_ADD_VEHICLE_POPUP_HEADER"
-                      : "ES_FSM_REGISTRY_ADD_DRIVER_POPUP_HEADER"
+                        ? "ES_FSM_REGISTRY_ADD_VEHICLE_POPUP_HEADER"
+                        : "ES_FSM_REGISTRY_ADD_DRIVER_POPUP_HEADER"
                   )}
                 />
               }

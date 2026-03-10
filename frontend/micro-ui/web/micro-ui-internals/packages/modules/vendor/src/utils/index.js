@@ -110,6 +110,8 @@ export const VendorData = (data) => {
       documents: data?.documents?.documents,
       active: null,
       vendorAdditionalDetailsId: null,
+      vendorGroup: data?.vendordet?.vendorGroup || "N/A",
+      vendorType: data?.vendordet?.vendorType || "N/A",
     },
   };
 
