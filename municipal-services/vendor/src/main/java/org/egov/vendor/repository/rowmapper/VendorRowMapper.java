@@ -47,6 +47,7 @@ public class VendorRowMapper implements ResultSetExtractor<List<Vendor>> {
 		while (rs.next()) {
 			Vendor currentvendor = new Vendor();
 			String id = rs.getString("vendor_id");
+			String vendorId = rs.getString("vendor_idgen");
 			String name = rs.getString("name");
 			currentvendor = vendorMap.get(id);
 			String tenantId = rs.getString("tenantid");
@@ -59,11 +60,12 @@ public class VendorRowMapper implements ResultSetExtractor<List<Vendor>> {
 			String paymentpreference = rs.getString("paymentpreference");
 			this.setFullCount(rs.getInt("full_count"));
 
+			
 			if (currentvendor == null) {
 				if (status == null) {
 					status = "ACTIVE";
 				}
-				currentvendor = Vendor.builder().id(id).name(name).tenantId(tenantId).agencyType(agencytype)
+				currentvendor = Vendor.builder().id(id).vendorIdGen(vendorId).name(name).tenantId(tenantId).agencyType(agencytype)
 						.paymentPreference(paymentpreference).additionalDetails(additionalDetail)
 						.description(description).source(source).status(StatusEnum.valueOf(status)).ownerId(ownerId)
 						.build();

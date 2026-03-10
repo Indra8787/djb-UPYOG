@@ -12,6 +12,7 @@ import org.egov.vendor.driver.service.DriverService;
 import org.egov.vendor.driver.web.model.DriverResponse;
 import org.egov.vendor.driver.web.model.DriverSearchCriteria;
 import org.egov.vendor.repository.VendorRepository;
+import org.egov.vendor.util.IdgenUtil;
 import org.egov.vendor.util.VendorConstants;
 import org.egov.vendor.util.VendorErrorConstants;
 import org.egov.vendor.util.VendorUtil;
@@ -52,6 +53,8 @@ public class EnrichmentService {
 
 	@Autowired
 	private DriverService driverService;
+	@Autowired
+	private IdgenUtil idgenUtil;
 
 	/**
 	 * enriches the request object for create, assigns random ids for vedor,
@@ -61,6 +64,12 @@ public class EnrichmentService {
 	 */
 
 	public void enrichCreate(VendorRequest vendorRequest) {
+		List<String> referenceList = idgenUtil.getIdList(
+				vendorRequest.getRequestInfo(),
+				vendorRequest.getVendor().getTenantId(),
+				"djb.vendor.id",
+				null,
+				1);
 		Vendor vendor = vendorRequest.getVendor();
 		RequestInfo requestInfo = vendorRequest.getRequestInfo();
 		vendor.setStatus(Vendor.StatusEnum.ACTIVE);
@@ -70,7 +79,7 @@ public class EnrichmentService {
 			vendorRequest.getVendor().setAuditDetails(auditDetails);
 		}
 		vendor.setId(UUID.randomUUID().toString());
-
+		vendor.setVendorIdGen(referenceList.get(0));
 		if (vendorRequest.getVendor().getAddress() != null) {
 			if (StringUtils.isEmpty(vendorRequest.getVendor().getAddress().getId()))
 				vendorRequest.getVendor().getAddress().setId(UUID.randomUUID().toString());
@@ -201,7 +210,7 @@ public class EnrichmentService {
 							.tenantId(tenantId).ids(Arrays.asList(driver.getOwnerId())).build(), requestInfo);
 					driver.setOwner(userDetailResponse.getUser().get(0));
 					driver.setVendorDriverStatus(org.egov.vendor.driver.web.model.Driver.StatusEnum.ACTIVE);
-					
+
 				});
 			}
 
@@ -222,7 +231,7 @@ public class EnrichmentService {
 			vendor.setVehicles(vehicleService.getVehicles(vehicleSearchCriteria, requestInfo));
 
 			vendor.getVehicles().forEach(vehicle -> {
-//				vehicle.setVendorVehicleStatus(vehicle.getStatus());
+				// vehicle.setVendorVehicleStatus(vehicle.getStatus());
 				vehicle.setVendorVehicleStatus(org.egov.vendor.web.model.vehicle.Vehicle.StatusEnum.ACTIVE);
 			});
 

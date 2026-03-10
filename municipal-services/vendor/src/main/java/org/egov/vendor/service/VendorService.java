@@ -14,6 +14,7 @@ import org.egov.tracer.model.CustomException;
 import org.egov.vendor.config.VendorConfiguration;
 import org.egov.vendor.driver.web.model.Driver;
 import org.egov.vendor.repository.VendorRepository;
+import org.egov.vendor.util.IdgenUtil;
 import org.egov.vendor.util.VendorConstants;
 import org.egov.vendor.util.VendorErrorConstants;
 import org.egov.vendor.util.VendorUtil;
@@ -61,8 +62,10 @@ public class VendorService {
 	@Autowired
 	private VendorConfiguration config;
 
+	
 	public Vendor create(VendorRequest vendorRequest) {
 		RequestInfo requestInfo = vendorRequest.getRequestInfo();
+		
 		String tenantId = vendorRequest.getVendor().getTenantId().split("\\.")[0];
 		if (vendorRequest.getVendor().getTenantId().split("\\.").length == 1) {
 			throw new CustomException("Invalid TenantId", " Application cannot be create at StateLevel");

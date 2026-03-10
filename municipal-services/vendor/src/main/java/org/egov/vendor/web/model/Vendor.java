@@ -41,6 +41,10 @@ public class Vendor {
 	@JsonProperty("id")
 	private String id = null;
 
+	@JsonProperty("vendor_id")
+	@SafeHtml
+	private String vendorIdGen = null;
+
 	@JsonProperty("tenantId")
 	@SafeHtml
 	@Size(max=64)
@@ -92,6 +96,9 @@ public class Vendor {
 	@Size(max=128)
 	private String paymentPreference = null;
 	
+	// @JsonProperty("bankDetails")
+    // @Valid
+    // private List<BankDetail> bankDetails = null;
 		
 	/**
 	 * Inactive records will be consider as soft deleted

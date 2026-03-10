@@ -18,7 +18,7 @@ public class VendorQueryBuilder {
 
 	private static final String QUERY = "SELECT count(*) OVER() AS full_count, vendor.*,vendor_address.*,vendor_driver.*,vendor_vehicle.*, vendor.id as vendor_id,"
 			+ "  vendor.createdby as vendor_createdby,vendor.lastmodifiedby as vendor_lastmodifiedby,"
-			+ "  vendor.createdtime as vendor_createdtime," + "  vendor.lastmodifiedtime as vendor_lastmodifiedtime,"
+			+ "  vendor.createdtime as vendor_createdtime," + "  vendor.lastmodifiedtime as vendor_lastmodifiedtime,vendor.vendor_idgen as vendor_idgen,"
 			+ "  vendor.additionaldetails as vendor_additionaldetails,"
 			+ "  vendor_address.id as vendor_address_id FROM eg_vendor vendor"
 			+ "  INNER JOIN eg_vendor_address vendor_address on  vendor_address.vendor_id=vendor.id"

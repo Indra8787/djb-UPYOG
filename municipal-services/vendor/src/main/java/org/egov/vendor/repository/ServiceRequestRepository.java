@@ -6,6 +6,7 @@ import org.egov.tracer.model.ServiceCallException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,15 +34,19 @@ public class ServiceRequestRepository {
 	 * @return
 	 */
 	public Object fetchResult(StringBuilder uri, Object request) {
-		Object response = null;
-		try {
-			response = restTemplate.postForObject(uri.toString(), request, Map.class);
-		} catch (HttpClientErrorException e) {
-			throw new ServiceCallException(e.getResponseBodyAsString());
-		} catch (Exception e) {
-			throw new ServiceCallException(e.getMessage());
-		}
-
-		return response;
-	}
+    Object response = null;
+    try {
+        response = restTemplate.postForObject(uri.toString(), request, Map.class);
+    } catch (HttpClientErrorException e) {
+        log.error("External Service Call Failed", e);
+        throw new ServiceCallException(e.getResponseBodyAsString());
+    } catch (HttpServerErrorException e) {          // ADD THIS BLOCK
+        log.error("External Service Call Failed", e);
+        throw new ServiceCallException(e.getResponseBodyAsString()); // gets actual error body
+    } catch (Exception e) {
+        log.error("External Service Call Failed", e);
+        throw new ServiceCallException(e.getMessage() != null ? e.getMessage() : e.getClass().getName());
+    }
+    return response;
+}
 }

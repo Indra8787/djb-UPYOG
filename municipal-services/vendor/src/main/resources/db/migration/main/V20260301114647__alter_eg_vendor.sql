@@ -1,0 +1,3 @@
+ALTER TABLE eg_vendor 
+ADD COLUMN IF NOT EXISTS vendor_idgen VARCHAR(25);
+

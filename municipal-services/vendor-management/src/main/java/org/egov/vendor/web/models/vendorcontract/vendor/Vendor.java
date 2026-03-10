@@ -45,6 +45,12 @@ public class Vendor {
 	@Column(name = "id", nullable = false, length = 64)
 	private String id = null;
 
+	@JsonProperty("vendorId")
+	@SafeHtml
+	@Size(max=64)
+	@Column(name = "vendor_idgen", length = 64)
+	private String vendorIdGen = null;
+	
 	@JsonProperty("tenantId")
 	@SafeHtml
 	@Size(max=64)

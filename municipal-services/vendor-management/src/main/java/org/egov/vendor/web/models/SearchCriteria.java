@@ -7,6 +7,7 @@ public class SearchCriteria {
     private String  vendorAdditionalDetailsId;
     private String tenantId;
     private String vendorId;
+    private String vendor_Id;
     private String category;
     private String status;
     private String vendorGroup;
