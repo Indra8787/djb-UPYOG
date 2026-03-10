@@ -14,7 +14,7 @@ const Documents = () => {
       formData?.documentName &&
       formData?.docCategory &&
       (formData?.document.filestoreId || formData?.document.documentLink) &&
-      formData?.ULB?.length
+      formData?.ULB
     ) {
       setSubmitValve(true);
     } else {
@@ -22,7 +22,7 @@ const Documents = () => {
     }
   };
 
-  const onSubmit = (data) => {  
+  const onSubmit = (data) => {
     const DocumentEntity = {
       name: data.documentName,
       description: data?.description.length ? data.description : "",
@@ -31,7 +31,8 @@ const Documents = () => {
       filestoreId: data.document?.filestoreId?.fileStoreId,
       fileSize: data.document?.filestoreId?.fileSize,
       fileType: data.document?.filestoreId?.fileType,
-      tenantIds: data.ULB.map((e) => e.code),
+      tenantId: data.ULB.code,
+      tenantIds: [data.ULB.code],
     };
 
     history.push("/digit-ui/employee/engagement/documents/response", { DocumentEntity });
@@ -39,16 +40,16 @@ const Documents = () => {
 
   return (
     <div>
-     <Header>{t("ES_ENGAGEMENT_DOCUMENTS")}</Header>
-    <FormComposer
-     // heading={t("ES_ENGAGEMENT_DOCUMENTS")}
-     label={t("ES_COMMON_APPLICATION_SUBMIT")}
-     config={documentsFormConfig}
-     onSubmit={onSubmit}
-     fieldStyle={{}}
-     onFormValueChange={onFormValueChange}
-     isDisabled={!canSubmit}
-     />
+      <Header>{t("ES_ENGAGEMENT_DOCUMENTS")}</Header>
+      <FormComposer
+        // heading={t("ES_ENGAGEMENT_DOCUMENTS")}
+        label={t("ES_COMMON_APPLICATION_SUBMIT")}
+        config={documentsFormConfig}
+        onSubmit={onSubmit}
+        fieldStyle={{}}
+        onFormValueChange={onFormValueChange}
+        isDisabled={!canSubmit}
+      />
     </div>
   );
 };

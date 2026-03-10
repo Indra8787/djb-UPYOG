@@ -33,9 +33,12 @@ const Response = (props) => {
       queryClient.clear();
     };
 
-    mutation.mutate(state, {
-      onSuccess,
-    });
+    const DocumentEntity = state?.DocumentEntity;
+    if (DocumentEntity) {
+      mutation.mutate({ DocumentEntity: DocumentEntity }, {
+        onSuccess,
+      });
+    }
   }, []);
 
   if (mutation.isLoading || mutation.isIdle) {

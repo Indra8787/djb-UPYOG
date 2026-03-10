@@ -99,8 +99,10 @@ const EngagementDocUploadDocument = ({ userType, t, onSelect, setValue, config, 
                 showHintBelow={true}
                 hintText={t("DOCUMENTS_ATTACH_RESTRICTIONS_SIZE")}
                 message={isUploadingImage ? <Loader /> : documentUploadMessage(t, fileStoreId, isInEditFormMode)}
+                error={isUploadingImage || !!imageUploadError}
+                buttonType="button"
                 textStyles={{ width: "100%" }}
-                inputStyles={{ width: "280px" }}
+                inputStyles={{ width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }}
               />
             )}
           />

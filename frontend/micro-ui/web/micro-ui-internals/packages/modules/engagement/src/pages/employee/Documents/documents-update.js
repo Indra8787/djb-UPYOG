@@ -38,7 +38,7 @@ const Documents = (props) => {
       fileSize,
       fileType,
       documentLink: data.document?.documentLink,
-      tenantId: data?.ULB?.code,
+      tenantId: data?.ULB?.code || props.location?.state?.DocumentEntity?.tenantId,
     };
 
     delete DocumentEntity.ULB;
