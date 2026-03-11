@@ -5,13 +5,17 @@ import { useHistory } from "react-router-dom";
 //import VehicleConfig from "../../../configs/VehicleConfig";
 import { useQueryClient } from "react-query";
 import VehicleConfig from "../../../config/VehicleConfig";
+import Timeline from "../../../components/VENDORTimeline";
 
 const AddVehicle = ({ parentUrl, heading }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   const [showToast, setShowToast] = useState(null);
   const history = useHistory();
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const [currentStep, setCurrentStep] = useState(1);
+  const steps = [t("ES_FSM_REGISTRY_TITLE_NEW_VEHICLE")];
 
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("FSM_MUTATION_HAPPENED", false);
   const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
@@ -26,8 +30,6 @@ const AddVehicle = ({ parentUrl, heading }) => {
     clearSuccessData();
     clearError();
   }, []);
-
-  const { t } = useTranslation();
 
   const Config = VehicleConfig(t);
 
@@ -143,32 +145,37 @@ const AddVehicle = ({ parentUrl, heading }) => {
 
   return (
     <React.Fragment>
-      <div>
+      {/* <div>
         <Header>{t("ES_FSM_REGISTRY_TITLE_NEW_VEHICLE")}</Header>
-      </div>
-      <div className="vendor-two-column-form" style={!isMobile ? { marginLeft: "-15px" } : {}}>
-        <FormComposer
-          isDisabled={!canSubmit}
-          label={t("ES_COMMON_APPLICATION_SUBMIT")}
-          config={Config.filter((i) => !i.hideInEmployee).map((config) => {
-            return {
-              ...config,
-              body: config.body.filter((a) => !a.hideInEmployee),
-            };
-          })}
-          fieldStyle={{ marginRight: 0 }}
-          onSubmit={onSubmit}
-          defaultValues={defaultValues}
-          onFormValueChange={onFormValueChange}
-          noBreakLine={true}
-        />
-        {showToast && (
-          <Toast
-            error={showToast.key === "error" ? true : false}
-            label={t(showToast.key === "success" ? `ES_FSM_REGISTRY_${showToast.action}_SUCCESS` : showToast.action)}
-            onClose={closeToast}
+      </div> */}
+      <div style={{ display: "flex", width: "100%", gap: "24px" }}>
+        {/* Timeline */}
+        <Timeline steps={steps} currentStep={currentStep} />
+
+        <div style={{ flex: "1", overflowY: "auto" }}>
+          <FormComposer
+            isDisabled={!canSubmit}
+            label={t("ES_COMMON_APPLICATION_SUBMIT")}
+            config={Config.filter((i) => !i.hideInEmployee).map((config) => {
+              return {
+                ...config,
+                body: config.body.filter((a) => !a.hideInEmployee),
+              };
+            })}
+            fieldStyle={{ marginRight: 0 }}
+            onSubmit={onSubmit}
+            defaultValues={defaultValues}
+            onFormValueChange={onFormValueChange}
+            noBreakLine={true}
           />
-        )}
+          {showToast && (
+            <Toast
+              error={showToast.key === "error" ? true : false}
+              label={t(showToast.key === "success" ? `ES_FSM_REGISTRY_${showToast.action}_SUCCESS` : showToast.action)}
+              onClose={closeToast}
+            />
+          )}
+        </div>
       </div>
     </React.Fragment>
   );

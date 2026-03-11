@@ -7,6 +7,7 @@ const VendorDocuments = ({ t, config, onSelect, formData }) => {
   const [uploadedFiles, setUploadedFiles] = useState([null]);
   const [error, setError] = useState(null);
   const [ind, setInd] = useState(1);
+  const steps = ["VENDOR_ADDITIONAL_DETAILS", "VENDOR_DOCUMENT_DETAILS", "VENDOR_SUMMARY"];
 
   const tenantId = Digit.ULBService.getStateId();
   const stateId = Digit.ULBService.getStateId();
@@ -84,50 +85,52 @@ const VendorDocuments = ({ t, config, onSelect, formData }) => {
   };
 
   return (
-    <div>
-      <Timeline currentStep={2} />
-      <FormStep
-        t={t}
-        config={config}
-        onSelect={handleSubmit}
-        onSkip={onSkip}
-        isDisabled={uploadedFiles.some((file) => file === null) && files.some((file) => file === null)}
-      >
-        {files.map((file, index) => (
-          <LabelFieldPair key={index} style={{ marginBottom: "24px" }}>
-            <CardLabel className="card-label-smaller">{t("VENDOR_ID") + (index !== 0 ? index : "")}</CardLabel>
-            <div className="field" style={{ display: "flex", alignItems: "center" }}>
-              <UploadFile
-                onUpload={(e) => handleFileSelect(e, index)}
-                onDelete={() =>
-                  setUploadedFiles((prev) => {
-                    const updatedFiles = [...prev];
-                    updatedFiles[index] = null;
-                    return updatedFiles;
-                  })
-                }
-                id={`file-upload-${index}`}
-                message={uploadedFiles[index] ? `1 ${t("CS_ACTION_FILEUPLOADED")}` : t("CS_ACTION_NO_FILEUPLOADED")}
-                textStyles={{ width: "100%" }}
-                inputStyles={{ width: "280px" }}
-                accept=".pdf, .jpeg, .jpg, .png"
-                buttonType="button"
-                error={!uploadedFiles[index]}
-              />
+    <div style={{ display: "flex", width: "100%", gap: "24px" }}>
+      <Timeline steps={steps} currentStep={2} />
+      <div style={{ flex: "1", overflowY: "auto" }}>
+        <FormStep
+          t={t}
+          config={config}
+          onSelect={handleSubmit}
+          onSkip={onSkip}
+          isDisabled={uploadedFiles.some((file) => file === null) && files.some((file) => file === null)}
+        >
+          {files.map((file, index) => (
+            <LabelFieldPair key={index}>
+              <CardLabel className="card-label-smaller">{t("VENDOR_ID") + (index !== 0 ? index : "")}</CardLabel>
+              <div className="field" style={{ display: "flex", alignItems: "center" }}>
+                <UploadFile
+                  onUpload={(e) => handleFileSelect(e, index)}
+                  onDelete={() =>
+                    setUploadedFiles((prev) => {
+                      const updatedFiles = [...prev];
+                      updatedFiles[index] = null;
+                      return updatedFiles;
+                    })
+                  }
+                  id={`file-upload-${index}`}
+                  message={uploadedFiles[index] ? `1 ${t("CS_ACTION_FILEUPLOADED")}` : t("CS_ACTION_NO_FILEUPLOADED")}
+                  textStyles={{ width: "100%" }}
+                  inputStyles={{ width: "280px" }}
+                  accept=".pdf, .jpeg, .jpg, .png"
+                  buttonType="button"
+                  error={!uploadedFiles[index]}
+                />
 
-              {/* {index > 0 && (
+                {/* {index > 0 && (
                 <button style={{ marginLeft: "10px" }} onClick={() => removeFileField(index)}>
                   <DeleteIcon className="delete" fill="#a82227" style={{ cursor: "pointer", marginLeft: "20px" }} />
                 </button>
               )} */}
-            </div>
-          </LabelFieldPair>
-        ))}
-{/* this is for adding more than 1 file
+              </div>
+            </LabelFieldPair>
+          ))}
+          {/* this is for adding more than 1 file
         <SubmitBar label={t("CS_COMMON_ADD")} style={{ marginBottom: "10px", marginLeft: "2px" }} onSubmit={addFileField} disabled={ind > 4} /> */}
 
-        {error && <Toast label={error} onClose={() => setError(null)} error />}
-      </FormStep>
+          {error && <Toast label={error} onClose={() => setError(null)} error />}
+        </FormStep>
+      </div>
     </div>
   );
 };

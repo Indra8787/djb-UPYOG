@@ -877,9 +877,9 @@
 
 
 .custom-stepper-card {
-  width: 280px;
-  background: #f3f3f3;
-  padding: 30px 24px;
+  width: 20%;
+  background: #FFFFFF;
+  padding: 25px 25px;
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
@@ -933,4 +933,12 @@
 .step-label.active-text {
   color: #5a6ee1;
   font-weight: 600;
+}
+
+
+.formcomposer-section-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
 }

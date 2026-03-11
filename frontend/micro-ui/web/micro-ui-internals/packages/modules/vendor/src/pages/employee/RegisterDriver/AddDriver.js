@@ -5,13 +5,18 @@ import { useHistory } from "react-router-dom";
 //import DriverConfig from "../../configs/DriverConfig";
 import { useQueryClient } from "react-query";
 import DriverConfig from "../../../config/DriverConfig";
+import Timeline from "../../../components/VENDORTimeline";
 
 const AddDriver = ({ parentUrl, heading }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const { t } = useTranslation();
+
   const stateId = Digit.ULBService.getStateId();
   const [showToast, setShowToast] = useState(null);
   const history = useHistory();
+  const [currentStep, setCurrentStep] = useState(1);
   const queryClient = useQueryClient();
+  const steps = [t("ES_FSM_REGISTRY_TITLE_NEW_DRIVER")];
 
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("FSM_MUTATION_HAPPENED", false);
   const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
@@ -26,8 +31,6 @@ const AddDriver = ({ parentUrl, heading }) => {
     clearSuccessData();
     clearError();
   }, []);
-
-  const { t } = useTranslation();
 
   const Config = DriverConfig(t);
 
@@ -60,7 +63,7 @@ const AddDriver = ({ parentUrl, heading }) => {
     const emailId = data?.emailId;
     // const phone = data?.phone;
     const dob = new Date(`${data.dob}`).getTime() || new Date(`1/1/1970`).getTime();
-    const additionalDetails = data?.additionalDetails?.code
+    const additionalDetails = data?.additionalDetails?.code;
     const formData = {
       driver: {
         tenantId: tenantId,
@@ -106,32 +109,36 @@ const AddDriver = ({ parentUrl, heading }) => {
 
   return (
     <React.Fragment>
-      <div>
+      {/* <div>
         <Header>{t("ES_FSM_REGISTRY_TITLE_NEW_DRIVER")}</Header>
-      </div>
-      <div className="vendor-two-column-form" style={!isMobile ? { marginLeft: "-15px" } : {}}>
-        <FormComposer
-          isDisabled={!canSubmit}
-          label={t("ES_COMMON_APPLICATION_SUBMIT")}
-          config={Config.filter((i) => !i.hideInEmployee).map((config) => {
-            return {
-              ...config,
-              body: config.body.filter((a) => !a.hideInEmployee),
-            };
-          })}
-          fieldStyle={{ marginRight: 0 }}
-          onSubmit={onSubmit}
-          defaultValues={defaultValues}
-          onFormValueChange={onFormValueChange}
-          noBreakLine={true}
-        />
-        {showToast && (
-          <Toast
-            error={showToast.key === "error" ? true : false}
-            label={t(showToast.key === "success" ? `ES_FSM_${showToast.action}_SUCCESS` : showToast.action)}
-            onClose={closeToast}
+      </div> */}
+      <div style={{ display: "flex", width: "100%", gap: "24px" }}>
+        {/* Timeline */}
+        <Timeline steps={steps} currentStep={currentStep} />
+        <div style={{ flex: "1", overflowY: "auto" }}>
+          <FormComposer
+            isDisabled={!canSubmit}
+            label={t("ES_COMMON_APPLICATION_SUBMIT")}
+            config={Config.filter((i) => !i.hideInEmployee).map((config) => {
+              return {
+                ...config,
+                body: config.body.filter((a) => !a.hideInEmployee),
+              };
+            })}
+            fieldStyle={{ marginRight: 0 }}
+            onSubmit={onSubmit}
+            defaultValues={defaultValues}
+            onFormValueChange={onFormValueChange}
+            noBreakLine={true}
           />
-        )}
+          {showToast && (
+            <Toast
+              error={showToast.key === "error" ? true : false}
+              label={t(showToast.key === "success" ? `ES_FSM_${showToast.action}_SUCCESS` : showToast.action)}
+              onClose={closeToast}
+            />
+          )}
+        </div>
       </div>
     </React.Fragment>
   );
