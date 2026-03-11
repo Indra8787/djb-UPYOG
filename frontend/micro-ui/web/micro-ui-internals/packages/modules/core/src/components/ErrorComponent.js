@@ -29,14 +29,15 @@ const ErrorComponent = (props) => {
     const pathname = window.location.pathname;
 
     const isEmployee = pathname.includes("/employee");
-    const isLoginPage = pathname.includes("/employee/user/login") || pathname.includes("/citizen/select-language");
+    const isLoginPage = pathname.includes("/employee/user/login") || pathname.includes("/citizen");
 
     // Wait until keycloak is ready
     if (!kc || !kc.didInitialize) return;
 
     // Not authenticated → trigger login
     if (!kc.authenticated && !isLoginPage) {
-      const redirectBase = isEmployee ? "/digit-ui/employee/user/select-language" : "/digit-ui/citizen";
+
+      const redirectBase = isEmployee ? "/digit-ui/employee/user/language-selection" : "/digit-ui/citizen";
 
       kc.login({
         redirectUri: window.location.origin + redirectBase + `?from=${encodeURIComponent(pathname + window.location.search)}`,
