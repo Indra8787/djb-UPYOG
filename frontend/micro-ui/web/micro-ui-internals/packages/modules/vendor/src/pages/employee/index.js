@@ -62,21 +62,21 @@ const EmployeeApp = ({ path, url, userType }) => {
 
     let crumbs = [
       { icon: HomeIcon, path: "/digit-ui/employee" },
-      { label: t("ES_COMMON_VENDOR"), path: `/digit-ui/employee/vendor/search-vendor` },
+      { label: t("TITLE_VENDOR_MANAGEMENT"), path: `/digit-ui/employee/vendor/search-vendor` },
     ];
 
     if (pathname.includes("/registry/new-vendor")) {
-      crumbs.push({ label: t("VENDOR_CREATE_NEW_VENDOR") });
+      crumbs.push({ label: t("ES_FSM_REGISTRY_TITLE_NEW_VENDOR") });
     } else if (pathname.includes("/search-vendor")) {
-      crumbs.push({ label: t("VENDOR_SEARCH_VENDORS") });
+      crumbs.push({ label: t("SEARCH_VENDOR") });
     } else if (pathname.includes("/registry/new-driver")) {
-      crumbs.push({ label: t("VENDOR_CREATE_NEW_DRIVER") });
+      crumbs.push({ label: t("ES_FSM_REGISTRY_TITLE_NEW_DRIVER") });
     } else if (pathname.includes("/registry/vendor-details") || pathname.includes("/registry/modify-vendor/")) {
       crumbs.push({ label: t("VENDOR_VENDOR_DETAILS") });
     } else if (pathname.includes("/registry/vehicle-details") || pathname.includes("/registry/modify-vehicle/")) {
       crumbs.push({ label: t("VENDOR_VEHICLE_DETAILS") });
     } else if (pathname.includes("/registry/new-vehicle")) {
-      crumbs.push({ label: t("VENDOR_CREATE_NEW_VEHICLE") });
+      crumbs.push({ label: t("ES_FSM_REGISTRY_TITLE_NEW_VEHICLE") });
     } else if (pathname.includes("/registry/driver-details") || pathname.includes("/registry/modify-driver/")) {
       crumbs.push({ label: t("VENDOR_DRIVER_DETAILS") });
     } else if (pathname.includes("/registry/additionaldetails")) {
@@ -91,6 +91,7 @@ const EmployeeApp = ({ path, url, userType }) => {
       <AppContainer>
         <React.Fragment>
           <div className="ground-container">
+            <div className="form-container">
             <ModuleHeader
               leftContent={
                 <React.Fragment>
@@ -126,6 +127,7 @@ const EmployeeApp = ({ path, url, userType }) => {
 
             {/* <PrivateRoute path={`${path}/new-application`} component={(props) => <Create {...props} parentRoute={path} />} /> */}
 
+          </div>
           </div>
         </React.Fragment>
       </AppContainer>

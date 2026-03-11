@@ -23,11 +23,9 @@ const VendorConfig = (t, disabled = false) => {
             className: "payment-form-text-input-correction",
           },
         },
-      ],
-    },
-    {
-      head: "ES_FSM_REGISTRY_PERSONAL_DETAILS",
-      body: [
+
+        // head: "ES_FSM_REGISTRY_PERSONAL_DETAILS",
+        // body: [
         {
           label: "ES_FSM_REGISTRY_NEW_GENDER",
           isMandatory: true,
@@ -99,6 +97,23 @@ const VendorConfig = (t, disabled = false) => {
             className: "payment-form-text-input-correction",
           },
         },
+        // {
+        //   label: "ES_VENDOR_REGISTRY_SERVICE_TYPE",
+        //   isMandatory: true,
+        //   type: "component",
+        //   route: "select-gender",
+        //   hideInEmployee: false,
+        //   key: "serviceType",
+        //   component: "SelectServiceType",
+        //   disable: disabled,
+        //   texts: {
+        //     headerCaption: "",
+        //     header: "CS_COMMON_CHOOSE_GENDER",
+        //     cardText: "CS_COMMON_SELECT_GENDER",
+        //     submitBarLabel: "CS_COMMON_NEXT",
+        //     skipText: "CORE_COMMON_SKIP_CONTINUE",
+        //   },
+        // },
       ],
     },
     {
@@ -195,39 +210,39 @@ const VendorConfig = (t, disabled = false) => {
       ],
     },
 
-    {
-      head: "",
-      body: [
+    // {
+    //   head: "",
+    //   body: [
 
-        {
-          label: "ES_VENDOR_REGISTRY_SERVICE_TYPE",
-          isMandatory: true,
-          type: "component",
-          route: "select-gender",
-          hideInEmployee: false,
-          key: "serviceType",
-          component: "SelectServiceType",
-          disable: disabled,
-          texts: {
-            headerCaption: "",
-            header: "CS_COMMON_CHOOSE_GENDER",
-            cardText: "CS_COMMON_SELECT_GENDER",
-            submitBarLabel: "CS_COMMON_NEXT",
-            skipText: "CORE_COMMON_SKIP_CONTINUE",
-          },
-        },
-        // {
-        //   label: "ES_FSM_REGISTRY_NEW_VENDOR_ADDITIONAL_DETAILS",
-        //   isMandatory: false,
-        //   type: "textarea",
-        //   key: "additionalDetails",
-        //   populators: {
-        //     name: "additionalDetails",
-        //     className: "payment-form-text-input-correction",
-        //   },
-        // },
-      ],
-    },
+    //     {
+    //       label: "ES_VENDOR_REGISTRY_SERVICE_TYPE",
+    //       isMandatory: true,
+    //       type: "component",
+    //       route: "select-gender",
+    //       hideInEmployee: false,
+    //       key: "serviceType",
+    //       component: "SelectServiceType",
+    //       disable: disabled,
+    //       texts: {
+    //         headerCaption: "",
+    //         header: "CS_COMMON_CHOOSE_GENDER",
+    //         cardText: "CS_COMMON_SELECT_GENDER",
+    //         submitBarLabel: "CS_COMMON_NEXT",
+    //         skipText: "CORE_COMMON_SKIP_CONTINUE",
+    //       },
+    //     },
+    //     // {
+    //     //   label: "ES_FSM_REGISTRY_NEW_VENDOR_ADDITIONAL_DETAILS",
+    //     //   isMandatory: false,
+    //     //   type: "textarea",
+    //     //   key: "additionalDetails",
+    //     //   populators: {
+    //     //     name: "additionalDetails",
+    //     //     className: "payment-form-text-input-correction",
+    //     //   },
+    //     // },
+    //   ],
+    // },
   ];
 };
 

@@ -162,7 +162,6 @@ const VendorInbox = (props) => {
     });
   };
 
-
   //vendor dropdown in driver
   const onVendorSelect = (row, selectedOption) => {
     let driverData = row.original;
@@ -205,9 +204,6 @@ const VendorInbox = (props) => {
       },
     });
   };
-
-
-
 
   const onCellClick = (row, column, length) => {
     setTableData((old) =>
@@ -264,7 +260,6 @@ const VendorInbox = (props) => {
             Header: t("ES_VENDOR_INBOX_VENDOR_NAME"),
             disableSortBy: true,
             Cell: ({ row }) => {
-
               return (
                 <div>
                   <span className="link">
@@ -275,13 +270,10 @@ const VendorInbox = (props) => {
                       </div>
                     </Link>
                   </span>
-                  
                 </div>
               );
-
-            }
+            },
           },
-
 
           //creation date
           {
@@ -290,9 +282,6 @@ const VendorInbox = (props) => {
             Cell: ({ row }) =>
               GetCell(row.original?.auditDetails?.createdTime ? Digit.DateUtils.ConvertEpochToDate(row.original?.auditDetails?.createdTime) : ""),
           },
-
-
-
 
           // {
           //   Header: t("ES_VENDOR_INBOX_SERVICE_TYPE"),
@@ -325,12 +314,11 @@ const VendorInbox = (props) => {
           //   },
           // },
 
-
           {
             Header: t("ES_VENDOR_INBOX_SERVICE_TYPE"),
             disableSortBy: true,
             Cell: ({ row }) => {
-              let additionalDetails = row.original.dsoDetails?.additionalDetails;      
+              let additionalDetails = row.original.dsoDetails?.additionalDetails;
               if (typeof additionalDetails === "string") {
                 try {
                   additionalDetails = JSON.parse(additionalDetails);
@@ -339,17 +327,11 @@ const VendorInbox = (props) => {
                   additionalDetails = {}; // Fallback to an empty object if parsing fails
                 }
               }
-          
+
               const serviceType = additionalDetails?.serviceType || "N/A"; // Safe access to description
-              return (
-                <div>
-                  {serviceType}
-                </div>
-              );
+              return <div>{serviceType}</div>;
             },
           },
-
-          
 
           // {
           //   Header: t("ES_VENDOR_INBOX_VENDOR_NAME"),
@@ -372,7 +354,6 @@ const VendorInbox = (props) => {
 
           //   }
           // },
-
 
           // {
           //   Header: t("ES_FSM_REGISTRY_INBOX_VENDOR_NAME"),
@@ -536,6 +517,25 @@ const VendorInbox = (props) => {
             },
           },
 
+          {
+            Header: t("ES_VENDOR_ADDITIONAL_DETAILS"),
+            disableSortBy: true,
+            Cell: ({ row }) => {
+              return (
+                <div>
+                  <span className="link">
+                    <Link to={"/digit-ui/employee/vendor/registry/additionaldetails/" + row.original["id"]}>
+                      <div>
+                        {t("ES_VENDOR_ADDITIONAL_DETAILS")}
+                        <br />
+                      </div>
+                    </Link>
+                  </span>
+                </div>
+              );
+            },
+          },
+
           // {
           //   Header: t("ES_VENDOR_ADDITIONAL_DETAILS")
           // }
@@ -577,15 +577,15 @@ const VendorInbox = (props) => {
             Header: t("ES_FSM_REGISTRY_INBOX_VENDOR_NAME"),
             disableSortBy: true,
             Cell: ({ row }) => GetCell(row.original?.vendor?.name || "NA"),
-          },  
-          
+          },
+
           // {
           //   Header: t("ES_VENDOR_INBOX_SERVICE_TYPE"),
           //   disableSortBy: true,
           //   Cell: ({ row }) => {
 
-          //     let additionalDetails = row.original.additionalDetails;  
-          //     console.log("additonal detailssss", additionalDetails)   
+          //     let additionalDetails = row.original.additionalDetails;
+          //     console.log("additonal detailssss", additionalDetails)
           //     if (typeof additionalDetails === "string") {
           //       try {
           //         additionalDetails = JSON.parse(additionalDetails);
@@ -606,13 +606,11 @@ const VendorInbox = (props) => {
           //   },
           // },
 
-
           {
             Header: t("ES_VENDOR_INBOX_SERVICE_TYPE"),
             disableSortBy: true,
             Cell: ({ row }) => {
-          
-              let additionalDetail = row.original.additionalDetails
+              let additionalDetail = row.original.additionalDetails;
               if (typeof additionalDetail === "string") {
                 try {
                   additionalDetail = JSON.parse(additionalDetail);
@@ -621,18 +619,12 @@ const VendorInbox = (props) => {
                   additionalDetail = {}; // Fallback to an empty object if parsing fails
                 }
               }
-          
+
               const serviceType = additionalDetail?.serviceType || "N/A"; // Safe access to description
-              console.log("sericvee", serviceType)
-              return (
-                <div>
-                  {serviceType}
-                </div>
-              );
+              console.log("sericvee", serviceType);
+              return <div>{serviceType}</div>;
             },
           },
-
-          
 
           //enabled
           {

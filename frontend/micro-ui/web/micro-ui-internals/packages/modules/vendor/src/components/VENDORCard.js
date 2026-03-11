@@ -19,10 +19,10 @@ const VENDORCard = () => {
     //   label: t("Inbox"),
     //   link: `/digit-ui/employee/asset/assetservice/inbox`,
     // },
-    {
-      label: t("ADDITIONAL_VENDOR_DETAILS"),
-      link: `/digit-ui/employee/vendor/registry/additionaldetails`
-    },
+    // {
+    //   label: t("ADDITIONAL_VENDOR_DETAILS"),
+    //   link: `/digit-ui/employee/vendor/registry/additionaldetails`
+    // },
     {
       label: t("VENDOR_NEW_REGISTERATION"),
       link: `/digit-ui/employee/vendor/registry/new-vendor`

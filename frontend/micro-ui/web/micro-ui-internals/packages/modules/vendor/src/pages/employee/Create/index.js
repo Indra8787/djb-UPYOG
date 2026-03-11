@@ -1,5 +1,5 @@
 import { Loader } from "@djb25/digit-ui-react-components";
-import React ,{Fragment}from "react";
+import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from "react-router-dom";
@@ -15,12 +15,12 @@ const VENDORCreate = ({ parentRoute }) => {
   let config = [];
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("VENDOR_Test", {});
 
-  const goNext = (skipStep, index, isAddMultiple, key) => {    
+  const goNext = (skipStep, index, isAddMultiple, key) => {
     let currentPath = pathname.split("/").pop(),
       lastchar = currentPath.charAt(currentPath.length - 1),
       isMultiple = false,
       nextPage;
-      
+
     if (Number(parseInt(currentPath)) || currentPath == "0" || currentPath == "-1") {
       if (currentPath == "-1" || currentPath == "-2") {
         currentPath = pathname.slice(0, -3);
@@ -38,8 +38,7 @@ const VENDORCreate = ({ parentRoute }) => {
       isMultiple = true;
     }
     // let { nextStep = {} } = config.find((routeObj) => routeObj.route === currentPath);
-    let { nextStep = {} } = config.find((routeObj) => routeObj.route === (currentPath || '0'));
-
+    let { nextStep = {} } = config.find((routeObj) => routeObj.route === (currentPath || "0"));
 
     let redirectWithHistory = history.push;
     if (skipStep) {
@@ -54,20 +53,17 @@ const VENDORCreate = ({ parentRoute }) => {
     }
     if (!isNaN(nextStep.split("/").pop())) {
       nextPage = `${match.path}/${nextStep}`;
-    }
-     else {
+    } else {
       nextPage = isMultiple && nextStep !== "map" ? `${match.path}/${nextStep}/${index}` : `${match.path}/${nextStep}`;
     }
 
     redirectWithHistory(nextPage);
   };
 
-
-  if(params && Object.keys(params).length>0 && window.location.href.includes("/info") && sessionStorage.getItem("docReqScreenByBack") !== "true")
-    {
-      clearParams();
-      queryClient.invalidateQueries("VENDOR_CREATE");
-    }
+  if (params && Object.keys(params).length > 0 && window.location.href.includes("/info") && sessionStorage.getItem("docReqScreenByBack") !== "true") {
+    clearParams();
+    queryClient.invalidateQueries("VENDOR_CREATE");
+  }
 
   const vendorcreate = async () => {
     history.push(`${match.path}/acknowledgement`);
@@ -98,9 +94,7 @@ const VENDORCreate = ({ parentRoute }) => {
     queryClient.invalidateQueries("VENDOR_CREATE");
   };
 
-  
-
-  let isLoading
+  let isLoading;
 
   if (isLoading) {
     return <Loader />;
@@ -108,41 +102,54 @@ const VENDORCreate = ({ parentRoute }) => {
 
   // commonFields=newConfig;
   /* use newConfig instead of commonFields for local development in case needed */
- let commonFields = createConfig;
+  let commonFields = createConfig;
   commonFields.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
-  
+
   config.indexRoute = "info";
+
+  console.log(commonFields,"commanFields")
+  console.log(config,"config")
 
   const CheckPage = Digit?.ComponentRegistryService?.getComponent("VENDORCheckPage");
   const NewResponse = Digit?.ComponentRegistryService?.getComponent("NewResponse");
 
-  
-  
   return (
-    <Switch>
-      {config.map((routeObj, index) => {
-        const { component, texts, inputs, key } = routeObj;
-        const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
-        return (
-          <Route path={`${match.path}/${routeObj.route}`} key={index}>
-            <Component config={{ texts, inputs, key }} onSelect={handleSelect} onSkip={handleSkip} t={t} formData={params} onAdd={handleMultiple} />
-          </Route>
-        );
-      })}
+    <React.Fragment>
+      <div style={{ display: "flex", width: "100%", gap: "24px" }}>
+        <div style={{ flex: "1", overflowY: "auto" }}>
+          <Switch>
+            {config.map((routeObj, index) => {
+              const { component, texts, inputs, key } = routeObj;
+              const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
+              return (
+                <Route path={`${match.path}/${routeObj.route}`} key={index}>
+                  <Component
+                    config={{ texts, inputs, key }}
+                    onSelect={handleSelect}
+                    onSkip={handleSkip}
+                    t={t}
+                    formData={params}
+                    onAdd={handleMultiple}
+                  />
+                </Route>
+              );
+            })}
 
-      
-      <Route path={`${match.path}/check`}>
-        <CheckPage onSubmit={vendorcreate} value={params} />
-      </Route>
-      <Route path={`${match.path}/acknowledgement`}>
-        <NewResponse data={params} onSuccess={onSuccess} />
-      </Route>
-      <Route>
-        <Redirect to={`${match.path}/${config.indexRoute}`} />
-      </Route>
-    </Switch>
+            <Route path={`${match.path}/check`}>
+              <CheckPage onSubmit={vendorcreate} value={params} />
+            </Route>
+            <Route path={`${match.path}/acknowledgement`}>
+              <NewResponse data={params} onSuccess={onSuccess} />
+            </Route>
+            <Route>
+              <Redirect to={`${match.path}/${config.indexRoute}`} />
+            </Route>
+          </Switch>
+        </div>
+      </div>
+    </React.Fragment>
   );
 };
 

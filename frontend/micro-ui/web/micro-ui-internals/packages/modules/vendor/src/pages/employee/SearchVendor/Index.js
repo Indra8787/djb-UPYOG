@@ -243,7 +243,7 @@ const SearchVendor = () => {
 
   return (
     <div>
-      <Header>{t("VENDOR_SEARCH")}</Header>
+      {/* <Header>{t("VENDOR_SEARCH")}</Header> */}
       <VendorInbox
         data={{ table: tableData }}
         isLoading={isLoading || isVendorLoading}

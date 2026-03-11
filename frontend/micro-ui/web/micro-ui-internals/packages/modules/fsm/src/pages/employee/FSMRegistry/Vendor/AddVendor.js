@@ -141,10 +141,10 @@ const AddVendor = ({ parentUrl, heading }) => {
 
   return (
     <React.Fragment>
-      <div>
+      {/* <div>
         <Header>{t("ES_FSM_REGISTRY_TITLE_NEW_VENDOR")}</Header>
-      </div>
-      <div style={!isMobile ? { marginLeft: "-15px" } : {}}>
+      </div> */}
+      <div style={!isMobile ? { marginLeft: "-15px" } : {}} >
         <FormComposer
           isDisabled={!canSubmit}
           label={t("ES_COMMON_APPLICATION_SUBMIT")}
