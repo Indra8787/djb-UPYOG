@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, CardLabel, Dropdown, RadioButtons, LabelFieldPair, RadioOrSelect } from "@djb25/digit-ui-react-components";
+import { FormStep, CardLabel, Dropdown, LabelFieldPair, RadioOrSelect } from "@djb25/digit-ui-react-components";
 // import Timeline from "../components/TLTimelineInFSM";
 
 const VendorSelectAddress = ({ t, config, onSelect, userType, formData }) => {
@@ -17,7 +17,6 @@ const VendorSelectAddress = ({ t, config, onSelect, userType, formData }) => {
   if (property !== "undefined") {
     property = JSON.parse(sessionStorage?.getItem("Digit_FSM_PT"))
   }
-  console.log("properfferrfrty", property)
   let cityDetail = {}
   if (property) {
     cityDetail = cities.filter((city) => {
@@ -49,7 +48,6 @@ const VendorSelectAddress = ({ t, config, onSelect, userType, formData }) => {
     if (selectedCity && fetchedLocalities) {
       let __localityList = fetchedLocalities;
       let filteredLocalityList = [];
-      console.log("formData?.address?.locality", formData?.address?.locality, formData?.cpt?.details?.address?.locality, property?.propertyDetails?.address?.locality)
       if (formData?.address?.locality) {
         setSelectedLocality(formData.address.locality);
       }
@@ -99,7 +97,7 @@ const VendorSelectAddress = ({ t, config, onSelect, userType, formData }) => {
 
   if (userType === "employee") {
     return (
-      <div className="">
+      <React.Fragment>
         <LabelFieldPair>
           <CardLabel className="card-label-smaller">
             {t("MYCITY_CODE_LABEL")}
@@ -131,7 +129,7 @@ const VendorSelectAddress = ({ t, config, onSelect, userType, formData }) => {
             t={t}
           />
         </LabelFieldPair>
-      </div>
+      </React.Fragment>
     );
   }
   return (

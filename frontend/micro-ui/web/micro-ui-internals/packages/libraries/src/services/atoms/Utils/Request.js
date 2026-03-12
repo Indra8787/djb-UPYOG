@@ -7,6 +7,27 @@ import Axios from "axios";
  *
  */
 
+Axios.interceptors.request.use(
+  async (config) => {
+    const kc = window.keycloak;
+
+    if (kc && kc.authenticated && kc.token) {
+      try {
+        await kc.updateToken(5);
+        config.headers.Authorization = `Bearer ${kc.token}`;
+      } catch (error) {
+        console.error(error);
+
+        kc.logout();
+        return Promise.reject(error);
+      }
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 Axios.interceptors.response.use(
   (res) => res,
   (err) => {
@@ -14,7 +35,7 @@ Axios.interceptors.response.use(
     const kc = window.keycloak;
     if (err?.response?.data?.Errors) {
       for (const error of err.response.data.Errors) {
-        console.error("🚀🚀🚀🚀 API ERROR:", error);
+        // console.error("🚀🚀🚀🚀 API ERROR:", error);
 
         if (error?.message?.includes("InvalidAccessTokenException")) {
           localStorage.clear();

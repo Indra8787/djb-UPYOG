@@ -222,20 +222,19 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { FormComposer, Toast } from "@djb25/digit-ui-react-components";
-import { useHistory } from "react-router-dom";
-import { useQueryClient } from "react-query";
+import { FormComposer, Stepper, Toast } from "@djb25/digit-ui-react-components";
+// import { useHistory } from "react-router-dom";
+// import { useQueryClient } from "react-query";
 import VendorConfig from "../../../config/VendorConfig";
-import Timeline from "../../../components/VENDORTimeline";
 
 const AddVendor = ({ parentUrl, heading }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
 
   const { t } = useTranslation();
-  const history = useHistory();
-  const queryClient = useQueryClient();
-  const [currentStep, setCurrentStep] = useState(1);
+  // const history = useHistory();
+  // const queryClient = useQueryClient();
+  const [currentStep, setCurrentStep] = useState(2);
   const [showToast, setShowToast] = useState(null);
   const [canSubmit, setCanSubmit] = useState(false);
   const step1DataRef = useRef({}); // 👈 store step 1 data here
@@ -268,7 +267,11 @@ const AddVendor = ({ parentUrl, heading }) => {
 
   const addressStepConfig = Config.filter((config) => config.head === "ES_FSM_REGISTRY_NEW_ADDRESS_DETAILS");
 
-  const steps = [t("ES_VRNDOR_NEW_VENDOR_DETAILS"), t("ES_FSM_REGISTRY_NEW_ADDRESS_DETAILS")];
+  // const steps = [t("ES_VRNDOR_NEW_VENDOR_DETAILS"), t("ES_FSM_REGISTRY_NEW_ADDRESS_DETAILS")];
+  const steps = [
+    { label: "ES_VRNDOR_NEW_VENDOR_DETAILS" },
+    { label: "ES_FSM_REGISTRY_NEW_ADDRESS_DETAILS" },
+  ];
 
   const onFormValueChange = (setValue, formData) => {
     if (formData?.vendorName && formData?.phone && formData?.selectGender?.code) {
@@ -376,52 +379,55 @@ const AddVendor = ({ parentUrl, heading }) => {
 
   return (
     <React.Fragment>
-      <div style={{ display: "flex", width: "100%", gap: "24px" }}>
-        {/* Timeline */}
-        <Timeline steps={steps} currentStep={currentStep} />
+      {/* Timeline */}
+      {/* <Timeline steps={steps} currentStep={currentStep} /> */}
+      <Stepper
+        steps={steps}
+        currentStep={currentStep - 1}
+        onStepClick={(step) => setCurrentStep(step + 1)}
+        t={t}
+      />
+      <div style={{ flex: "1", overflowY: "auto" }}>
+        {currentStep === 1 && ( // 👈 conditionally render instead of key prop
+          <FormComposer
+            // isDisabled={!canSubmit}
+            label={t("CS_COMMON_NEXT")}
+            config={vendorStepConfig
+              .filter((i) => !i.hideInEmployee)
+              .map((config) => ({
+                ...config,
+                body: config.body.filter((a) => !a.hideInEmployee),
+              }))}
+            onSubmit={onSubmit}
+            defaultValues={defaultValues}
+            onFormValueChange={onFormValueChange}
+            noBreakLine={true}
+          />
+        )}
 
-        <div style={{ flex: "1", overflowY: "auto" }}>
-          {currentStep === 1 && ( // 👈 conditionally render instead of key prop
-            <FormComposer
-              // isDisabled={!canSubmit}
-              label={t("CS_COMMON_NEXT")}
-              config={vendorStepConfig
-                .filter((i) => !i.hideInEmployee)
-                .map((config) => ({
-                  ...config,
-                  body: config.body.filter((a) => !a.hideInEmployee),
-                }))}
-              onSubmit={onSubmit}
-              defaultValues={defaultValues}
-              onFormValueChange={onFormValueChange}
-              noBreakLine={true}
-            />
-          )}
+        {currentStep === 2 && ( // 👈 conditionally render instead of key prop
+          <FormComposer
+            label={t("ES_COMMON_APPLICATION_SUBMIT")}
+            config={addressStepConfig
+              .filter((i) => !i.hideInEmployee)
+              .map((config) => ({
+                ...config,
+                body: config.body.filter((a) => !a.hideInEmployee),
+              }))}
+            onSubmit={onSubmit}
+            defaultValues={defaultValues}
+            onFormValueChange={onFormValueChange}
+            noBreakLine={true}
+          />
+        )}
 
-          {currentStep === 2 && ( // 👈 conditionally render instead of key prop
-            <FormComposer
-              label={t("ES_COMMON_APPLICATION_SUBMIT")}
-              config={addressStepConfig
-                .filter((i) => !i.hideInEmployee)
-                .map((config) => ({
-                  ...config,
-                  body: config.body.filter((a) => !a.hideInEmployee),
-                }))}
-              onSubmit={onSubmit}
-              defaultValues={defaultValues}
-              onFormValueChange={onFormValueChange}
-              noBreakLine={true}
-            />
-          )}
-
-          {showToast && (
-            <Toast
-              error={showToast.key === "error"}
-              label={t(showToast.key === "success" ? `ES_FSM_REGISTRY_${showToast.action}_SUCCESS` : showToast.action)}
-              onClose={closeToast}
-            />
-          )}
-        </div>
+        {showToast && (
+          <Toast
+            error={showToast.key === "error"}
+            label={t(showToast.key === "success" ? `ES_FSM_REGISTRY_${showToast.action}_SUCCESS` : showToast.action)}
+            onClose={closeToast}
+          />
+        )}
       </div>
     </React.Fragment>
   );

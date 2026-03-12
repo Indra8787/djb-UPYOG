@@ -66,8 +66,7 @@
 }
 
 .employeeCard {
-  @apply bg-white shadow-card p-xl;
-  padding-inline: 48px;
+  @apply bg-white shadow-card p-md;
   border-radius: 6px;
 
   .card-header {

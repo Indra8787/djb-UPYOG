@@ -233,6 +233,7 @@ import CitizenConsentForm from "./atoms/CitizenConsentForm";
 import AddressDetails from "./molecules/AddressDetails";
 import ApplicantDetails from "./molecules/ApplicantDetails";
 import Timeline from "./molecules/Timeline";
+import Stepper from "./molecules/Stepper";
 import ExpandedViewContext from "./atoms/ExpandedViewContext";
 import ExpandedViewPage from "./atoms/ExpandedViewPage";
 import CollapsibleModuleSidebar from "./atoms/CollapsibleModuleSidebar";
@@ -482,5 +483,6 @@ export {
   ExpandedViewContext,
   ExpandedViewPage,
   CollapsibleModuleSidebar,
-  Tooltip
+  Tooltip,
+  Stepper
 };

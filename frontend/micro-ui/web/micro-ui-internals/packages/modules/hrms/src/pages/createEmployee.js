@@ -1,55 +1,8 @@
-import { FormComposer, Toast, Loader } from "@djb25/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
+import { FormComposer, Toast, Loader } from "@djb25/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { newConfig } from "../components/config/config";
-
-// const Stepper = ({ customSteps, currentStep, onStepClick, t }) => {
-//   return (
-//     <div className="stepper-container">
-//       {customSteps.map((stepObj, index) => {
-//         const isCompleted = index < currentStep;
-//         const isActive = index === currentStep;
-
-//         return (
-//           <div className="stepper-item" key={index}>
-//             <div className="stepper-row">
-//               <div
-//                 className={`stepper-circle ${isCompleted ? "completed" : isActive ? "active" : ""
-//                   }`}
-//               >
-//                 {isCompleted ? (
-//                   <svg width="14" height="10" viewBox="0 0 14 10">
-//                     <path
-//                       d="M4.7 9.99L0.28 5.58C-0.09 5.21 -0.09 4.6 0.28 4.22C0.66 3.85 1.26 3.85 1.64 4.22L4.7 7.28L12.36 0.28C12.79 -0.11 13.44 -0.08 13.84 0.35C14.24 0.78 14.19 1.46 13.77 1.84L4.7 9.99Z"
-//                       fill="white"
-//                     />
-//                   </svg>
-//                 ) : (
-//                   index + 1
-//                 )}
-//               </div>
-
-//               <div
-//                 className={`stepper-label ${isActive ? "active" : ""}`}
-//                 onClick={() => isCompleted && onStepClick(index)}
-//               >
-//                 {t(stepObj.head)}
-//               </div>
-//             </div>
-
-//             {index !== customSteps.length - 1 && (
-//               <div
-//                 className={`stepper-line ${isCompleted ? "completed" : ""
-//                   }`}
-//               />
-//             )}
-//           </div>
-//         );
-//       })}
-//     </div>
-//   );
-// };
 
 const Stepper = ({ customSteps, currentStep, onStepClick, t }) => {
   return (
@@ -361,7 +314,7 @@ const CreateEmployee = () => {
           label={isFinalStep ? t("HR_COMMON_BUTTON_SUBMIT") : t("CS_COMMON_NEXT")}
           // secondaryActionLabel={activeStep !== 0 ? t("CS_COMMON_BACK") : null}
           onSecondayActionClick={handleSecondaryAction}
-          cardClassName="stepper-form-wrapper"
+          cardClassName=""
           sectionHeadStyle={{ gridColumn: "span 2" }}
         />
       </div>{showToast && (

@@ -304,7 +304,7 @@ const BILLSBreadCrumbs = ({ location }) => {
             {dowloadOptions && dowloadOptions.length > 0 && (
               <React.Fragment>
                 <MultiLink
-                  className="abcd"
+                  className=""
                   onHeadClick={() => setShowOptions(!showOptions)}
                   displayOptions={showOptions}
                   options={dowloadOptions}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FormComposer, Toast, Header } from "@djb25/digit-ui-react-components";
+import { FormComposer, Toast } from "@djb25/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
 import VendorConfig from "../../configs/VendorConfig";
 import { useQueryClient } from "react-query";
