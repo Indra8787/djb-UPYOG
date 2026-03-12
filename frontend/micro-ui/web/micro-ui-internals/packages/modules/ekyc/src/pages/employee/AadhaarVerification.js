@@ -211,70 +211,67 @@ const AadhaarVerification = () => {
 
                     {/* Section 2: Contact Details */}
                     <CardHeader style={{ fontSize: "20px", marginBottom: "16px" }}>{t("EKYC_CONTACT_DETAILS_HEADER") || "Contact Details"}</CardHeader>
+                    <LabelFieldPair style={{ animation: "fadeSlideIn 0.3s ease" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+                            <CardLabel style={{ fontWeight: "600", marginBottom: "0" }}>
+                                {t("EKYC_USER_NAME") || "Corrected Name"}
+                            </CardLabel>
 
-                    <LabelFieldPair>
-                        <CardLabel style={{ fontWeight: "600" }}>{t("EKYC_NAME_CORRECTION_PROMPT") || "Do you want to correct the Name?"}</CardLabel>
-                        <RadioButtons
-                            options={yesNoOptions}
-                            optionsKey="name"
-                            selectedOption={nameCorrect}
-                            onSelect={setNameCorrect}
-                            t={t}
-                            innerStyles={{ display: "flex", gap: "24px" }}
-                            style={{ display: "flex", gap: "50px", justifyContent: "flex-start", marginBottom: "0" }}
-                        />
-                    </LabelFieldPair>
-
-                    {nameCorrect.code === "YES" && (
-                        <LabelFieldPair style={{ animation: "fadeSlideIn 0.3s ease" }}>
-                            <CardLabel style={{ fontWeight: "600" }}>{t("EKYC_ENTER_NAME") || "Enter Corrected Name"}</CardLabel>
-                            <div className="field" style={{ position: "relative" }}>
-                                <div style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", zIndex: 1, opacity: 0.6 }}>
-                                    <UserIcon size={18} />
-                                </div>
-                                <TextInput
-                                    value={userName}
-                                    onChange={(e) => setUserName(e.target.value)}
-                                    placeholder={t("EKYC_ENTER_NAME_PLACEHOLDER") || "Enter full name"}
-                                    textInputStyle={{ paddingLeft: "40px" }}
-                                />
+                            <RadioButtons
+                                options={yesNoOptions}
+                                optionsKey="name"
+                                selectedOption={nameCorrect}
+                                onSelect={setNameCorrect}
+                                t={t}
+                                innerStyles={{ display: "flex", gap: "24px" }}
+                                style={{ display: "flex", gap: "50px", marginBottom: "0" }}
+                            />
+                        </div>
+                        <div className="field" style={{ position: "relative" }}>
+                            <div style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", zIndex: 1, opacity: nameCorrect.code === "YES" ? 0.6 : 0.3 }}>
+                                <UserIcon size={18} color={nameCorrect.code === "YES" ? "#64748b" : "#94a3b8"} />
                             </div>
-                        </LabelFieldPair>
-                    )}
+                            <TextInput
+                                value={userName}
+                                onChange={(e) => setUserName(e.target.value)}
+                                placeholder={t("EKYC_ENTER_NAME_PLACEHOLDER") || "Enter full name"}
+                                textInputStyle={{ paddingLeft: "40px" }}
+                                disabled={nameCorrect.code !== "YES"}
+                            />
+                        </div>
+                    </LabelFieldPair>
 
                     <LabelFieldPair>
-                        <CardLabel style={{ fontWeight: "600" }}>{t("EKYC_MOBILE_CHANGE_PROMPT") || "Change your mobile number?"}</CardLabel>
-                        <RadioButtons
-                            options={yesNoOptions}
-                            optionsKey="name"
-                            selectedOption={mobileChange}
-                            onSelect={setMobileChange}
-                            t={t}
-                            innerStyles={{ display: "flex", gap: "24px" }}
-                            style={{ display: "flex", gap: "50px", justifyContent: "flex-start", marginBottom: "0" }}
-                        />
+                        <div style={{ display: "flex", alignItems: "center", gap: "20px", padding: "10px" }}>
+                            <CardLabel style={{ fontWeight: "600", marginBottom: "0" }}>
+                                {t("EKYC_USER_MOBILE_NUMBER") || "User Mobile Number"}
+                            </CardLabel>
+
+                            <RadioButtons
+                                options={yesNoOptions}
+                                optionsKey="name"
+                                selectedOption={mobileChange}
+                                onSelect={setMobileChange}
+                                t={t}
+                                innerStyles={{ display: "flex", gap: "24px" }}
+                                style={{ display: "flex", gap: "50px", marginBottom: "0" }}
+                            />
+                        </div>
+                        <div className="field" style={{ position: "relative" }}>
+                            <div style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", zIndex: 1, opacity: mobileChange.code === "YES" ? 0.6 : 0.3 }}>
+                                <PhoneIcon size={18} color={mobileChange.code === "YES" ? "#64748b" : "#94a3b8"} />
+                            </div>
+                            <TextInput
+                                value={mobileNumber}
+                                onChange={(e) => setMobileNumber(e.target.value)}
+                                placeholder="+91 XXXXX XXXXX"
+                                textInputStyle={{ paddingLeft: "40px" }}
+                                disabled={mobileChange.code !== "YES"}
+                            />
+                        </div>
                     </LabelFieldPair>
-                    {mobileChange.code === "YES" && (
-                        <Fragment>
-                            <LabelFieldPair>
-                                <CardLabel style={{ fontWeight: "600" }}>{t("EKYC_MOBILE_NUMBER") || "Mobile Number"}</CardLabel>
-                                <div className="field" style={{ position: "relative" }}>
-                                    <div style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", zIndex: 1, opacity: 0.6 }}>
-                                        <PhoneIcon size={18} />
-                                    </div>
-                                    <TextInput
-                                        value={mobileNumber}
-                                        onChange={(e) => setMobileNumber(e.target.value)}
-                                        placeholder="+91 XXXXX XXXXX"
-                                        textInputStyle={{ paddingLeft: "40px" }}
-                                    />
-                                </div>
-                            </LabelFieldPair>
 
-
-                        </Fragment>
-                    )}
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", marginTop: "24px" }}>
                         <LabelFieldPair>
                             <CardLabel style={{ fontWeight: "600" }}>{t("EKYC_WHATSAPP_NUMBER") || "WhatsApp Number"}</CardLabel>
                             <div className="field" style={{ position: "relative" }}>

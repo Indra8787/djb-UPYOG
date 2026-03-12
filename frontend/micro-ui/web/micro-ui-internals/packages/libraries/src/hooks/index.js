@@ -346,7 +346,7 @@ import useSelectedMDMS from "./useSelectedMDMS";
 import useVendorAdditionaldetailsAPI from "./vendor/useVendorAdditionaldetailsAPI";
 import useCreateDemand from "./sv/useCreateDemand";
 import useEmpvendorCommonSearch from "./vendor/useEmpvendorCommonSearch";
-import { useEkycCount, useEkycSearch, useGetConnection, useValidateUser } from "./ekyc/useEkyc";
+import { useGetConnection, useValidateUser } from "./ekyc/useEkyc";
 
 const wt={
   useTankerCreateAPI,
@@ -485,8 +485,6 @@ const mcollect = {
 };
 
 const ekyc = {
-  useEkycSearch,
-  useEkycCount,
   useGetConnection,
   useValidateUser,
 };
