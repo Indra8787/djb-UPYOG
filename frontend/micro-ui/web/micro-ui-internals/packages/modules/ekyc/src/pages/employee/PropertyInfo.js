@@ -9,6 +9,11 @@ const PropertyInfo = () => {
     const location = useLocation();
 
     const { kNumber } = location.state || { kNumber: "EKYC-1234567890" };
+    const tenantId = Digit.ULBService.getCurrentTenantId();
+    const { data: dataV0, isLoading: isLoadingV0 } = Digit.Hooks.ekyc.useGetPropertyType(tenantId);
+    const { data, isLoading } = Digit.Hooks.ekyc.useGetConnectionTypeV2(tenantId);
+    const { data: dataV1, isLoading: isLoadingV1 } = Digit.Hooks.ekyc.useGetUserType(tenantId);
+    const { data: dataV2, isLoading: isLoadingV2 } = Digit.Hooks.ekyc.useGetFloorCount(tenantId);
 
     const [ownerType, setOwnerType] = useState("OWNER");
     const [pidNumber, setPidNumber] = useState("");
@@ -22,7 +27,19 @@ const PropertyInfo = () => {
     const cameraRef = useRef(null);
 
     const handleSaveAndContinue = () => {
-        history.push("/digit-ui/employee/ekyc/dashboard");
+        history.push("/digit-ui/employee/ekyc/review", {
+            ...location.state,
+            propertyDetails: {
+                ownerType,
+                pidNumber,
+                connectionType,
+                connectionCategory,
+                userType,
+                noOfFloors,
+                propertyDocument,
+                buildingPhoto
+            }
+        });
     };
 
     const SuitcaseIcon = () => (
@@ -73,7 +90,7 @@ const PropertyInfo = () => {
                 </Card>
 
                 {/* Progress Steps Sidebar */}
-                <div style={{ padding: "8px 16px" }}>
+                <div style={{ backgroundColor: "#FFFFFF", padding: "16px", borderRadius: "8px", border: "1px solid #EAECF0", boxShadow: "0 2px 4px rgba(0,0,0,0.02)" }}>
                     <ConnectingCheckPoints>
                         <CheckPoint label={t("EKYC_STEP_AADHAAR") || "Aadhaar"} isCompleted={true} />
                         <CheckPoint label={t("EKYC_STEP_ADDRESS") || "Address"} isCompleted={true} />
@@ -164,17 +181,50 @@ const PropertyInfo = () => {
 
                         {/* Dropdowns */}
                         {[
-                            { label: "Type_of_Connection", state: connectionType, setState: setConnectionType },
-                            { label: "Connection_Category", state: connectionCategory, setState: setConnectionCategory },
-                            { label: "User_Type", state: userType, setState: setUserType },
-                            { label: "No_of_Floor", state: noOfFloors, setState: setNoOfFloors }
+                            {
+                                label: "Type_of_Connection",
+                                state: connectionCategory,
+                                setState: setConnectionCategory,
+                                options: dataV0?.["ws-services-calculation"]?.propertyTypeV2?.map(item => ({
+                                    label: t(item.code),
+                                    value: item.code
+                                })) || []
+                            },
+                            {
+                                label: "Connection_Category",
+                                state: connectionType,
+                                setState: setConnectionType,
+                                options: data?.["ws-services-calculation"]?.connectionTypeV2?.map(item => ({
+                                    label: t(item.code),
+                                    value: item.code
+                                })) || []
+                            },
+                            // { label: "User_Type", state: userType, setState: setUserType },
+                            {
+                                label: "User_Type",
+                                state: userType,
+                                setState: setUserType,
+                                options: dataV1?.["ws-services-calculation"]?.userTypeV2?.map(item => ({
+                                    label: t(item.code),
+                                    value: item.code
+                                })) || []
+                            },
+                            {
+                                label: "No_of_Floor",
+                                state: noOfFloors,
+                                setState: setNoOfFloors,
+                                options: dataV2?.["ws-services-calculation"]?.floorCount?.map(item => ({
+                                    label: t(item.code),
+                                    value: item.code
+                                })) || []
+                            }
                         ].map((item, idx) => (
                             <div key={idx} style={{ marginBottom: "20px" }}>
                                 <CardLabel style={{ fontSize: "14px", fontWeight: "600", color: "#344054", marginBottom: "8px" }}>{t(item.label)}</CardLabel>
                                 <Dropdown
                                     selected={item.state}
                                     select={item.setState}
-                                    option={[{ label: `Select ${item.label}`, value: "" }]}
+                                    option={item.options || [{ label: `Select ${item.label}`, value: "" }]}
                                     optionKey="label"
                                     t={t}
                                     style={{ borderRadius: "12px", border: "1px solid #D0D5DD", height: "48px" }}
@@ -340,7 +390,9 @@ const PropertyInfo = () => {
                                 {t("This_section_is_enabled_only_if_user_is_not_the_owner.")}
                             </div>
                         </div>
-                        <SubmitBar label={t("Save_&_Continue")} onSubmit={handleSaveAndContinue} style={{ borderRadius: "8px", height: "48px", marginTop: "24px", marginRight: "1100px" }} />
+                        <div style={{ display: "flex", justifyContent: "flex-start", marginTop: "24px" }}>
+                            <SubmitBar label={t("Save_&_Continue")} onSubmit={handleSaveAndContinue} style={{ borderRadius: "8px", height: "48px", margin: 0 }} />
+                        </div>
                     </Card>
 
 

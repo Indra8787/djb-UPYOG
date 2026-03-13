@@ -63,25 +63,9 @@ const ConnectionDetailsView = ({ kNumber, kName, connectionDetails, isLoading })
                     <CardLabel>{t("EKYC_NO_CONNECTION_DETAILS_FOUND")}</CardLabel>
                 )}
 
-                <button
-                    type="button"
-                    onClick={handleStartVerification}
-                    style={{
-                        background: "none",
-                        border: "none",
-                        color: "#0076f3ff",
-                        fontWeight: "600",
-                        cursor: "pointer",
-                        fontSize: "14px",
-                        padding: "10px",
-
-                    }}
-                >
-                    {t("")}
-                </button>
-
-
-                <SubmitBar label={t("EKYC_START_VERIFICATION")} onSubmit={handleStartVerification} style={{ borderRadius: "12px", marginLeft: "1100px" }} />
+                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "16px" }}>
+                    <SubmitBar label={t("EKYC_START_VERIFICATION")} onSubmit={handleStartVerification} style={{ borderRadius: "12px", margin: 0 }} />
+                </div>
                 {/* <button
                     className="submit-bar"
                     style={{

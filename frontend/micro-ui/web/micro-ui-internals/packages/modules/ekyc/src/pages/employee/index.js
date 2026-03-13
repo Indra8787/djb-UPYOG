@@ -7,6 +7,7 @@ import Create from "./Create";
 import AadhaarVerification from "./AadhaarVerification";
 import AddressDetails from "./AddressDetails";
 import PropertyInfo from "./PropertyInfo";
+import Review from "./Review";
 
 const EmployeeApp = ({ path }) => {
     const { t } = useTranslation();
@@ -22,6 +23,7 @@ const EmployeeApp = ({ path }) => {
         if (pathname.includes("/aadhaar-verification")) return "EKYC_AADHAAR_VERIFICATION";
         if (pathname.includes("/address-details")) return "EKYC_ADDRESS_DETAILS";
         if (pathname.includes("/property-info")) return "EKYC_PROPERTY_INFO";
+        if (pathname.includes("/review")) return "EKYC_REVIEW";
         return "ES_COMMON_INBOX";
     };
 
@@ -75,6 +77,11 @@ const EmployeeApp = ({ path }) => {
                     <PrivateRoute
                         path={`${path}/property-info`}
                         component={() => <PropertyInfo />}
+                    />
+                    
+                    <PrivateRoute
+                        path={`${path}/review`}
+                        component={() => <Review />}
                     />
 
                     <PrivateRoute

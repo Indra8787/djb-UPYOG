@@ -128,10 +128,11 @@ const AadhaarVerification = () => {
                 </Card>
 
                 {/* Progress Steps Sidebar */}
-                <div style={{ padding: "8px 16px" }}>
+                <div style={{ backgroundColor: "#FFFFFF", padding: "16px", borderRadius: "8px", border: "1px solid #EAECF0", boxShadow: "0 2px 4px rgba(0,0,0,0.02)" }}>
                     <ConnectingCheckPoints>
                         <CheckPoint label={t("EKYC_STEP_AADHAAR") || "Aadhaar"} isCompleted={showAddressSection} />
                         <CheckPoint label={t("EKYC_STEP_ADDRESS") || "Address"} isCompleted={addressData !== null} />
+                        <CheckPoint label={t("EKYC_STEP_PROPERTY") || "Property"} isCompleted={false} />
                         <CheckPoint label={t("EKYC_STEP_REVIEW") || "Review"} />
                     </ConnectingCheckPoints>
                 </div>

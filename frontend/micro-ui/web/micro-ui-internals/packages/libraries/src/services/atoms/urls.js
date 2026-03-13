@@ -312,6 +312,7 @@ const Urls = {
     create: "/ekyc-services/ekyc/v1/_create",
     get_connection: "/ekyc-service/user/get/_connection",
     validate_user: "/ekyc-service/user/_validate",
+    connection_type: "/egov-mdms-service/v1/_search",
   },
   audit: "/inbox/v1/elastic/_search",
 };
