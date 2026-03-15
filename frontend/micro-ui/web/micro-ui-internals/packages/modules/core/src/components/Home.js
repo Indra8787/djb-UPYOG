@@ -121,12 +121,12 @@ const CitizenHome = ({ modules, getCitizenMenu, fetchedCitizen, isLoading }) => 
                     Info={
                       code === "OBPS"
                         ? () => (
-                            <CitizenInfoLabel
-                              style={{ margin: "0px", padding: "10px" }}
-                              info={t("CS_FILE_APPLICATION_INFO_LABEL")}
-                              text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)}
-                            />
-                          )
+                          <CitizenInfoLabel
+                            style={{ margin: "0px", padding: "10px" }}
+                            info={t("CS_FILE_APPLICATION_INFO_LABEL")}
+                            text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)}
+                          />
+                        )
                         : null
                     }
                     isInfo={code === "OBPS" ? true : false}
@@ -191,16 +191,11 @@ const ModuleCarousel = ({ modules, title }) => {
       setShowRightArrow(Math.ceil(scrollLeft + clientWidth) < scrollWidth - 1);
 
       if (clientWidth > 0) {
-        const total = Math.ceil(scrollWidth / clientWidth) || 1;
+        const gap = parseInt(window.getComputedStyle(scrollContainerRef.current).columnGap) || 0;
+        const total = Math.ceil((scrollWidth + gap) / (clientWidth + gap)) || 1;
         setTotalPages(total);
-        const maxScrollLeft = scrollWidth - clientWidth;
-        if (maxScrollLeft > 0) {
-          const scrollProgress = scrollLeft / maxScrollLeft;
-          const current = Math.round(scrollProgress * (total - 1)) + 1;
-          setCurrentPage(Math.min(Math.max(current, 1), total));
-        } else {
-          setCurrentPage(1);
-        }
+        const current = Math.round(scrollLeft / (clientWidth + gap)) + 1;
+        setCurrentPage(Math.min(Math.max(current, 1), total));
       }
     }
   };
@@ -213,7 +208,8 @@ const ModuleCarousel = ({ modules, title }) => {
 
   const scroll = (direction) => {
     if (scrollContainerRef.current) {
-      const scrollAmount = direction === "left" ? -scrollContainerRef.current.clientWidth : scrollContainerRef.current.clientWidth;
+      const gap = parseInt(window.getComputedStyle(scrollContainerRef.current).columnGap) || 0;
+      const scrollAmount = direction === "left" ? -(scrollContainerRef.current.clientWidth + gap) : scrollContainerRef.current.clientWidth + gap;
       scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   };
@@ -252,6 +248,7 @@ const ModuleCarousel = ({ modules, title }) => {
 };
 
 const EmployeeHome = ({ modules }) => {
+  console.log(modules, 'moduleeeeee')
   const { t } = useTranslation();
   const userInfo = JSON.parse(localStorage.getItem("Employee.user-info"));
   const name = userInfo?.name;
