@@ -42,7 +42,7 @@ const VENDORCard = () => {
 
   ]
 
-  const VENDORRole = Digit.UserService.hasAccess(["VENDOR"]) || false;
+  const VENDORRole = Digit.UserService.hasAccess(["WT_VENDOR"]) ;
 
 
   const propsForModuleCard = {

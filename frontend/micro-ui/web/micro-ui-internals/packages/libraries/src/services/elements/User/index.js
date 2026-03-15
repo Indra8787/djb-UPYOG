@@ -41,7 +41,7 @@ export const UserService = {
       }
 
       // 2️⃣ Clear Digit session
-      await Digit.SessionStorage.clear();
+      await Digit.SessionStorage.del();
       sessionStorage.clear();
       localStorage.clear();
       localStorage.removeItem("token");
@@ -81,7 +81,7 @@ export const UserService = {
       window.localStorage.clear();
       window.sessionStorage.clear();
       if (userType === "citizen") {
-        window.location.replace("/digit-ui/citizen");
+        window.location.replace("/digit-ui/citizen/login");
       } else {
         window.location.replace("/digit-ui/employee/user/language-selection");
       }
