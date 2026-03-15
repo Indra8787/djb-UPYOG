@@ -133,6 +133,12 @@ public class RequestServiceQueryBuilder {
             preparedStmtList.add(criteria.getStatus());
         }
 
+        if (!ObjectUtils.isEmpty(criteria.getDriverId())) {
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" ursbd.driver_id = ? ");
+            preparedStmtList.add(criteria.getDriverId());
+        }
+
         // Return count query directly without applying pagination
         if (criteria.isCountCall()) {
             return query.toString();
