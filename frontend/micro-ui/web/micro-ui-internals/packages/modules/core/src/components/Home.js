@@ -121,12 +121,12 @@ const CitizenHome = ({ modules, getCitizenMenu, fetchedCitizen, isLoading }) => 
                     Info={
                       code === "OBPS"
                         ? () => (
-                          <CitizenInfoLabel
-                            style={{ margin: "0px", padding: "10px" }}
-                            info={t("CS_FILE_APPLICATION_INFO_LABEL")}
-                            text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)}
-                          />
-                        )
+                            <CitizenInfoLabel
+                              style={{ margin: "0px", padding: "10px" }}
+                              info={t("CS_FILE_APPLICATION_INFO_LABEL")}
+                              text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)}
+                            />
+                          )
                         : null
                     }
                     isInfo={code === "OBPS" ? true : false}
@@ -248,7 +248,6 @@ const ModuleCarousel = ({ modules, title }) => {
 };
 
 const EmployeeHome = ({ modules }) => {
-  console.log(modules, 'moduleeeeee')
   const { t } = useTranslation();
   const userInfo = JSON.parse(localStorage.getItem("Employee.user-info"));
   const name = userInfo?.name;
@@ -281,8 +280,16 @@ const EmployeeHome = ({ modules }) => {
 
   const greeting = getGreeting();
 
-  const engagementModuleCodes = ["Engagement", "Events", "Documents", "Public Message broadcast", "MessageBroadcast", "Broadcast", "Surveys"];
-
+  const engagementModuleCodes = [
+    "ENGAGEMENT",
+    "Engagement",
+    "Events",
+    "Documents",
+    "Public Message broadcast",
+    "MessageBroadcast",
+    "Broadcast",
+    "Surveys",
+  ];
   const engagementModules = modules.filter((mod) => engagementModuleCodes.includes(mod?.code));
   const mainModules = modules.filter((mod) => !engagementModuleCodes.includes(mod?.code));
 

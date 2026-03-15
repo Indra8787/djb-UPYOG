@@ -115,7 +115,7 @@ const NewSurveys = () => {
         ServiceDefinitionCriteria:{
           "tenantId": tenantId,
           "code": [title],
-          "module": ["engagement"]
+          "module": ["Engagement"]
         }
         
       }

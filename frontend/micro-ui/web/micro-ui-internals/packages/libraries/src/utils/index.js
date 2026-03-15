@@ -295,6 +295,25 @@ const mCollectAccess = () => {
   return MCOLLECT_ACCESS?.length > 0;
 };
 
+const engagementAccess = () => {
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo?.info?.roles?.map((roleData) => roleData?.code);
+  const engagementRoles = [
+    "EMPLOYEE",
+    "CITIZEN_SERVICE_ADMIN",
+    "MSEVA_ADMIN",
+    "MSEVA_MAKER",
+    "MSEVA_CHECKER",
+    "PUBLIC_MESSAGE_BROADCAST_ADMIN",
+    "SURVEY_ADMIN",
+    "EVENTS_ADMIN",
+  ];
+
+  const ENGAGEMENT_ACCESS = userRoles?.filter((role) => engagementRoles?.includes(role));
+
+  return ENGAGEMENT_ACCESS?.length > 0;
+};
+
 const receiptsAccess = () => {
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo?.info?.roles.map((roleData) => roleData?.code);
@@ -379,6 +398,7 @@ export default {
   hrmsRoles,
   getUnique,
   tlAccess,
+  engagementAccess,
   wsAccess,
   swAccess,
   assetAccess,

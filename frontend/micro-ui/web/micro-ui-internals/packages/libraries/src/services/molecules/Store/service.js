@@ -71,10 +71,18 @@ export const StoreService = {
         bannerUrl: stateInfo.bannerUrl,
       },
       localizationModules: stateInfo.localizationModules,
-      modules: MdmsRes?.tenant?.citymodule
-        .filter((module) => module?.active)
-        .filter((module) => enabledModules?.includes(module?.code))
-        ?.sort((x, y) => x?.order - y?.order),
+      modules: (() => {
+        const rawModules = MdmsRes?.tenant?.citymodule || [];
+        const enabledModulesUpper = enabledModules?.map((m) => m?.toUpperCase()) || [];
+        const filtered = rawModules
+          .filter((module) => {
+            const isActive = module?.active;
+            const isEnabled = enabledModulesUpper.includes(module?.code?.toUpperCase());
+            return isActive && isEnabled;
+          })
+          ?.sort((x, y) => x?.order - y?.order);
+        return filtered;
+      })(),
       uiHomePage: uiHomePage,
     };
 

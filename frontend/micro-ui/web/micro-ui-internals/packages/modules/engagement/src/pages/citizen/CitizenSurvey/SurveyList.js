@@ -20,7 +20,7 @@ const SurveyList = () => {
   let ServiceDefinitionCriteria =  {
     "tenantId": tenantIds,
     "code": [],
-    "module": ["engagement"],
+    "module": ["Engagement"],
   }
 
   let Pagination = {
