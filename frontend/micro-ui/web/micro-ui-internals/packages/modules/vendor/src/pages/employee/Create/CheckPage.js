@@ -35,6 +35,34 @@ const CheckPage = ({ onSubmit, value = {} }) => {
     setAgree(!agree);
   };
 
+  const openFilePDF = (fileId) => {
+    if (!fileId) {
+      console.error("fileId is null or undefined!");
+      return;
+    }
+
+    Digit.UploadServices.Filefetch([fileId], Digit.ULBService.getStateId()).then((res) => {
+      const concatenatedUrls = res?.data?.fileStoreIds?.[0]?.url;
+
+      if (concatenatedUrls) {
+        const urlArray = concatenatedUrls.split(",");
+        const fileUrl = urlArray[0];
+
+        if (fileUrl) {
+          const link = document.createElement("a");
+          link.href = fileUrl;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      } else {
+        console.error("URL missing in response. Full res:", res);
+      }
+    });
+  };
+
   return (
     <React.Fragment>
       <div style={{ display: "flex", width: "100%", gap: "24px" }}>
@@ -163,24 +191,29 @@ const CheckPage = ({ onSubmit, value = {} }) => {
               <CardSubHeader>{t("VENDOR_DOCUMENTS_DETAILS")}</CardSubHeader>
 
               <StatusTable>
-                <Row
-                  label={t("VENDOR_DOCUMENTS")}
-                  text={
-                    documents?.documents?.length > 0
-                      ? documents.documents.map((doc, index) => (
-                          <div key={index}>
-                            <a
-                              href={`/digit-ui/employee/vendor/registry/additionaldetails/documents/${doc.filestoreId}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {t(doc.documentType)}
-                            </a>
-                          </div>
-                        ))
-                      : t("CS_NA")
-                  }
-                />
+                <StatusTable>
+                  <Row
+                    label={t("VENDOR_DOCUMENTS")}
+                    text={
+                      documents?.documents?.length > 0
+                        ? documents.documents.map((doc, index) => (
+                            <div key={index}>
+                              <span
+                                style={{
+                                  color: "#5a6ee1",
+                                  cursor: "pointer",
+                                  textDecoration: "underline",
+                                }}
+                                onClick={() => openFilePDF(doc?.filestoreId)} // ← fix here
+                              >
+                                {t(doc.documentType)}
+                              </span>
+                            </div>
+                          ))
+                        : t("CS_NA")
+                    }
+                  />
+                </StatusTable>
               </StatusTable>
 
               <br></br>

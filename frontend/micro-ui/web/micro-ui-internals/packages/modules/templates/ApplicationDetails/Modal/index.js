@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import FSMActionModal from "./FSMActionModal";
+import React from "react";
+// import FSMActionModal from "./FSMActionModal";
 import PTActionModal from "./PTActionModal";
 import TLActionModal from "./TLActionModal";
 import BPAREGActionModal from "./BPAREGActionModal";
@@ -13,11 +13,6 @@ import EWActionModal from "./EWActionModal";
 import SVActionModal from "./SVActionModal";
 import WTActionModal from "./WTActionModal";
 
-
-
-
-
-
 const ActionModal = (props) => {
   if (props?.businessService.includes("PT")) {
     return <PTActionModal {...props} />;
@@ -26,7 +21,12 @@ const ActionModal = (props) => {
     return <PTRActionModal {...props} />;
   }
 
-  if (props?.businessService.includes("NewTL") || props?.businessService.includes("TL") || props?.businessService.includes("EDITRENEWAL") || props?.businessService.includes("DIRECTRENEWAL")) {
+  if (
+    props?.businessService.includes("NewTL") ||
+    props?.businessService.includes("TL") ||
+    props?.businessService.includes("EDITRENEWAL") ||
+    props?.businessService.includes("DIRECTRENEWAL")
+  ) {
     return <TLActionModal {...props} />;
   }
 
@@ -63,7 +63,7 @@ const ActionModal = (props) => {
   if (props?.businessService.includes("mobileToilet")) {
     return <WTActionModal {...props} />;
   }
-  
+
   // return <FSMActionModal {...props} />;
 };
 

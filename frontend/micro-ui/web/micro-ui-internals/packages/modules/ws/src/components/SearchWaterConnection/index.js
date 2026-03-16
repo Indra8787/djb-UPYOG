@@ -1,5 +1,5 @@
-import React, { Fragment, useState, useEffect, useCallback, useMemo } from "react";
-import { SearchForm, Table, Card, Loader, Header, Toast } from "@djb25/digit-ui-react-components";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { SearchForm, Table, Card, Loader, Toast, CollapsibleCardPage, MobileNumber, SearchField, SubmitBar } from "@djb25/digit-ui-react-components";
 import { useForm, Controller } from "react-hook-form";
 import SearchFields from "./SearchFields";
 import { useTranslation } from "react-i18next";
@@ -10,13 +10,13 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
   const history = useHistory();
   const [result, setResult] = useState([]);
   const [showToast, setShowToast] = useState(null);
-  const replaceUnderscore = (str) => {
-    str = str.replace(/_/g, " ");
-    return str;
-  };
+  // const replaceUnderscore = (str) => {
+  //   str = str.replace(/_/g, " ");
+  //   return str;
+  // };
 
   const convertEpochToDate = (dateEpoch) => {
-    if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
+    if (dateEpoch == null || dateEpoch === undefined || dateEpoch === "") {
       return "NA";
     }
     const dateFromApi = new Date(dateEpoch);
@@ -27,15 +27,19 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
     day = (day > 9 ? "" : "0") + day;
     return `${day}/${month}/${year}`;
   };
-  useEffect(async () => {
-    const payload = {
-      BulkBillCriteria: {
-        tenantId: Digit.ULBService.getCurrentTenantId(),
-      },
-    };
-    let data = await Digit.WSService.WSSewsearchDemand(payload, window.location.href.includes("ws/sewerage/search-demand") ? "sw" : "ws");
-    setResult(data.connection);
+
+  useEffect(() => {
+    (async () => {
+      const payload = {
+        BulkBillCriteria: {
+          tenantId: Digit.ULBService.getCurrentTenantId(),
+        },
+      };
+      let data = await Digit.WSService.WSSewsearchDemand(payload, window.location.href.includes("ws/sewerage/search-demand") ? "sw" : "ws");
+      setResult(data.connection);
+    })();
   }, []);
+
   const { t } = useTranslation();
   const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
     defaultValues: {
@@ -60,6 +64,7 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
     if (args.length === 0) return;
     setValue("sortBy", args.id);
     setValue("sortOrder", args.desc ? "DESC" : "ASC");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function onPageSizeChange(e) {
@@ -168,7 +173,7 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
         Cell: ({ row }) => {
           const amount = row.original?.due;
 
-          if (amount || amount == 0) {
+          if (amount || amount === 0) {
             return GetCell(getActionItem(row.original?.status, row));
           } else {
             return GetCell(t(`${"WS_NA"}`));
@@ -176,8 +181,10 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
         },
       },
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
+
   const columns2 = useMemo(
     () => [
       {
@@ -303,62 +310,95 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
   };
 
   return (
-    <>
-      {/* <div className="header" styles={{ display: "flex" }}>
+    <React.Fragment>
+      <div className="employee-wrapper">
+        {/* <div className="header" styles={{ display: "flex" }}>
         {window.location.href.includes("water") ? t("WS_WATER_SEARCH_CONNECTION_SUB_HEADER") : t("WS_SEWERAGE_SEARCH_CONNECTION_SUB_HEADER")}
       </div> */}
-      {window.location.href.includes("search-demand") ? (
-        ""
-      ) : (
-        <SearchForm className="ws-custom-wrapper" onSubmit={onSubmit} handleSubmit={handleSubmit}>
-          <SearchFields {...{ register, control, reset, tenantId, t }} />
-        </SearchForm>
-      )}
-      {isLoading ? <Loader /> : null}
-      {data?.display && !resultOk ? (
-        <Card style={{ marginTop: 20 }}>
-          {t(data?.display)
-            .split("\\n")
-            .map((text, index) => (
-              <p key={index} style={{ textAlign: "center" }}>
-                {text}
-              </p>
-            ))}
-        </Card>
-      ) : // <></>
-      resultOk ? (
-        <Table
-          t={t}
-          data={data}
-          totalRecords={count}
-          columns={columns}
-          getCellProps={(cellInfo) => {
-            return {
-              style: {
-                minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
-                padding: "20px 18px",
-                fontSize: "16px",
-              },
-            };
-          }}
-          onPageSizeChange={onPageSizeChange}
-          currentPage={getValues("offset") / getValues("limit")}
-          onNextPage={nextPage}
-          onPrevPage={previousPage}
-          pageSizeLimit={getValues("limit")}
-          onSort={onSort}
-          disableSort={false}
-          sortParams={[{ id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false }]}
-        />
-      ) : null}
+        {window.location.href.includes("search-demand") ? (
+          ""
+        ) : (
+          <CollapsibleCardPage
+            title={t("WS_SEARCH_FILTERS_LABEL") || "Search Filters"}
+            defaultOpen={true}
+            tabs={[t("WT_SMART_SEARCH"), t("WT_ADVANCED_SEARCH")]} // Define tab names
+            defaultTab={t("WT_SMART_SEARCH")}
+          >
+            {(activeTab) => (
+              <form className="ws-search-form" onSubmit={handleSubmit(onSubmit)}>
+                {/* --- SMART SEARCH --- */}
+                {activeTab === t("WT_SMART_SEARCH") && (
+                  <div className="wt-search-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+                    <div className="search-field-wrapper">
+                      <label>{t("WS_MOBILE_NUMBER")}</label>
+                      <MobileNumber
+                        name="mobileNumber"
+                        inputRef={register({
+                          minLength: { value: 10, message: t("CORE_COMMON_MOBILE_ERROR") },
+                          maxLength: { value: 10, message: t("CORE_COMMON_MOBILE_ERROR") },
+                          pattern: { value: /[6789][0-9]{9}/, message: t("CORE_COMMON_MOBILE_ERROR") },
+                        })}
+                        type="number"
+                        maxlength={10}
+                      />
+                      {/* <CardLabelError>{formState?.errors?.["mobileNumber"]?.message}</CardLabelError> */}
+                    </div>
 
-      {window.location.href.includes("search-demand") ? (
-        result?.length > 0 ? (
+                    {/* <div className="search-field-wrapper">
+                    <label>{t("WT_APPLICANT_NAME")}</label>
+                    <TextInput name="applicantName" inputRef={register({})} />
+                  </div> */}
+                  </div>
+                )}
+                {/* --- ADVANCED SEARCH --- */}
+                {activeTab === t("WT_ADVANCED_SEARCH") && (
+                  <SearchForm className="ws-search-form-wrapper formcomposer-section-grid" onSubmit={onSubmit} handleSubmit={handleSubmit}>
+                    <SearchFields {...{ register, control, reset, tenantId, t }} hideSubmitButton={true} />
+                  </SearchForm>
+                )}
+                <SearchField className="ws-submit">
+                  <SubmitBar label={t("WS_SEARCH_CONNECTION_SEARCH_BUTTON")} className="submit-bar generic-button" submit />
+                  <button
+                    className="clear-search generic-button"
+                    onClick={() => {
+                      reset({
+                        searchType: "CONNECTION",
+                        mobileNumber: "",
+                        offset: 0,
+                        limit: 10,
+                        sortBy: "commencementDate",
+                        sortOrder: "DESC",
+                        propertyId: "",
+                        connectionNumber: "",
+                        oldConnectionNumber: "",
+                      });
+                    }}
+                  >
+                    {t("WS_SEARCH_CONNECTION_RESET_BUTTON")}
+                  </button>
+                </SearchField>
+              </form>
+            )}
+          </CollapsibleCardPage>
+        )}
+        {isLoading ? <Loader /> : null}
+        {data?.display && !resultOk ? (
+          <Card style={{ marginTop: 20 }}>
+            {t(data?.display)
+              .split("\\n")
+              .map((text, index) => (
+                <p key={index} style={{ textAlign: "center" }}>
+                  {text}
+                </p>
+              ))}
+          </Card>
+        ) : // <></>
+        resultOk ? (
           <Table
             t={t}
-            data={result}
+            data={data}
             totalRecords={count}
-            columns={columns2}
+            columns={columns}
             getCellProps={(cellInfo) => {
               return {
                 style: {
@@ -377,21 +417,49 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
             disableSort={false}
             sortParams={[{ id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false }]}
           />
+        ) : null}
+
+        {window.location.href.includes("search-demand") ? (
+          result?.length > 0 ? (
+            <Table
+              t={t}
+              data={result}
+              totalRecords={count}
+              columns={columns2}
+              getCellProps={(cellInfo) => {
+                return {
+                  style: {
+                    minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
+                    padding: "20px 18px",
+                    fontSize: "16px",
+                  },
+                };
+              }}
+              onPageSizeChange={onPageSizeChange}
+              currentPage={getValues("offset") / getValues("limit")}
+              onNextPage={nextPage}
+              onPrevPage={previousPage}
+              pageSizeLimit={getValues("limit")}
+              onSort={onSort}
+              disableSort={false}
+              sortParams={[{ id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false }]}
+            />
+          ) : (
+            <Card style={{ marginTop: 20 }}>{<p style={{ textAlign: "center" }}>No Data Found</p>}</Card>
+          )
         ) : (
-          <Card style={{ marginTop: 20 }}>{<p style={{ textAlign: "center" }}>No Data Found</p>}</Card>
-        )
-      ) : (
-        ""
-      )}
-      {showToast?.label && (
-        <Toast
-          label={showToast?.label}
-          onClose={(w) => {
-            setShowToast((x) => null);
-          }}
-        />
-      )}
-    </>
+          ""
+        )}
+        {showToast?.label && (
+          <Toast
+            label={showToast?.label}
+            onClose={(w) => {
+              setShowToast((x) => null);
+            }}
+          />
+        )}
+      </div>
+    </React.Fragment>
   );
 };
 

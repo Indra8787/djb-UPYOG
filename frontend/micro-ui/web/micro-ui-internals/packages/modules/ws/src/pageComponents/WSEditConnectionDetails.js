@@ -214,7 +214,7 @@ const ConnectionDetails = (_props) => {
           </StatusTable>
         </div>
       ) : (
-        <div style={{ marginBottom: "16px" }}>
+        <div className="formcomposer-section-grid" style={{ marginBottom: "16px" }}>
           <LabelFieldPair>
             <CardLabel
               style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
@@ -274,145 +274,153 @@ const ConnectionDetails = (_props) => {
             </div>
           </LabelFieldPair>
           {connectionDetail?.serviceName == "WATER" && (
-            <div>
-              <LabelFieldPair>
-                <CardLabel
-                  style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
-                  className="card-label-smaller"
-                >{`${t("WS_NO_OF_PROPOSED_TAPS_LABEL")}*`}</CardLabel>
-                <div className="field">
+            <React.Fragment>
+              <div>
+                <LabelFieldPair>
+                  <CardLabel
+                    style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
+                    className="card-label-smaller"
+                  >{`${t("WS_NO_OF_PROPOSED_TAPS_LABEL")}*`}</CardLabel>
+                  <div className="field">
+                    <Controller
+                      control={control}
+                      name="proposedTaps"
+                      defaultValue={connectionDetail?.proposedTaps}
+                      rules={{
+                        validate: (e) => ((e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")),
+                        required: t("REQUIRED_FIELD"),
+                      }}
+                      type="number"
+                      isMandatory={true}
+                      render={(props) => (
+                        <TextInput
+                          type="number"
+                          value={props.value}
+                          autoFocus={focusIndex.index === connectionDetail?.key && focusIndex.type === "proposedTaps"}
+                          errorStyle={localFormState.touched.proposedTaps && errors?.proposedTaps?.message ? true : false}
+                          onChange={(e) => {
+                            props.onChange(e.target.value);
+                            setFocusIndex({ index: connectionDetail?.key, type: "proposedTaps" });
+                          }}
+                          labelStyle={{ marginTop: "unset" }}
+                          onBlur={props.onBlur}
+                        />
+                      )}
+                    />
+                  </div>
+                </LabelFieldPair>
+                <CardLabelError style={errorStyle}>{localFormState.touched.proposedTaps ? errors?.proposedTaps?.message : ""}</CardLabelError>
+              </div>
+              <div>
+                <LabelFieldPair>
+                  <CardLabel
+                    style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
+                    className="card-label-smaller"
+                  >{`${t("WS_PROPOSED_PIPE_SIZE_IN_INCHES_LABEL")}*`}</CardLabel>
                   <Controller
                     control={control}
-                    name="proposedTaps"
-                    defaultValue={connectionDetail?.proposedTaps}
-                    rules={{
-                      validate: (e) => ((e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")),
-                      required: t("REQUIRED_FIELD"),
-                    }}
-                    type="number"
+                    name={"proposedPipeSize"}
+                    defaultValue={connectionDetail?.proposedPipeSize}
+                    rules={{ required: t("REQUIRED_FIELD") }}
                     isMandatory={true}
                     render={(props) => (
-                      <TextInput
-                        type="number"
-                        value={props.value}
-                        autoFocus={focusIndex.index === connectionDetail?.key && focusIndex.type === "proposedTaps"}
-                        errorStyle={localFormState.touched.proposedTaps && errors?.proposedTaps?.message ? true : false}
-                        onChange={(e) => {
-                          props.onChange(e.target.value);
-                          setFocusIndex({ index: connectionDetail?.key, type: "proposedTaps" });
+                      <Dropdown
+                        className="form-field"
+                        selected={getValues("proposedPipeSize")}
+                        disable={false}
+                        option={pipeSizeList}
+                        errorStyle={localFormState.touched.proposedPipeSize && errors?.proposedPipeSize?.message ? true : false}
+                        select={(e) => {
+                          props.onChange(e);
                         }}
-                        labelStyle={{ marginTop: "unset" }}
+                        optionKey="i18nKey"
                         onBlur={props.onBlur}
+                        t={t}
                       />
                     )}
                   />
-                </div>
-              </LabelFieldPair>
-              <CardLabelError style={errorStyle}>{localFormState.touched.proposedTaps ? errors?.proposedTaps?.message : ""}</CardLabelError>
-              <LabelFieldPair>
-                <CardLabel
-                  style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
-                  className="card-label-smaller"
-                >{`${t("WS_PROPOSED_PIPE_SIZE_IN_INCHES_LABEL")}*`}</CardLabel>
-                <Controller
-                  control={control}
-                  name={"proposedPipeSize"}
-                  defaultValue={connectionDetail?.proposedPipeSize}
-                  rules={{ required: t("REQUIRED_FIELD") }}
-                  isMandatory={true}
-                  render={(props) => (
-                    <Dropdown
-                      className="form-field"
-                      selected={getValues("proposedPipeSize")}
-                      disable={false}
-                      option={pipeSizeList}
-                      errorStyle={localFormState.touched.proposedPipeSize && errors?.proposedPipeSize?.message ? true : false}
-                      select={(e) => {
-                        props.onChange(e);
-                      }}
-                      optionKey="i18nKey"
-                      onBlur={props.onBlur}
-                      t={t}
-                    />
-                  )}
-                />
-              </LabelFieldPair>
-              <CardLabelError style={errorStyle}>{localFormState.touched.proposedPipeSize ? errors?.proposedPipeSize?.message : ""}</CardLabelError>
-            </div>
+                </LabelFieldPair>
+                <CardLabelError style={errorStyle}>{localFormState.touched.proposedPipeSize ? errors?.proposedPipeSize?.message : ""}</CardLabelError>
+              </div>
+            </React.Fragment>
           )}
           {connectionDetail?.serviceName !== "WATER" && (
-            <div>
-              <LabelFieldPair>
-                <CardLabel
-                  style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
-                  className="card-label-smaller"
-                >{`${t("WS_PROPOSED_WATER_CLOSETS_LABEL")}*`}</CardLabel>
-                <div className="field">
-                  <Controller
-                    control={control}
-                    name="proposedWaterClosets"
-                    defaultValue={connectionDetail?.proposedWaterClosets}
-                    rules={{
-                      validate: (e) => ((e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")),
-                      required: t("REQUIRED_FIELD"),
-                    }}
-                    type="number"
-                    isMandatory={true}
-                    render={(props) => (
-                      <TextInput
-                        type="number"
-                        value={props.value}
-                        autoFocus={focusIndex.index === connectionDetail?.key && focusIndex.type === "proposedWaterClosets"}
-                        errorStyle={localFormState.touched.proposedWaterClosets && errors?.proposedWaterClosets?.message ? true : false}
-                        onChange={(e) => {
-                          props.onChange(e.target.value);
-                          setFocusIndex({ index: connectionDetail?.key, type: "proposedWaterClosets" });
-                        }}
-                        labelStyle={{ marginTop: "unset" }}
-                        onBlur={props.onBlur}
-                      />
-                    )}
-                  />
-                </div>
-              </LabelFieldPair>
-              <CardLabelError style={errorStyle}>
-                {localFormState.touched.proposedWaterClosets ? errors?.proposedWaterClosets?.message : ""}
-              </CardLabelError>
-              <LabelFieldPair>
-                <CardLabel
-                  style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
-                  className="card-label-smaller"
-                >{`${t("WS_PROPOSED_WATER_TOILETS_LABEL")}*`}</CardLabel>
-                <div className="field">
-                  <Controller
-                    control={control}
-                    name="proposedToilets"
-                    defaultValue={connectionDetail?.proposedToilets}
-                    rules={{
-                      validate: (e) => ((e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")),
-                      required: t("REQUIRED_FIELD"),
-                    }}
-                    type="number"
-                    isMandatory={true}
-                    render={(props) => (
-                      <TextInput
-                        type="number"
-                        value={props.value}
-                        autoFocus={focusIndex.index === connectionDetail?.key && focusIndex.type === "proposedToilets"}
-                        errorStyle={localFormState.touched.proposedToilets && errors?.proposedToilets?.message ? true : false}
-                        onChange={(e) => {
-                          props.onChange(e.target.value);
-                          setFocusIndex({ index: connectionDetail?.key, type: "proposedToilets" });
-                        }}
-                        labelStyle={{ marginTop: "unset" }}
-                        onBlur={props.onBlur}
-                      />
-                    )}
-                  />
-                </div>
-              </LabelFieldPair>
-              <CardLabelError style={errorStyle}>{localFormState.touched.proposedToilets ? errors?.proposedToilets?.message : ""}</CardLabelError>
-            </div>
+            <React.Fragment>
+              <div>
+                <LabelFieldPair>
+                  <CardLabel
+                    style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
+                    className="card-label-smaller"
+                  >{`${t("WS_PROPOSED_WATER_CLOSETS_LABEL")}*`}</CardLabel>
+                  <div className="field">
+                    <Controller
+                      control={control}
+                      name="proposedWaterClosets"
+                      defaultValue={connectionDetail?.proposedWaterClosets}
+                      rules={{
+                        validate: (e) => ((e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")),
+                        required: t("REQUIRED_FIELD"),
+                      }}
+                      type="number"
+                      isMandatory={true}
+                      render={(props) => (
+                        <TextInput
+                          type="number"
+                          value={props.value}
+                          autoFocus={focusIndex.index === connectionDetail?.key && focusIndex.type === "proposedWaterClosets"}
+                          errorStyle={localFormState.touched.proposedWaterClosets && errors?.proposedWaterClosets?.message ? true : false}
+                          onChange={(e) => {
+                            props.onChange(e.target.value);
+                            setFocusIndex({ index: connectionDetail?.key, type: "proposedWaterClosets" });
+                          }}
+                          labelStyle={{ marginTop: "unset" }}
+                          onBlur={props.onBlur}
+                        />
+                      )}
+                    />
+                  </div>
+                </LabelFieldPair>
+                <CardLabelError style={errorStyle}>
+                  {localFormState.touched.proposedWaterClosets ? errors?.proposedWaterClosets?.message : ""}
+                </CardLabelError>
+              </div>
+              <div>
+                <LabelFieldPair>
+                  <CardLabel
+                    style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
+                    className="card-label-smaller"
+                  >{`${t("WS_PROPOSED_WATER_TOILETS_LABEL")}*`}</CardLabel>
+                  <div className="field">
+                    <Controller
+                      control={control}
+                      name="proposedToilets"
+                      defaultValue={connectionDetail?.proposedToilets}
+                      rules={{
+                        validate: (e) => ((e && getPattern("WSOnlyNumbers").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")),
+                        required: t("REQUIRED_FIELD"),
+                      }}
+                      type="number"
+                      isMandatory={true}
+                      render={(props) => (
+                        <TextInput
+                          type="number"
+                          value={props.value}
+                          autoFocus={focusIndex.index === connectionDetail?.key && focusIndex.type === "proposedToilets"}
+                          errorStyle={localFormState.touched.proposedToilets && errors?.proposedToilets?.message ? true : false}
+                          onChange={(e) => {
+                            props.onChange(e.target.value);
+                            setFocusIndex({ index: connectionDetail?.key, type: "proposedToilets" });
+                          }}
+                          labelStyle={{ marginTop: "unset" }}
+                          onBlur={props.onBlur}
+                        />
+                      )}
+                    />
+                  </div>
+                </LabelFieldPair>
+                <CardLabelError style={errorStyle}>{localFormState.touched.proposedToilets ? errors?.proposedToilets?.message : ""}</CardLabelError>
+              </div>
+            </React.Fragment>
           )}
         </div>
       )}

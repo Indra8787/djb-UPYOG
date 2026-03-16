@@ -8,6 +8,9 @@ import {
   ViewReportIcon,
   InboxIcon,
   ULBHomeCard,
+  ModuleHeader,
+  ArrowLeft,
+  HomeIcon,
 } from "@djb25/digit-ui-react-components";
 import React, { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -207,12 +210,54 @@ const EmployeeApp = ({ path, url, userType }) => {
     window.location.href.includes("/employee/fsm/registry") ||
     window.location.href.includes("/employee/fsm/application-details/");
 
-  const desludgingApplicationCheck = window.location.href.includes("/employee/fsm/new-application") || window.location.href.includes("/employee/fsm/modify-application");
+  const getDynamicBreadcrumbs = () => {
+    const pathname = location.pathname;
+
+    let crumbs = [
+      { icon: HomeIcon, path: "/digit-ui/employee" },
+      { label: t("TITLE_FSM"), path: `/digit-ui/employee/fsm/inbox` },
+    ];
+
+    if (pathname.includes("/registry/new-vendor")) {
+      crumbs.push({ label: t("ES_FSM_REGISTRY_TITLE_NEW_VENDOR") });
+    } else if (pathname.includes("/search-vendor")) {
+      crumbs.push({ label: t("SEARCH_VENDOR") });
+    } else if (pathname.includes("/registry/new-driver")) {
+      crumbs.push({ label: t("ES_FSM_REGISTRY_TITLE_NEW_DRIVER") });
+    } else if (pathname.includes("/registry/vendor-details") || pathname.includes("/registry/modify-vendor/")) {
+      crumbs.push({ label: t("VENDOR_VENDOR_DETAILS") });
+    } else if (pathname.includes("/registry/vehicle-details") || pathname.includes("/registry/modify-vehicle/")) {
+      crumbs.push({ label: t("VENDOR_VEHICLE_DETAILS") });
+    } else if (pathname.includes("/registry/new-vehicle")) {
+      crumbs.push({ label: t("ES_FSM_REGISTRY_TITLE_NEW_VEHICLE") });
+    } else if (pathname.includes("/registry/driver-details") || pathname.includes("/registry/modify-driver/")) {
+      crumbs.push({ label: t("VENDOR_DRIVER_DETAILS") });
+    } else if (pathname.includes("/registry/additionaldetails")) {
+      crumbs.push({ label: t("VENDOR_ADDITIONAL_DETAILS") });
+    } else if (pathname.includes("/registry/modify-vendor/:id")) {
+      crumbs.push({ label: t("ES_TITLE_VENDOR_EDIT") });
+    }
+
+    return crumbs;
+  };
+
+  const desludgingApplicationCheck =
+    window.location.href.includes("/employee/fsm/new-application") || window.location.href.includes("/employee/fsm/modify-application");
   return (
     <Switch>
       <React.Fragment>
-        <div className="ground-container">
-          {FSTPO ? (
+        <div className="ground-container employee-app-container form-container">
+          <ModuleHeader
+            leftContent={
+              <React.Fragment>
+                <ArrowLeft className="icon" />
+                Back
+              </React.Fragment>
+            }
+            onLeftClick={() => window.history.back()}
+            breadcrumbs={getDynamicBreadcrumbs()}
+          />
+          {/* {FSTPO ? (
             <BackButton
               isCommonPTPropertyScreen={location.pathname.includes("new") ? true : false}
               getBackPageNumber={location.pathname.includes("new") ? () => -2 : null}
@@ -223,38 +268,40 @@ const EmployeeApp = ({ path, url, userType }) => {
             <div style={locationCheck ? { marginLeft: "-4px" } : desludgingApplicationCheck ? { marginLeft: "12px" } : { marginLeft: "20px" }}>
               <BreadCrumbComp location={location} />
             </div>
-          )}
-          <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
-          <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} isInbox={true} />} />
-          <PrivateRoute path={`${path}/fstp-inbox`} component={() => <FstpInbox parentRoute={path} />} />
-          <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
-          <PrivateRoute path={`${path}/modify-application/:id`} component={() => <EditApplication />} />
-          <PrivateRoute
-            path={`${path}/application-details/:id`}
-            component={() => <EmployeeApplicationDetails parentRoute={path} userType="EMPLOYEE" />}
-          />
-          <PrivateRoute path={`${path}/fstp-operator-details/:id`} component={FstpOperatorDetails} />
-          <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
-          <PrivateRoute path={`${path}/application-audit/:id`} component={() => <ApplicationAudit parentRoute={path} />} />
-          <PrivateRoute path={`${path}/search`} component={() => <Inbox parentRoute={path} isSearch={true} />} />
-          <PrivateRoute path={`${path}/rate-view/:id`} component={() => <RateView parentRoute={path} />} />
-          <PrivateRoute path={`${path}/mark-for-disposal`} component={() => <div />} />
-          <PrivateRoute exact path={`${path}/registry`} component={() => <FSMRegistry parentRoute={path} />} />
-          <PrivateRoute path={`${path}/registry/vendor-details/:id`} component={() => <VendorDetails parentRoute={path} />} />
-          <PrivateRoute path={`${path}/registry/new-vendor`} component={() => <AddVendor parentRoute={path} />} />
-          <PrivateRoute path={`${path}/registry/modify-vendor/:id`} component={() => <EditVendor parentRoute={path} />} />
-          <PrivateRoute path={`${path}/registry/vehicle-details/:id`} component={() => <VehicleDetails parentRoute={path} />} />
-          <PrivateRoute path={`${path}/registry/new-vehicle`} component={() => <AddVehicle parentRoute={path} />} />
-          <PrivateRoute path={`${path}/registry/modify-vehicle/:id`} component={() => <EditVehicle parentRoute={path} />} />
-          <PrivateRoute path={`${path}/registry/driver-details/:id`} component={() => <DriverDetails parentRoute={path} />} />
-          <PrivateRoute path={`${path}/registry/new-driver`} component={() => <AddDriver parentRoute={path} />} />
-          <PrivateRoute path={`${path}/registry/modify-driver/:id`} component={() => <EditDriver parentRoute={path} />} />
-          <PrivateRoute exact path={`${path}/fstp-operations`} component={() => <FstpOperations />} />
-          <PrivateRoute exact path={`${path}/fstp-add-vehicle`} component={() => <FstpAddVehicle />} />
-          <PrivateRoute exact path={`${path}/fstp-fsm-request/:id`} component={() => <FstpServiceRequest />} />
-          {/* <PrivateRoute exact path={`${path}/home`} component={() => <ULBHomeCard module={module} />} /> */}
-          <PrivateRoute exact path={`${path}/fstp/new-vehicle-entry`} component={FstpOperatorDetails} />
-          <PrivateRoute exact path={`${path}/fstp/new-vehicle-entry/:id`} component={FstpOperatorDetails} />
+          )} */}
+          <div className="employee-form">
+            <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
+            <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} isInbox={true} />} />
+            <PrivateRoute path={`${path}/fstp-inbox`} component={() => <FstpInbox parentRoute={path} />} />
+            <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
+            <PrivateRoute path={`${path}/modify-application/:id`} component={() => <EditApplication />} />
+            <PrivateRoute
+              path={`${path}/application-details/:id`}
+              component={() => <EmployeeApplicationDetails parentRoute={path} userType="EMPLOYEE" />}
+            />
+            <PrivateRoute path={`${path}/fstp-operator-details/:id`} component={FstpOperatorDetails} />
+            <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
+            <PrivateRoute path={`${path}/application-audit/:id`} component={() => <ApplicationAudit parentRoute={path} />} />
+            <PrivateRoute path={`${path}/search`} component={() => <Inbox parentRoute={path} isSearch={true} />} />
+            <PrivateRoute path={`${path}/rate-view/:id`} component={() => <RateView parentRoute={path} />} />
+            <PrivateRoute path={`${path}/mark-for-disposal`} component={() => <div />} />
+            <PrivateRoute exact path={`${path}/registry`} component={() => <FSMRegistry parentRoute={path} />} />
+            <PrivateRoute path={`${path}/registry/vendor-details/:id`} component={() => <VendorDetails parentRoute={path} />} />
+            <PrivateRoute path={`${path}/registry/new-vendor`} component={() => <AddVendor parentRoute={path} />} />
+            <PrivateRoute path={`${path}/registry/modify-vendor/:id`} component={() => <EditVendor parentRoute={path} />} />
+            <PrivateRoute path={`${path}/registry/vehicle-details/:id`} component={() => <VehicleDetails parentRoute={path} />} />
+            <PrivateRoute path={`${path}/registry/new-vehicle`} component={() => <AddVehicle parentRoute={path} />} />
+            <PrivateRoute path={`${path}/registry/modify-vehicle/:id`} component={() => <EditVehicle parentRoute={path} />} />
+            <PrivateRoute path={`${path}/registry/driver-details/:id`} component={() => <DriverDetails parentRoute={path} />} />
+            <PrivateRoute path={`${path}/registry/new-driver`} component={() => <AddDriver parentRoute={path} />} />
+            <PrivateRoute path={`${path}/registry/modify-driver/:id`} component={() => <EditDriver parentRoute={path} />} />
+            <PrivateRoute exact path={`${path}/fstp-operations`} component={() => <FstpOperations />} />
+            <PrivateRoute exact path={`${path}/fstp-add-vehicle`} component={() => <FstpAddVehicle />} />
+            <PrivateRoute exact path={`${path}/fstp-fsm-request/:id`} component={() => <FstpServiceRequest />} />
+            {/* <PrivateRoute exact path={`${path}/home`} component={() => <ULBHomeCard module={module} />} /> */}
+            <PrivateRoute exact path={`${path}/fstp/new-vehicle-entry`} component={FstpOperatorDetails} />
+            <PrivateRoute exact path={`${path}/fstp/new-vehicle-entry/:id`} component={FstpOperatorDetails} />
+          </div>
         </div>
       </React.Fragment>
     </Switch>

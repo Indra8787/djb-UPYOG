@@ -50,7 +50,7 @@ const Inbox = ({ parentRoute }) => {
   const ServiceDefinitionCriteria =  {
     "tenantId": tenantId,
     "code": [],
-    "module": ["engagement"],
+    "module": ["Engagement"],
     "postedBy":""
   }
 
@@ -60,12 +60,12 @@ const Inbox = ({ parentRoute }) => {
         Digit.SessionStorage.set("CITIZENSURVEY.INBOX", { ...state, searchForm: payload.data , ServiceDefinitionCriteria:{
           "code": [],
           "postedBy": null,
-          "module": ["engagement"],
+          "module": ["Engagement"],
         }})
         return { ...state, searchForm: payload.data,ServiceDefinitionCriteria: {"tenantId": tenantId,
         "code": [],
         "postedBy": null,
-        "module": ["engagement"],
+        "module": ["Engagement"],
       }  };
       case "mutateFilterForm":
         // Digit.SessionStorage.set("CITIZENSURVEY.INBOX", { ...state, filterForm: payload.data })
@@ -73,13 +73,13 @@ const Inbox = ({ parentRoute }) => {
         Digit.SessionStorage.set("CITIZENSURVEY.INBOX", { ...state, filterForm: payload.data, ServiceDefinitionCriteria:{
           "code": [state.searchForm.title],
           "postedBy": state.searchForm.postedBy,
-          "module": ["engagement"],
+          "module": ["Engagement"],
           "status": payload.data.status.code
         }})
         return { ...state, filterForm: payload.data, ServiceDefinitionCriteria: {"tenantId": tenantId,
           "code": [state.searchForm.title],
           "postedBy": state.searchForm.postedBy,
-          "module": ["engagement"],
+          "module": ["Engagement"],
           "status": payload.data.status.code
         } };
       case "mutateTableForm":
@@ -89,11 +89,11 @@ const Inbox = ({ parentRoute }) => {
         Digit.SessionStorage.set("CITIZENSURVEY.INBOX", { ...state, searchForm: payload.data, ServiceDefinitionCriteria: {"tenantId": tenantId,
           "code": [payload.data.title],
           "postedBy": payload.data.postedBy,
-          "module": ["engagement"]} })
+          "module": ["Engagement"]} })
         return { ...state, searchForm: payload.data, ServiceDefinitionCriteria: {"tenantId": tenantId,
           "code": [payload.data.title],
           "postedBy": payload.data.postedBy,
-          "module": ["engagement"]} };
+          "module": ["Engagement"]} };
       default:
         break;
     }

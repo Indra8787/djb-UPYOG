@@ -231,7 +231,15 @@ const Details = () => {
         </div>
       ) : null}
       {showModal ? (
-        <ActionModal t={t} action={selectedAction} tenantId={tenantId} applicationData={data} closeModal={closeModal} submitAction={submitAction} />
+        <ActionModal
+          t={t}
+          action={selectedAction}
+          tenantId={tenantId}
+          applicationData={data}
+          closeModal={closeModal}
+          submitAction={submitAction}
+          cardFormWrapperClassName={"modal-form"}
+        />
       ) : null}
       <ActionBar>
         {displayMenu && data ? (

@@ -249,13 +249,30 @@ const VendorInbox = (props) => {
     }
   };
 
+  const vendorIds = React.useMemo(() => {
+    if (props.selectedTab === "VENDOR") {
+      return tableData?.map((row) => row.id) || [];
+    }
+    return vendorData?.map((v) => v.dsoDetails?.id) || [];
+  }, [props.selectedTab, tableData, vendorData]);
+  const { data: additionalVendorData } = Digit.Hooks.vendor.useEmpvendorCommonSearch(
+    {
+      tenantId,
+      filters: { vendorIds: vendorIds },
+    },
+    { enabled: vendorIds?.length > 0 }
+  );
+
+  const hasAdditionalDetails = (vendorId) => {
+    return additionalVendorData?.VendorDetails?.some((v) => v.vendorAdditionalDetails?.vendorId === vendorId);
+  };
+
   //used for columns in table
   const columns = React.useMemo(() => {
     switch (props.selectedTab) {
       case "VENDOR":
         return [
           //Vendor Name
-
           {
             Header: t("ES_VENDOR_INBOX_VENDOR_NAME"),
             disableSortBy: true,
@@ -324,11 +341,11 @@ const VendorInbox = (props) => {
                   additionalDetails = JSON.parse(additionalDetails);
                 } catch (error) {
                   console.error("Error parsing additionalDetails:", error);
-                  additionalDetails = {}; // Fallback to an empty object if parsing fails
+                  additionalDetails = {};
                 }
               }
 
-              const serviceType = additionalDetails?.serviceType || "N/A"; // Safe access to description
+              const serviceType = additionalDetails?.serviceType || "N/A";
               return <div>{serviceType}</div>;
             },
           },
@@ -521,24 +538,35 @@ const VendorInbox = (props) => {
             Header: t("ES_VENDOR_ADDITIONAL_DETAILS"),
             disableSortBy: true,
             Cell: ({ row }) => {
+              const vendorId = row.original?.id;
+              const hasDetails = hasAdditionalDetails(vendorId);
+
               return (
                 <div>
                   <span className="link">
-                    <Link to={"/digit-ui/employee/vendor/registry/additionaldetails/" + row.original["id"]}>
-                      <div>
-                        {t("ES_VENDOR_ADDITIONAL_DETAILS")}
-                        <br />
-                      </div>
+                    <Link
+                      to={
+                        hasDetails
+                          ? "/digit-ui/employee/vendor/registry/additionaldetails/info?vendorId=" + vendorId
+                          : "/digit-ui/employee/vendor/registry/additionaldetails/vendor-details?vendorId=" + vendorId
+                      }
+                    >
+                      <button
+                        className="submit-bar"
+                        type="button"
+                        style={{
+                          color: "white",
+                          backgroundColor: hasDetails ? "#417505" : "#F47738",
+                        }}
+                      >
+                        {hasDetails ? t("ES_VENDOR_VIEW_DETAILS") : t("ES_VENDOR_ADD_DETAILS")}
+                      </button>
                     </Link>
                   </span>
                 </div>
               );
             },
           },
-
-          // {
-          //   Header: t("ES_VENDOR_ADDITIONAL_DETAILS")
-          // }
         ];
 
       //if toggle on vehicle then it will show the below columns
@@ -616,12 +644,11 @@ const VendorInbox = (props) => {
                   additionalDetail = JSON.parse(additionalDetail);
                 } catch (error) {
                   console.error("Error parsing additionalDetails:", error);
-                  additionalDetail = {}; // Fallback to an empty object if parsing fails
+                  additionalDetail = {};
                 }
               }
 
-              const serviceType = additionalDetail?.serviceType || "N/A"; // Safe access to description
-              console.log("sericvee", serviceType);
+              const serviceType = additionalDetail?.serviceType || "N/A";
               return <div>{serviceType}</div>;
             },
           },
@@ -770,12 +797,9 @@ const VendorInbox = (props) => {
   }
 
   return (
-    //console.log("name of vendor",row.original.name),
-
     <div className="inbox-container">
       {props.userRole !== "FSM_EMP_FSTPO" && props.userRole !== "FSM_ADMIN" && !props.isSearch && (
         <div className="filters-container">
-          {/* <FSMLink parentRoute={props.parentRoute} /> */}
           <VENDORLink parentRoute={props.parentRoute} />
           <div style={{ marginTop: "24px" }}>
             <Filter

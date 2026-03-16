@@ -1,22 +1,16 @@
-import React, { useEffect, useState } from "react";
-import {
-  CardLabel,
-  LabelFieldPair,
-  Dropdown,
-  UploadFile,
-  Toast,
-  Loader,
-  CardHeader,
-  CardSectionHeader,
-} from "@djb25/digit-ui-react-components";
+import React, { useEffect, useRef, useState } from "react";
+import { CardLabel, LabelFieldPair, Dropdown, UploadFile, Toast, Loader } from "@djb25/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 
 const WSDocumentsEmployee = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
-  const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   const [documents, setDocuments] = useState(formData?.DocumentsRequired?.documents || []);
   const [error, setError] = useState(null);
-  const wsDocsData = window.location.href.includes("modify") ? "ModifyConnectionDocuments" : window.location.href.includes("disconnection") ? "DisconnectionDocuments" : "Documents";
+  const wsDocsData = window.location.href.includes("modify")
+    ? "ModifyConnectionDocuments"
+    : window.location.href.includes("disconnection")
+    ? "DisconnectionDocuments"
+    : "Documents";
   let action = "create";
 
   const { pathname } = useLocation();
@@ -26,7 +20,6 @@ const WSDocumentsEmployee = ({ t, config, onSelect, userType, formData, setError
   if (isEditScreen) action = "update";
 
   const { isLoading, data: wsDocs } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(stateId, wsDocsData);
-
 
   const goNext = () => {
     onSelect(config.key, { documents });
@@ -42,48 +35,52 @@ const WSDocumentsEmployee = ({ t, config, onSelect, userType, formData, setError
 
   const applicationDetailsData = JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS"));
 
-  if (
-    (window.location.href.includes("edit") && applicationDetailsData?.applicationData?.documents?.length > 0)
-  ) {
+  if (window.location.href.includes("edit") && applicationDetailsData?.applicationData?.documents?.length > 0) {
     const documentsData = applicationDetailsData?.applicationData?.documents || [];
-    documentsData?.map(documentData => {
-      wsDocs?.[wsDocsData]?.forEach(docData => {
-        const docType = docData?.code?.split(".")[1] ? docData?.code?.split(".")[0] + "." + docData?.code?.split(".")[1] : docData?.code?.split(".")[0]
-        const dataDocType = documentData?.documentType?.split(".")[1] ? documentData?.documentType?.split(".")[0] + "." + documentData?.documentType?.split(".")[1] : documentData?.documentType?.split(".")[0]
+    documentsData?.map((documentData) => {
+      wsDocs?.[wsDocsData]?.forEach((docData) => {
+        const docType = docData?.code?.split(".")[1]
+          ? docData?.code?.split(".")[0] + "." + docData?.code?.split(".")[1]
+          : docData?.code?.split(".")[0];
+        const dataDocType = documentData?.documentType?.split(".")[1]
+          ? documentData?.documentType?.split(".")[0] + "." + documentData?.documentType?.split(".")[1]
+          : documentData?.documentType?.split(".")[0];
         if (docType == dataDocType) {
-          docData.auditDetails = documentData.auditDetails
-          docData.documentType = docData.documentType
-          docData.documentUid = documentData.documentUid
-          docData.fileStoreId = documentData.fileStoreId
-          docData.id = documentData.id
-          docData.status = "ACTIVE"
+          docData.auditDetails = documentData.auditDetails;
+          docData.documentType = docData.documentType;
+          docData.documentUid = documentData.documentUid;
+          docData.fileStoreId = documentData.fileStoreId;
+          docData.id = documentData.id;
+          docData.status = "ACTIVE";
         }
-      })
-    })
+      });
+    });
   }
-  
+
   return (
     <div>
-      {wsDocs?.[wsDocsData]?.map((document, index) => {
-        return (
-          <SelectDocument
-            key={index}
-            document={document}
-            action={action}
-            t={t}
-            id={`pt-document-${index}`}
-            error={error}
-            setError={setError}
-            setDocuments={setDocuments}
-            documents={documents}
-            formData={formData}
-            setFormError={setFormError}
-            clearFormErrors={clearFormErrors}
-            config={config}
-            formState={formState}
-          />
-        );
-      })}
+      <div className="formcomposer-section-grid ws-doc-upload">
+        {wsDocs?.[wsDocsData]?.map((document, index) => {
+          return (
+            <SelectDocument
+              key={index}
+              document={document}
+              action={action}
+              t={t}
+              id={`pt-document-${index}`}
+              error={error}
+              setError={setError}
+              setDocuments={setDocuments}
+              documents={documents}
+              formData={formData}
+              setFormError={setFormError}
+              clearFormErrors={clearFormErrors}
+              config={config}
+              formState={formState}
+            />
+          );
+        })}
+      </div>
       {error && <Toast label={error} onClose={() => setError(null)} error />}
     </div>
   );
@@ -105,14 +102,10 @@ function SelectDocument({
   fromRawData,
   id,
 }) {
+  const fileRef = useRef();
   const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0];
-  const tenantId = Digit.ULBService.getCurrentTenantId();
   const [selectedDocument, setSelectedDocument] = useState(
-    filteredDocument
-      ? { ...filteredDocument, code: filteredDocument?.documentType }
-      : doc?.dropdownData?.length === 1
-        ? doc?.dropdownData[0]
-        : {}
+    filteredDocument ? { ...filteredDocument, code: filteredDocument?.documentType } : doc?.dropdownData?.length === 1 ? doc?.dropdownData[0] : {}
   );
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
@@ -121,13 +114,11 @@ function SelectDocument({
 
   useEffect(() => {
     if (filteredDocument) {
-      setSelectedDocument(filteredDocument
-        ? { ...filteredDocument, code: filteredDocument?.documentType }
-        : doc?.dropdownData?.length === 1
-          ? doc?.dropdownData[0]
-          : {})
+      setSelectedDocument(
+        filteredDocument ? { ...filteredDocument, code: filteredDocument?.documentType } : doc?.dropdownData?.length === 1 ? doc?.dropdownData[0] : {}
+      );
     }
-  }, [])
+  }, []);
 
   function selectfile(e) {
     setFile(e.target.files[0]);
@@ -176,7 +167,7 @@ function SelectDocument({
             fileStoreId: uploadedFile,
             i18nKey: selectedDocument?.code,
             id: selectedDocument?.id,
-            status: "ACTIVE"
+            status: "ACTIVE",
           },
         ];
         sessionStorage.setItem("DISCONNECTION_EDIT_DOCS", JSON.stringify(data));
@@ -193,7 +184,6 @@ function SelectDocument({
       removeError();
     }
   }, [uploadedFile, selectedDocument, isHidden, formData?.ConnectionDetails?.[0]]);
-
 
   useEffect(() => {
     (async () => {
@@ -223,10 +213,10 @@ function SelectDocument({
   }, [isHidden]);
 
   return (
-    <div style={{ marginBottom: "24px" }}>
+    <React.Fragment>
       {doc?.hasDropdown ? (
         <LabelFieldPair>
-          <CardLabel style={{fontWeight: "700" }}>{doc?.required ? `${t(doc?.i18nKey)}*` : `${t(doc?.i18nKey)}`}</CardLabel>
+          <CardLabel style={{ fontWeight: "700" }}>{doc?.required ? `${t(doc?.i18nKey)}*` : `${t(doc?.i18nKey)}`}</CardLabel>
           <Dropdown
             id={`doc-${doc?.code}`}
             key={`doc-${doc?.code}`}
@@ -240,7 +230,6 @@ function SelectDocument({
         </LabelFieldPair>
       ) : null}
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller"></CardLabel>
         <div className="field">
           <UploadFile
             onUpload={selectfile}
@@ -250,16 +239,14 @@ function SelectDocument({
             id={id}
             message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
             textStyles={{ width: "100%" }}
-            inputStyles={{ width: "280px" }}
             buttonType="button"
             error={!uploadedFile}
-            accept= "image/*, .pdf, .png, .jpeg, .jpg"
+            accept="image/*, .pdf, .png, .jpeg, .jpg"
           />
         </div>
       </LabelFieldPair>
-    </div>
+    </React.Fragment>
   );
 }
 
 export default WSDocumentsEmployee;
-

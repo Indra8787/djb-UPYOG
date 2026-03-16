@@ -84,7 +84,7 @@ const AddDriver = ({ parentUrl, heading }) => {
           serviceType: additionalDetails,
         },
 
-        vendorDriverStatus: "INACTIVE",
+        vendorDriverStatus: "ACTIVE",
       },
     };
 

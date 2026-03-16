@@ -11,17 +11,17 @@ const VendorSelectAddress = ({ t, config, onSelect, userType, formData }) => {
     userType === "employee"
       ? allCities.filter((city) => city.code === tenantId)
       : pincode
-        ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
-        : allCities;
-  let property = sessionStorage?.getItem("Digit_FSM_PT")
+      ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
+      : allCities;
+  let property = sessionStorage?.getItem("Digit_FSM_PT");
   if (property !== "undefined") {
-    property = JSON.parse(sessionStorage?.getItem("Digit_FSM_PT"))
+    property = JSON.parse(sessionStorage?.getItem("Digit_FSM_PT"));
   }
-  let cityDetail = {}
+  let cityDetail = {};
   if (property) {
     cityDetail = cities.filter((city) => {
-      return city.code == property?.propertyDetails?.address?.tenantId
-    })
+      return city.code == property?.propertyDetails?.address?.tenantId;
+    });
   }
   const [selectedCity, setSelectedCity] = useState(() => formData?.address?.city || cityDetail?.[0] || null);
   const { data: fetchedLocalities } = Digit.Hooks.useBoundaryLocalities(
@@ -34,7 +34,9 @@ const VendorSelectAddress = ({ t, config, onSelect, userType, formData }) => {
   );
 
   const [localities, setLocalities] = useState();
-  const [selectedLocality, setSelectedLocality] = useState(() => property?.propertyDetails?.address?.locality || formData?.cpt?.details?.address?.locality || formData?.address?.locality);
+  const [selectedLocality, setSelectedLocality] = useState(
+    () => property?.propertyDetails?.address?.locality || formData?.cpt?.details?.address?.locality || formData?.address?.locality
+  );
 
   useEffect(() => {
     if (cities) {
@@ -50,14 +52,11 @@ const VendorSelectAddress = ({ t, config, onSelect, userType, formData }) => {
       let filteredLocalityList = [];
       if (formData?.address?.locality) {
         setSelectedLocality(formData.address.locality);
-      }
-      else if (formData?.cpt?.details?.address?.locality) {
+      } else if (formData?.cpt?.details?.address?.locality) {
         setSelectedLocality(formData.cpt.details.address.locality);
-      }
-      else if (property?.propertyDetails?.address?.locality) {
+      } else if (property?.propertyDetails?.address?.locality) {
         setSelectedLocality(property?.propertyDetails?.address?.locality);
       }
-
 
       if (formData?.address?.pincode) {
         filteredLocalityList = __localityList.filter((obj) => obj.pincode?.find((item) => item == formData.address.pincode));
@@ -98,37 +97,26 @@ const VendorSelectAddress = ({ t, config, onSelect, userType, formData }) => {
   if (userType === "employee") {
     return (
       <React.Fragment>
-        <LabelFieldPair>
-          <CardLabel className="card-label-smaller">
-            {t("MYCITY_CODE_LABEL")}
-            {config.isMandatory ? " * " : null}
-          </CardLabel>
-          <Dropdown
-            className=""
-            isMandatory
-            selected={cities?.length === 1 ? cities[0] : selectedCity}
-            disable={cities?.length === 1}
-            option={cities}
-            select={selectCity}
-            optionKey="code"
-            t={t}
-          />
-        </LabelFieldPair>
-        <LabelFieldPair>
-          <CardLabel className="card-label-smaller">
-            {t("ES_NEW_APPLICATION_LOCATION_MOHALLA")}
-            {config.isMandatory ? " * " : null}
-          </CardLabel>
-          <Dropdown
-            className=""
-            isMandatory
-            selected={selectedLocality}
-            option={localities}
-            select={selectLocality}
-            optionKey="name"
-            t={t}
-          />
-        </LabelFieldPair>
+        <CardLabel className="card-label-smaller">
+          {t("MYCITY_CODE_LABEL")}
+          {config.isMandatory ? " * " : null}
+        </CardLabel>
+        <Dropdown
+          className=""
+          isMandatory
+          selected={cities?.length === 1 ? cities[0] : selectedCity}
+          disable={cities?.length === 1}
+          option={cities}
+          select={selectCity}
+          optionKey="code"
+          t={t}
+        />
+
+        <CardLabel className="card-label-smaller">
+          {t("ES_NEW_APPLICATION_LOCATION_MOHALLA")}
+          {config.isMandatory ? " * " : null}
+        </CardLabel>
+        <Dropdown className="" isMandatory selected={selectedLocality} option={localities} select={selectLocality} optionKey="name" t={t} />
       </React.Fragment>
     );
   }

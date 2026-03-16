@@ -1,5 +1,5 @@
-import React, { Fragment, useEffect, useCallback, useMemo } from "react";
-import { SearchForm, Table, Card, Loader, Header } from "@djb25/digit-ui-react-components";
+import React, { useEffect, useCallback, useMemo } from "react";
+import { SearchForm, Table, Card, Loader, CollapsibleCardPage, MobileNumber, SearchField, SubmitBar } from "@djb25/digit-ui-react-components";
 import { useForm, Controller } from "react-hook-form";
 import SearchFields from "./SearchFields";
 import { useTranslation } from "react-i18next";
@@ -8,11 +8,6 @@ import MobileSearchApplication from "./MobileSearchApplication";
 const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, businessService, isLoading }) => {
   const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("ADHOC_ADD_REBATE_DATA", {});
   const [sessionBillFormData, setSessionBillFormData, clearBillSessionFormData] = Digit.Hooks.useSessionStorage("ADHOC_BILL_ADD_REBATE_DATA", {});
-
-  const replaceUnderscore = (str) => {
-    str = str.replace(/_/g, " ");
-    return str;
-  };
 
   const { t } = useTranslation();
   const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
@@ -208,14 +203,69 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
   );
 
   return (
-    <>
+    <div className="employee-wrapper">
       {/* <Header styles={{ fontSize: "32px" }}>{businessService === "WS" ? t("WS_WATER_SEARCH_APPLICATION_SUB_HEADER") : t("WS_SEWERAGE_SEARCH_APPLICATION_SUB_HEADER")}</Header> */}
       {/* <Card className={"card-search-heading"}>
         <span style={{ color: "#505A5F" }}>{t("WS_INFO_VALIDATION")}</span>
       </Card> */}
-      <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
-        <SearchFields {...{ register, control, reset, tenantId, t, businessService }} />
-      </SearchForm>
+      <CollapsibleCardPage
+        title={t("WS_SEARCH_FILTERS_LABEL") || "Search Filters"}
+        defaultOpen={true}
+        tabs={[t("WT_SMART_SEARCH"), t("WT_ADVANCED_SEARCH")]} // Define tab names
+        defaultTab={t("WT_SMART_SEARCH")}
+      >
+        {(activeTab) => (
+          <form className="ws-search-form" onSubmit={handleSubmit(onSubmit)}>
+            {/* --- SMART SEARCH --- */}
+            {activeTab === t("WT_SMART_SEARCH") && (
+              <div className="wt-search-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+                <div className="search-field-wrapper">
+                  <label>{t("WT_MOBILE_NUMBER")}</label>
+                  <MobileNumber
+                    name="mobileNumber"
+                    inputRef={register({
+                      minLength: { value: 10, message: t("CORE_COMMON_MOBILE_ERROR") },
+                      maxLength: { value: 10, message: t("CORE_COMMON_MOBILE_ERROR") },
+                      pattern: { value: /[6789][0-9]{9}/, message: t("CORE_COMMON_MOBILE_ERROR") },
+                    })}
+                    type="number"
+                    maxlength={10}
+                  />
+                </div>
+              </div>
+            )}
+            {/* --- ADVANCED SEARCH --- */}
+            {activeTab === t("WT_ADVANCED_SEARCH") && (
+              <SearchForm className="ws-search-form-wrapper formcomposer-section-grid" onSubmit={onSubmit} handleSubmit={handleSubmit}>
+                <SearchFields {...{ register, control, reset, tenantId, t, businessService }} hideSubmitButton={true} />
+              </SearchForm>
+            )}
+            <SearchField className="ws-submit">
+              <SubmitBar label={t("ES_COMMON_SEARCH")} className="submit-bar generic-button" submit />
+              <button
+                className="clear-search generic-button"
+                onClick={() => {
+                  reset({
+                    applicationType: "",
+                    fromDate: "",
+                    toDate: "",
+                    connectionNumber: "",
+                    applicationStatus: "",
+                    applicationNumber: "",
+                    tradeName: "",
+                    offset: 0,
+                    limit: 10,
+                    sortBy: "commencementDate",
+                    sortOrder: "DESC",
+                  });
+                }}
+              >
+                {t(`CS_COMMON_CLEAR_SEARCH`)}
+              </button>
+            </SearchField>
+          </form>
+        )}
+      </CollapsibleCardPage>
       {isLoading ? <Loader /> : null}
       {data?.display && !resultOk ? (
         <Card style={{ marginTop: 20 }}>
@@ -252,7 +302,7 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
           sortParams={[{ id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false }]}
         />
       ) : null}
-    </>
+    </div>
   );
 };
 

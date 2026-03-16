@@ -57,6 +57,18 @@ const AddVehicle = ({ parentUrl, heading }) => {
   };
 
   const onFormValueChange = (setValue, formData) => {
+    if (formData?.registrationNumber) {
+      let updatedRegNo = formData.registrationNumber
+        .toUpperCase()
+        .replace(/ /g, "-")
+        .replace(/[^A-Z0-9-]/g, "");
+      if (updatedRegNo.length > 13) {
+        updatedRegNo = updatedRegNo.slice(0, 13);
+      }
+      if (updatedRegNo !== formData.registrationNumber) {
+        setValue("registrationNumber", updatedRegNo);
+      }
+    }
     if (
       formData?.registrationNumber &&
       formData?.ownerName &&

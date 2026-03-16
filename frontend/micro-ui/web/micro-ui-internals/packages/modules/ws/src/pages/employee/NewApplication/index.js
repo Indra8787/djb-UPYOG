@@ -1,6 +1,6 @@
+import React, { useState, useEffect } from "react";
 import { FormComposer, Loader, Toast } from "@djb25/digit-ui-react-components";
 import cloneDeep from "lodash/cloneDeep";
-import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useHistory } from "react-router-dom";
 import _ from "lodash";
@@ -308,6 +308,7 @@ const NewApplication = () => {
         label={t("CS_COMMON_SUBMIT")}
         onSubmit={onSubmit}
         defaultValues={sessionFormData}
+        cardFormWrapperClassName="new-application-card"
       />
       {showToast && (
         <Toast

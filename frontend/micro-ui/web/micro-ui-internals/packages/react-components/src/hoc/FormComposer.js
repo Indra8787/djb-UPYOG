@@ -20,7 +20,7 @@ import MobileNumber from "../atoms/MobileNumber";
 import _ from "lodash";
 
 export const FormComposer = (props) => {
-  const { register, handleSubmit, setValue, getValues, reset, watch, control, formState, errors, setError, clearErrors } = useForm({
+  const { register, handleSubmit, setValue, getValues, reset, watch, control, formState, errors, setError, clearErrors, className } = useForm({
     defaultValues: props.defaultValues,
   });
   const { t } = useTranslation();
@@ -132,7 +132,7 @@ export const FormComposer = (props) => {
 
       case "form":
         return (
-          <form className="">
+          <form className={props.formClassName}>
             <Component
               userType={"employee"}
               t={t}
@@ -234,7 +234,7 @@ export const FormComposer = (props) => {
               Fields default to 1 column each (side by side).
               Set field.colSpan = "span 2" in config for a full-width single field.
             */}
-            <div className="formcomposer-section-grid">
+            <div className={`formcomposer-section-grid ${props.cardFormWrapperClassName ? props.cardFormWrapperClassName : ""}`}>
               {section && getCombinedComponent(section)}
 
               {section.body.map((field, index) => {
@@ -343,14 +343,16 @@ export const FormComposer = (props) => {
       onSubmit={handleSubmit(onSubmit)}
       onKeyDown={(e) => checkKeyDown(e)}
       id={props.formId}
-      className={props.className}
+      className={props.formClassName}
     >
-      <Card className={"form-composer-card"} style={getCardStyles()}>
+      <Card className={`form-composer-card ${className ? props.cardClassName : ""}`} style={getCardStyles()}>
         {!props.childrenAtTheBottom && props.children}
         {props.heading && <CardSubHeader style={{ ...props.headingStyle }}> {props.heading} </CardSubHeader>}
         {props.description && <CardLabelDesc className={"repos"}> {props.description} </CardLabelDesc>}
         {props.text && <CardText>{props.text}</CardText>}
-        <div className={`formcomposer-grid-container-form ${props?.cardClassName ? props.cardClassName : ""}`}>{formFields}</div>
+        <div className={`formcomposer-grid-container-form ${props?.cardFormWrapperClassName ? props.cardFormWrapperClassName : ""}`}>
+          {formFields}
+        </div>
         {props.childrenAtTheBottom && props.children}
         {props.submitInForm && (
           <SubmitBar label={t(props.label)} style={{ ...props?.buttonStyle }} submit="submit" disabled={isDisabled} className="w-full" />

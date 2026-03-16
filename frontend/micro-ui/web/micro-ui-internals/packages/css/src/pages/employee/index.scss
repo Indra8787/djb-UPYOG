@@ -74,7 +74,7 @@
   }
 }
 
-.employee-main-application-details{
+.employee-main-application-details {
   width: 100%;
   overflow-y: scroll;
 }
@@ -88,13 +88,15 @@
   gap: 16px;
 }
 
-
-
 .citizen {
   .main {
     padding-top: 82px;
     min-height: calc(100vh - 90px);
   }
+}
+
+.ws-edit-form-card-wrapper {
+  grid-template-columns: 1fr;
 }
 
 .citizen,
@@ -243,7 +245,8 @@
       &.active {
         border-left: 4px solid theme(colors.primary.main);
 
-        &.level-0 {}
+        &.level-0 {
+        }
 
         &.level-1 {
           border-left: 8.5px solid theme(colors.primary.main);
@@ -253,7 +256,8 @@
           border-left: 4px solid theme(colors.primary.main);
         }
 
-        &.level-3 {}
+        &.level-3 {
+        }
 
         color: theme(colors.primary.main) !important;
         border-right: none;
@@ -432,10 +436,7 @@
     -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: 1px solid rgba(255, 255, 255, 0.3);
 
-    box-shadow:
-      inset 0 2px 4px rgba(255, 255, 255, 0.4),
-      inset 0 -2px 6px rgba(0, 0, 0, 0.1),
-      0 12px 30px rgba(97, 119, 236, 0.2);
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), inset 0 -2px 6px rgba(0, 0, 0, 0.1), 0 12px 30px rgba(97, 119, 236, 0.2);
 
     .header-icon-area {
       position: absolute;
@@ -455,7 +456,6 @@
     .header-greeting-area {
       display: flex;
       flex-direction: column;
-      
     }
 
     .greeting-title {
@@ -481,7 +481,6 @@
       font-weight: 500;
       color: rgba(255, 255, 255, 0.9);
       letter-spacing: 0.5px;
-
     }
 
     /* --- Right: Omni Search Area --- */
@@ -543,7 +542,7 @@
       padding: 4px 10px;
       border-radius: 8px;
       margin-right: 6px;
-      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-family: "SFMono-Regular", Consolas, monospace;
       border: 1px solid rgba(255, 255, 255, 0.3);
     }
   }
@@ -656,7 +655,8 @@
       justify-content: center;
     }
 
-    .center-container {}
+    .center-container {
+    }
   }
 }
 
@@ -888,12 +888,13 @@
 @media (min-width: 1024px) {
   .top-info-cards-wrapper {
     display: grid;
-    grid-template-columns: 3fr 1fr; 
+    grid-template-columns: 3fr 1fr;
     align-items: stretch;
   }
 }
 
-@media (min-width: 375px) {}
+@media (min-width: 375px) {
+}
 
 .static-card {
   background: white;
@@ -1009,13 +1010,13 @@
   margin-right: 8px;
 }
 .ra-footer {
-  margin-top: auto;   
-  padding-top: 16px;   
-  padding-bottom: 0px; 
+  margin-top: auto;
+  padding-top: 16px;
+  padding-bottom: 0px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: transparent; 
+  background: transparent;
   z-index: 10;
 }
 
@@ -1093,10 +1094,10 @@
   color: #ef4444;
 }
 .ra-timeline {
-  flex: 1;             
-  overflow-y: auto;    
-  min-height: 0;       
-  padding-right: 8px;  
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding-right: 8px;
 }
 .ra-timeline-modal {
   padding: 24px;
@@ -1118,7 +1119,6 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-
 }
 
 .ra-header h3 {
@@ -1260,11 +1260,11 @@
   row-gap: 1rem;
 }
 
-.vendor-two-column-form .employeeCard>.card-header,
-.vendor-two-column-form .employeeCard>header,
-.vendor-two-column-form .employeeCard>.submit-bar,
-.vendor-two-column-form .employeeCard>.primary-label-btn,
-.vendor-two-column-form .employeeCard>.break-line {
+.vendor-two-column-form .employeeCard > .card-header,
+.vendor-two-column-form .employeeCard > header,
+.vendor-two-column-form .employeeCard > .submit-bar,
+.vendor-two-column-form .employeeCard > .primary-label-btn,
+.vendor-two-column-form .employeeCard > .break-line {
   grid-column: 1 / -1;
 }
 
@@ -1289,22 +1289,21 @@
   align-items: flex-start;
 }
 
-.vendor-two-column-form .digit-card>.card-header,
-.vendor-two-column-form .digit-card>.card-sub-header,
-.vendor-two-column-form .digit-card>header,
-.vendor-two-column-form .employeeCard>.card-header,
-.vendor-two-column-form .employeeCard>.card-sub-header,
-.vendor-two-column-form .employeeCard>header,
-.vendor-two-column-form .card>.card-header,
-.vendor-two-column-form .card>.card-sub-header,
-.vendor-two-column-form .card>header,
-.vendor-two-column-form .card>hr {
+.vendor-two-column-form .digit-card > .card-header,
+.vendor-two-column-form .digit-card > .card-sub-header,
+.vendor-two-column-form .digit-card > header,
+.vendor-two-column-form .employeeCard > .card-header,
+.vendor-two-column-form .employeeCard > .card-sub-header,
+.vendor-two-column-form .employeeCard > header,
+.vendor-two-column-form .card > .card-header,
+.vendor-two-column-form .card > .card-sub-header,
+.vendor-two-column-form .card > header,
+.vendor-two-column-form .card > hr {
   grid-column: 1 / -1;
   width: 100%;
 }
 
 @media (max-width: 768px) {
-
   .vendor-two-column-form .digit-card,
   .vendor-two-column-form .employeeCard,
   .vendor-two-column-form .card {
@@ -1354,7 +1353,7 @@
   width: 100%;
 }
 
-.vendor-select-address-inline>.label-field-pair {
+.vendor-select-address-inline > .label-field-pair {
   flex: 1;
 }
 
@@ -1366,7 +1365,6 @@
 
   @media (min-width: 325px) and (max-width: 768px) {
     .home-header {
-
       .header-top-section {
         margin-inline: 10px;
       }
@@ -1508,11 +1506,11 @@
 
 .engagement-custom-card {
   display: flex !important;
-  
+
   .employeeCard {
     margin: 0 !important;
     width: 100% !important;
-    min-height: 120px !important; 
+    min-height: 120px !important;
     border-radius: 12px;
     background: linear-gradient(145deg, #ffffff, #f9fafb);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04) !important;

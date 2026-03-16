@@ -40,29 +40,29 @@ const SearchWater = ({ path }) => {
     enabled: !!(payload && Object.keys(payload).length > 0),
   };
 
-  let result = Digit.Hooks.ws.useSearchWS({ tenantId, filters: payload, config, bussinessService: businessServ, t ,shortAddress:true});
-  
+  let result = Digit.Hooks.ws.useSearchWS({ tenantId, filters: payload, config, bussinessService: businessServ, t, shortAddress: true });
+
   const isMobile = window.Digit.Utils.browser.isMobile();
 
   if (result?.isLoading && isMobile) {
-    return <Loader />
+    return <Loader />;
   }
 
   const getData = () => {
-    if (result?.data?.length == 0 ) {
-      return { display: "ES_COMMON_NO_DATA" }
+    if (result?.data?.length == 0) {
+      return { display: "ES_COMMON_NO_DATA" };
     } else if (result?.data?.length > 0) {
-      return result?.data
+      return result?.data;
     } else {
       return [];
     }
-  }
+  };
 
   const isResultsOk = () => {
     return result?.data?.length > 0 ? true : false;
-  }
+  };
 
-  if(!result?.isLoading)
+  if (!result?.isLoading)
     result.data = result?.data?.map((item) => {
       if (item?.connectionNo?.includes("WS")) {
         item.service = serviceConfig.WATER;

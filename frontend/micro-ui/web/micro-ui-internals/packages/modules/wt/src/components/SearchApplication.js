@@ -175,7 +175,7 @@ const WTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
 
               {/* --- ADVANCED SEARCH --- */}
               {activeTab === t("WT_ADVANCED_SEARCH") && (
-                <div className="wt-search-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }}>
+                <div className="formcomposer-section-grid">
                   <div className="search-field-wrapper">
                     <label>{t("WT_BOOKING_NO")}</label>
                     <TextInput name="bookingNo" inputRef={register({})} />

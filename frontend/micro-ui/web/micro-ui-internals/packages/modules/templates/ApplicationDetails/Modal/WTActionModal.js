@@ -38,8 +38,23 @@ const CloseBtn = (props) => {
   );
 };
 
-const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData, applicationData, businessService, moduleCode }) => {
-
+const ActionModal = ({
+  t,
+  action,
+  tenantId,
+  state,
+  id,
+  closeModal,
+  submitAction,
+  actionData,
+  applicationData,
+  businessService,
+  moduleCode,
+  cardClassName,
+  cardFormWrapperClassName,
+  cardFormClassName,
+  formClassName,
+}) => {
   const { data: approverData, isLoading: PTALoading } = Digit.Hooks.useEmployeeSearch(
     tenantId,
     {
@@ -65,7 +80,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   let vendorDescription = [];
   dsoData?.vendor?.forEach((item) => {
     if (item?.additionalDetails?.description === "WT" || item?.additionalDetails?.serviceType === "WT") {
-
       // Combine the Name and Mobile Number for the dropdown display
       const displayLabel = `${item?.name} (${item?.owner?.mobileNumber})`;
 
@@ -73,7 +87,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         code: item?.name,
         name: displayLabel,
         i18nKey: displayLabel,
-        vendorId: item?.id
+        vendorId: item?.id,
       });
     }
   });
@@ -109,7 +123,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [selectedVendor, setSelectedVendor] = useState(null);
   const [selectVehicle, setSelectVehicle] = useState(null);
 
-
   useEffect(() => {
     setApprovers(approverData?.Employees?.map((employee) => ({ uuid: employee?.uuid, name: employee?.user?.name })));
   }, [approverData]);
@@ -140,7 +153,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     })();
   }, [file]);
 
-
   function submit(data) {
     let workflow = { action: action?.action, comments: data?.comments, businessService, moduleName: moduleCode };
     if (uploadedFile)
@@ -153,19 +165,20 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       ];
     if (action?.state === "PENDING_FOR_VEHICLE_DRIVER_ASSIGN") {
       applicationData.vendorId = selectedVendor?.vendorId;
-    };
+    }
 
     if (action?.state === "DELIVERY_PENDING") {
       applicationData.vehicleId = selectVehicle?.vehicleId;
-    };
-    /* * Constructs the request payload based on the business service type.  
-  * If `businessService` is "watertanker", wraps `applicationData` in `waterTankerBookingDetail`.  
-  * Otherwise, wraps it in `mobileToiletBookingDetail`.  
-  * * The payload is then passed to `submitAction` for processing.  
-  */
-    let requestPayload = businessService === "watertanker"
-      ? { waterTankerBookingDetail: { ...applicationData, workflow } }
-      : { mobileToiletBookingDetail: { ...applicationData, workflow } };
+    }
+    /* * Constructs the request payload based on the business service type.
+     * If `businessService` is "watertanker", wraps `applicationData` in `waterTankerBookingDetail`.
+     * Otherwise, wraps it in `mobileToiletBookingDetail`.
+     * * The payload is then passed to `submitAction` for processing.
+     */
+    let requestPayload =
+      businessService === "watertanker"
+        ? { waterTankerBookingDetail: { ...applicationData, workflow } }
+        : { mobileToiletBookingDetail: { ...applicationData, workflow } };
     submitAction(requestPayload);
   }
 
@@ -186,7 +199,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           setSelectVehicle,
         })
       );
-
     }
   }, [action, approvers, uploadedFile, dsoData, selectVehicle, vehicleData]);
 
@@ -197,10 +209,9 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       actionCancelLabel={t(config.label.cancel)}
       actionCancelOnSubmit={closeModal}
       actionSaveLabel={t(config.label.submit)}
-      actionSaveOnSubmit={() => { }}
+      actionSaveOnSubmit={() => {}}
       formId="modal-action"
     >
-
       <FormComposer
         config={config.form}
         noBoxShadow
@@ -209,8 +220,11 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         onSubmit={submit}
         defaultValues={defaultValues}
         formId="modal-action"
+        cardFormClassName={cardFormClassName}
+        cardFormWrapperClassName={cardFormWrapperClassName}
+        cardClassName={cardClassName}
+        formClassName={formClassName}
       />
-
     </Modal>
   ) : (
     <Loader />

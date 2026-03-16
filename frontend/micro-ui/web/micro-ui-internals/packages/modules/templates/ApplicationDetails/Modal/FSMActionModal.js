@@ -23,7 +23,20 @@ const CloseBtn = (props) => {
   );
 };
 
-const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData }) => {
+const ActionModal = ({
+  t,
+  action,
+  tenantId,
+  state,
+  id,
+  closeModal,
+  submitAction,
+  actionData,
+  cardClassName,
+  cardFormWrapperClassName,
+  cardFormClassName,
+  formClassName,
+}) => {
   const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId);
   const { isLoading, isSuccess, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
     tenantId,
@@ -287,6 +300,10 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         onSubmit={submit}
         defaultValues={defaultValues}
         formId="modal-action"
+        cardFormClassName={cardFormClassName}
+        cardFormWrapperClassName={cardFormWrapperClassName}
+        cardClassName={cardClassName}
+        formClassName={formClassName}
       />
       {/* {toastError && <Toast {...toastError} />} */}
     </Modal>

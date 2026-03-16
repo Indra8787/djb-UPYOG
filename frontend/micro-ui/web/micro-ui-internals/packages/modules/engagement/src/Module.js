@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Switch, useLocation, useRouteMatch, Route } from "react-router-dom";
 
 
-import EngagementCard from "./components/EngagementCard";
+import ENGAGEMENTCard from "./components/EngagementCard";
 import EngagementDocSelectULB from "./components/Documents/EngagementDocsULB";
 import EngagementULBDropdown from "./components/Documents/EngagementULBDropdown";
 import EnagementDocName from "./components/Documents/engagement-doc-name";
@@ -226,8 +226,8 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
   );
 };
 
-const EngagementModule = ({ stateCode, userType, tenants }) => {
-  const moduleCode = "Engagement";
+const ENGAGEMENTModule = ({ stateCode, userType, tenants }) => {
+  const moduleCode = "ENGAGEMENT";
   const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
@@ -278,8 +278,8 @@ const EngagementLinks = ({ matchPath, userType }) => {
 };
 
 const componentsToRegister = {
-  EngagementModule,
-  EngagementCard,
+  ENGAGEMENTModule,
+  ENGAGEMENTCard,
   EngagementDocSelectULB,
   EngagementULBDropdown,
   EnagementDocName,

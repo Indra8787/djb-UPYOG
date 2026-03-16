@@ -176,6 +176,9 @@ import {
   LoginIcon,
   PTRIcon,
   CHBIcon,
+  UploadIcon,
+  MdUploadIcon,
+  UploadCloudIcon,
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -238,6 +241,7 @@ import ExpandedViewContext from "./atoms/ExpandedViewContext";
 import ExpandedViewPage from "./atoms/ExpandedViewPage";
 import CollapsibleModuleSidebar from "./atoms/CollapsibleModuleSidebar";
 import Tooltip from "./atoms/Tooltip";
+import CollapsibleCardPage from "./hoc/CollapsibleCardPage";
 
 export {
   Phone,
@@ -475,6 +479,7 @@ export {
   CitizenConsentForm,
   PTRIcon,
   CHBIcon,
+  UploadIcon,
   AddressDetails,
   ApplicantDetails,
   Timeline,
@@ -484,5 +489,8 @@ export {
   ExpandedViewPage,
   CollapsibleModuleSidebar,
   Tooltip,
-  Stepper
+  Stepper,
+  MdUploadIcon,
+  UploadCloudIcon,
+  CollapsibleCardPage,
 };

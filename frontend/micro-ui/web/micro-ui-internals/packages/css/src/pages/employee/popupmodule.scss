@@ -11,6 +11,10 @@
     gap: 16px;
     @apply flex flex-row justify-end;
   }
+
+  .modal-form {
+    grid-template-columns: 1fr;
+  }
 }
 
 @screen dt {

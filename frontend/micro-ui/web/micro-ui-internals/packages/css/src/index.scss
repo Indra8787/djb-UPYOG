@@ -748,6 +748,28 @@ input[type="number"] {
   }
 }
 
+.ws-search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .ws-search-form-wrapper {
+    border-radius: 0;
+  }
+}
+
+.ws-search-form-wrapper {
+  padding: 0;
+  overflow-y: scroll;
+}
+
+.ws-submit {
+  display: flex;
+  gap: 16px;
+  justify-content: end;
+  align-items: center;
+}
+
 .plumber-details-new-value-wrapper {
   flex: 2 1 auto;
 }

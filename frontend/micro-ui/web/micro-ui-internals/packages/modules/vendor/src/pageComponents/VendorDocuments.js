@@ -87,7 +87,7 @@ const VendorDocuments = ({ t, config, onSelect, formData }) => {
   return (
     <div style={{ display: "flex", width: "100%", gap: "24px" }}>
       <Timeline steps={steps} currentStep={2} />
-      <div style={{ flex: "1", overflowY: "auto" }}>
+      <div style={{ flex: "1", overflowY: "auto",  }}>
         <FormStep
           t={t}
           config={config}
@@ -98,7 +98,7 @@ const VendorDocuments = ({ t, config, onSelect, formData }) => {
           {files.map((file, index) => (
             <LabelFieldPair key={index}>
               <CardLabel className="card-label-smaller">{t("VENDOR_ID") + (index !== 0 ? index : "")}</CardLabel>
-              <div className="field" style={{ display: "flex", alignItems: "center" }}>
+              <div className="field" style={{ display: "flex", alignItems: "center", paddingBottom: "10px" }}>
                 <UploadFile
                   onUpload={(e) => handleFileSelect(e, index)}
                   onDelete={() =>

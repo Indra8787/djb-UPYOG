@@ -1,9 +1,8 @@
-import { Loader, Modal, FormComposer } from "@djb25/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
+import { Loader, Modal, FormComposer } from "@djb25/digit-ui-react-components";
 import { configWSApproverApplication, configWSDisConnectApplication } from "../config";
-import * as predefinedConfig from "../config";
+// import * as predefinedConfig from "../config";
 import cloneDeep from "lodash/cloneDeep";
-
 
 const Heading = (props) => {
   return <h1 className="heading-m">{props.label}</h1>;
@@ -41,7 +40,23 @@ const convertDateToEpochNew = (dateString, dayStartOrEnd = "dayend") => {
   }
 };
 
-const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData, applicationData, businessService, moduleCode }) => {
+const ActionModal = ({
+  t,
+  action,
+  tenantId,
+  state,
+  id,
+  closeModal,
+  submitAction,
+  actionData,
+  applicationData,
+  businessService,
+  moduleCode,
+  cardClassName,
+  cardFormWrapperClassName,
+  cardFormClassName,
+  formClassName,
+}) => {
   const { data: approverData, isLoading: PTALoading } = Digit.Hooks.useEmployeeSearch(
     tenantId,
     {
@@ -59,7 +74,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [uploadedFile, setUploadedFile] = useState(null);
   const [error, setError] = useState(null);
   const isMobile = window.Digit.Utils.browser.isMobile();
-  const isEmployee = window.location.href.includes("/employee")
+  const isEmployee = window.location.href.includes("/employee");
 
   useEffect(() => {
     setApprovers(approverData?.Employees?.map((employee) => ({ uuid: employee?.uuid, name: employee?.user?.name })));
@@ -73,11 +88,11 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     (async () => {
       setError(null);
       if (file) {
-        const allowedFileTypesRegex = /(.*?)(jpg|jpeg|png|image|pdf)$/i
+        const allowedFileTypesRegex = /(.*?)(jpg|jpeg|png|image|pdf)$/i;
         if (file.size >= 5242880) {
           setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
         } else if (file?.type && !allowedFileTypesRegex.test(file?.type)) {
-          setError(t(`NOT_SUPPORTED_FILE_TYPE`))
+          setError(t(`NOT_SUPPORTED_FILE_TYPE`));
         } else {
           try {
             const response = await Digit.UploadServices.Filestorage("WS", file, Digit.ULBService.getCurrentTenantId());
@@ -96,59 +111,59 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   }, [file]);
 
   function submit(data) {
-    if(applicationData?.isBillAmend){
-      const comments = data?.comments ? data.comments : null
-    
-      const additionalDetails = { ...applicationData?.billAmendmentDetails?.additionalDetails, comments } 
-     const amendment = {
-       ...applicationData?.billAmendmentDetails,
-        workflow:{
-          businessId:applicationData?.billAmendmentDetails?.amendmentId,
-          action:action?.action,
-          tenantId:tenantId,
-          businessService:applicationData?.applicationType?.includes("WATER")?"WS.AMENDMENT":"SW.AMENDMENT",
-          moduleName:applicationData?.applicationType?.includes("WATER")?"WS":"SW",
+    if (applicationData?.isBillAmend) {
+      const comments = data?.comments ? data.comments : null;
+
+      const additionalDetails = { ...applicationData?.billAmendmentDetails?.additionalDetails, comments };
+      const amendment = {
+        ...applicationData?.billAmendmentDetails,
+        workflow: {
+          businessId: applicationData?.billAmendmentDetails?.amendmentId,
+          action: action?.action,
+          tenantId: tenantId,
+          businessService: applicationData?.applicationType?.includes("WATER") ? "WS.AMENDMENT" : "SW.AMENDMENT",
+          moduleName: applicationData?.applicationType?.includes("WATER") ? "WS" : "SW",
           assignes: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
           comment: data?.comments || "",
           documents: uploadedFile
             ? [
+                {
+                  documentType: action?.action + " DOC",
+                  fileName: file?.name,
+                  fileStoreId: uploadedFile,
+                },
+              ]
+            : [],
+        },
+        additionalDetails,
+        comment: data?.comments || "",
+        wfDocuments: uploadedFile
+          ? [
               {
                 documentType: action?.action + " DOC",
                 fileName: file?.name,
                 fileStoreId: uploadedFile,
               },
             ]
-            : []
+          : null,
+        processInstance: {
+          action: action?.action,
+          assignes: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
+          comment: data?.comments || "",
+          documents: uploadedFile
+            ? [
+                {
+                  documentType: action?.action + " DOC",
+                  fileName: file?.name,
+                  fileStoreId: uploadedFile,
+                },
+              ]
+            : [],
         },
-       additionalDetails,
-       comment: data?.comments || "",
-       wfDocuments: uploadedFile
-         ? [
-           {
-             documentType: action?.action + " DOC",
-             fileName: file?.name,
-             fileStoreId: uploadedFile,
-           },
-         ]
-         : null,
-       processInstance: {
-         action: action?.action,
-         assignes: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
-         comment: data?.comments || "",
-         documents: uploadedFile
-           ? [
-             {
-               documentType: action?.action + " DOC",
-               fileName: file?.name,
-               fileStoreId: uploadedFile,
-             },
-           ]
-           : []
-       }
-      }
+      };
       //amendment?.additionalDetails?.comments = comments
-      submitAction({AmendmentUpdate:amendment})
-      return
+      submitAction({ AmendmentUpdate: amendment });
+      return;
     }
     let workflow = { action: action?.action, comments: data?.comments, businessService, moduleName: moduleCode };
     applicationData = {
@@ -159,12 +174,12 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       assignes: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
       wfDocuments: uploadedFile
         ? [
-          {
-            documentType: action?.action + " DOC",
-            fileName: file?.name,
-            fileStoreId: uploadedFile,
-          },
-        ]
+            {
+              documentType: action?.action + " DOC",
+              fileName: file?.name,
+              fileStoreId: uploadedFile,
+            },
+          ]
         : null,
       processInstance: {
         ...applicationData?.processInstance,
@@ -173,51 +188,60 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         comment: data?.comments || "",
         documents: uploadedFile
           ? [
-            {
-              documentType: action?.action + " DOC",
-              fileName: file?.name,
-              fileStoreId: uploadedFile,
-            },
-          ]
-          : []
-      }
+              {
+                documentType: action?.action + " DOC",
+                fileName: file?.name,
+                fileStoreId: uploadedFile,
+              },
+            ]
+          : [],
+      },
     };
-    if(data?.date && applicationData?.applicationType?.includes("DISCONNECT"))
-    {
+    if (data?.date && applicationData?.applicationType?.includes("DISCONNECT")) {
       const disconnectionExecutionDate = cloneDeep(data?.date);
-      applicationData.disconnectionExecutionDate = convertDateToEpochNew(disconnectionExecutionDate)
-    }
-    else if (data?.date) {
+      applicationData.disconnectionExecutionDate = convertDateToEpochNew(disconnectionExecutionDate);
+    } else if (data?.date) {
       const connectionExecutionDate = cloneDeep(data?.date);
-      applicationData.connectionExecutionDate = convertDateToEpochNew(connectionExecutionDate)
+      applicationData.connectionExecutionDate = convertDateToEpochNew(connectionExecutionDate);
     }
-    if ((applicationData?.processInstance?.businessService == "DisconnectWSConnection" || applicationData?.processInstance?.businessService == "DisconnectSWConnection") || window.location.href.includes("disconnection")){
-      
-      applicationData?.serviceType == "WATER" ?
-      submitAction({ WaterConnection: applicationData, disconnectRequest: true }) :
-      submitAction({ SewerageConnection: applicationData, disconnectRequest: true })
-    } 
-    else if(applicationData?.applicationType == "SEWERAGE_RECONNECTION") {
-      submitAction({ SewerageConnection: applicationData, disconnectRequest: false, reconnectRequest:true })
-    }
-    else if(applicationData?.applicationType == "WATER_RECONNECTION") {
-      submitAction({ WaterConnection: applicationData, disconnectRequest: false, reconnectRequest:true })
-    }
-      else {
+    if (
+      applicationData?.processInstance?.businessService == "DisconnectWSConnection" ||
+      applicationData?.processInstance?.businessService == "DisconnectSWConnection" ||
+      window.location.href.includes("disconnection")
+    ) {
+      applicationData?.serviceType == "WATER"
+        ? submitAction({ WaterConnection: applicationData, disconnectRequest: true })
+        : submitAction({ SewerageConnection: applicationData, disconnectRequest: true });
+    } else if (applicationData?.applicationType == "SEWERAGE_RECONNECTION") {
+      submitAction({ SewerageConnection: applicationData, disconnectRequest: false, reconnectRequest: true });
+    } else if (applicationData?.applicationType == "WATER_RECONNECTION") {
+      submitAction({ WaterConnection: applicationData, disconnectRequest: false, reconnectRequest: true });
+    } else {
       const adhocRebateData = sessionStorage.getItem("Digit.ADHOC_ADD_REBATE_DATA");
       const parsedAdhocRebateData = adhocRebateData ? JSON.parse(adhocRebateData) : "";
-      if (parsedAdhocRebateData?.value?.adhocPenalty) applicationData.additionalDetails.adhocPenalty = parseInt(parsedAdhocRebateData?.value?.adhocPenalty) || "";
-      if (parsedAdhocRebateData?.value?.adhocPenaltyComment) applicationData.additionalDetails.adhocPenaltyComment = parsedAdhocRebateData?.value?.adhocPenaltyComment || "";
-      if (parsedAdhocRebateData?.value?.adhocPenaltyReason) applicationData.additionalDetails.adhocPenaltyReason = parsedAdhocRebateData?.value?.adhocPenaltyReason || "";
-      if (parsedAdhocRebateData?.value?.adhocRebate) applicationData.additionalDetails.adhocRebate = parseInt(parsedAdhocRebateData?.value?.adhocRebate) || "";
-      if (parsedAdhocRebateData?.value?.adhocRebateComment) applicationData.additionalDetails.adhocRebateComment = parsedAdhocRebateData?.value?.adhocRebateComment || "";
-      if (parsedAdhocRebateData?.value?.adhocRebateReason) applicationData.additionalDetails.adhocRebateReason = parsedAdhocRebateData?.value?.adhocRebateReason || "";
-      applicationData?.serviceType == "WATER" ? submitAction({ WaterConnection: applicationData ,disconnectRequest: false, reconnectRequest:false}) : submitAction({ SewerageConnection: applicationData, disconnectRequest: false, reconnectRequest:false });
+      if (parsedAdhocRebateData?.value?.adhocPenalty)
+        applicationData.additionalDetails.adhocPenalty = parseInt(parsedAdhocRebateData?.value?.adhocPenalty) || "";
+      if (parsedAdhocRebateData?.value?.adhocPenaltyComment)
+        applicationData.additionalDetails.adhocPenaltyComment = parsedAdhocRebateData?.value?.adhocPenaltyComment || "";
+      if (parsedAdhocRebateData?.value?.adhocPenaltyReason)
+        applicationData.additionalDetails.adhocPenaltyReason = parsedAdhocRebateData?.value?.adhocPenaltyReason || "";
+      if (parsedAdhocRebateData?.value?.adhocRebate)
+        applicationData.additionalDetails.adhocRebate = parseInt(parsedAdhocRebateData?.value?.adhocRebate) || "";
+      if (parsedAdhocRebateData?.value?.adhocRebateComment)
+        applicationData.additionalDetails.adhocRebateComment = parsedAdhocRebateData?.value?.adhocRebateComment || "";
+      if (parsedAdhocRebateData?.value?.adhocRebateReason)
+        applicationData.additionalDetails.adhocRebateReason = parsedAdhocRebateData?.value?.adhocRebateReason || "";
+      applicationData?.serviceType == "WATER"
+        ? submitAction({ WaterConnection: applicationData, disconnectRequest: false, reconnectRequest: false })
+        : submitAction({ SewerageConnection: applicationData, disconnectRequest: false, reconnectRequest: false });
     }
   }
 
   useEffect(() => {
-    if (applicationData?.processInstance?.businessService == "DisconnectWSConnection" || applicationData?.processInstance?.businessService == "DisconnectSWConnection") {
+    if (
+      applicationData?.processInstance?.businessService == "DisconnectWSConnection" ||
+      applicationData?.processInstance?.businessService == "DisconnectSWConnection"
+    ) {
       if (action) {
         setConfig(
           configWSDisConnectApplication({
@@ -230,7 +254,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
             uploadedFile,
             setUploadedFile,
             businessService,
-            error
+            error,
           })
         );
       }
@@ -247,7 +271,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
             uploadedFile,
             setUploadedFile,
             businessService,
-            error
+            error,
           })
         );
       }
@@ -261,9 +285,9 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       actionCancelLabel={t(config.label.cancel)}
       actionCancelOnSubmit={closeModal}
       actionSaveLabel={t(config.label.submit)}
-      actionSaveOnSubmit={() => { }}
+      actionSaveOnSubmit={() => {}}
       formId="modal-action"
-      style={isMobile && isEmployee ? {width:"100%",height:"auto"} : {}}
+      style={isMobile && isEmployee ? { width: "100%", height: "auto" } : {}}
     >
       {PTALoading ? (
         <Loader />
@@ -276,6 +300,10 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           onSubmit={submit}
           defaultValues={defaultValues}
           formId="modal-action"
+          cardFormClassName={cardFormClassName}
+          cardFormWrapperClassName={cardFormWrapperClassName}
+          cardClassName={cardClassName}
+          formClassName={formClassName}
         />
       )}
     </Modal>
