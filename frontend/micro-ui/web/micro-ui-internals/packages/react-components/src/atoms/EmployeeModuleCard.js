@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useCallback, memo } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { ArrowRightInbox } from "./svgindex";
 import ExpandedViewContext from "./ExpandedViewContext";
@@ -45,13 +45,7 @@ const WaterIcon = () => (
 
 const AssetIcon = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-    <defs>
-      <linearGradient id="asset-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#8b5cf6" />
-        <stop offset="100%" stopColor="#6d28d9" />
-      </linearGradient>
-    </defs>
-    <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" fill="url(#asset-grad)" />
+    <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" fill="#8b5cf6" />
   </svg>
 );
 
@@ -196,12 +190,12 @@ const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], className
   const history = useHistory();
   const { isExpandedView, isModuleSidebar } = useContext(ExpandedViewContext) || {};
 
-  const handleDetailsClick = () => {
+  const handleDetailsClick = useCallback(() => {
     history.push("/digit-ui/employee/module/details", {
       moduleName,
       links,
     });
-  };
+  }, [history, moduleName, links]);
 
   if (isExpandedView) {
     return <ModuleLinksView links={links} moduleName={moduleName} />;
@@ -299,7 +293,7 @@ const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], className
       </div>
     </Fragment>
   );
-};
+});
 
 const ModuleCardFullWidth = ({ Icon, moduleName, kpis = [], links = [], className, styles }) => {
   const history = useHistory();

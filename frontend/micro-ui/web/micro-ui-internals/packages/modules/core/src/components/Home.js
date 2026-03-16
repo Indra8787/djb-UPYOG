@@ -13,9 +13,12 @@ import {
   WSICon,
   PTRIcon,
   CHBIcon,
+  FinanceChartIcon,
+  Toast,
 } from "@djb25/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import EmployeeDashboard from "./EmployeeDashboard";
 import RecentActivity from "./RecentActivity";
 import NewsAndEvents from "./NewsAndEvents";
@@ -121,12 +124,12 @@ const CitizenHome = ({ modules, getCitizenMenu, fetchedCitizen, isLoading }) => 
                     Info={
                       code === "OBPS"
                         ? () => (
-                            <CitizenInfoLabel
-                              style={{ margin: "0px", padding: "10px" }}
-                              info={t("CS_FILE_APPLICATION_INFO_LABEL")}
-                              text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)}
-                            />
-                          )
+                          <CitizenInfoLabel
+                            style={{ margin: "0px", padding: "10px" }}
+                            info={t("CS_FILE_APPLICATION_INFO_LABEL")}
+                            text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)}
+                          />
+                        )
                         : null
                     }
                     isInfo={code === "OBPS" ? true : false}
@@ -191,7 +194,12 @@ const ModuleCarousel = ({ modules, title }) => {
       setShowRightArrow(Math.ceil(scrollLeft + clientWidth) < scrollWidth - 1);
 
       if (clientWidth > 0) {
-        const gap = parseInt(window.getComputedStyle(scrollContainerRef.current).columnGap) || 0;
+        // Cache layout values to avoid repeated getComputedStyle calls
+        if (!scrollContainerRef.current._carouselGap) {
+          const computedStyle = window.getComputedStyle(scrollContainerRef.current);
+          scrollContainerRef.current._carouselGap = parseInt(computedStyle.columnGap) || 0;
+        }
+        const gap = scrollContainerRef.current._carouselGap;
         const total = Math.ceil((scrollWidth + gap) / (clientWidth + gap)) || 1;
         setTotalPages(total);
         const current = Math.round(scrollLeft / (clientWidth + gap)) + 1;
@@ -201,9 +209,25 @@ const ModuleCarousel = ({ modules, title }) => {
   };
 
   React.useEffect(() => {
-    setTimeout(() => handleScroll(), 100);
+    let timeoutId;
+    const debouncedScroll = () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(handleScroll, 50);
+    };
+
+    // Initial call
+    handleScroll();
+
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener("scroll", debouncedScroll);
+    }
     window.addEventListener("resize", handleScroll);
-    return () => window.removeEventListener("resize", handleScroll);
+
+    return () => {
+      if (container) container.removeEventListener("scroll", debouncedScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
   }, [modules]);
 
   const scroll = (direction) => {
@@ -252,6 +276,20 @@ const EmployeeHome = ({ modules }) => {
   const userInfo = JSON.parse(localStorage.getItem("Employee.user-info"));
   const name = userInfo?.name;
   const dashboardCemp = Digit.UserService.hasAccess(["DASHBOARD_EMPLOYEE"]) ? true : false;
+  const [showToast, setShowToast] = React.useState(null);
+
+  const clearToast = () => {
+    setShowToast(null);
+  };
+
+  React.useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => {
+        clearToast();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
 
   if (window.Digit.SessionStorage.get("PT_CREATE_EMP_TRADE_NEW_FORM")) window.Digit.SessionStorage.set("PT_CREATE_EMP_TRADE_NEW_FORM", {});
 
@@ -306,11 +344,48 @@ const EmployeeHome = ({ modules }) => {
             </h1>
             <p className="greeting-date">{getFormattedDate()}</p>
           </div>
-          <div className="header-icon-area">
-            <PresentationIcon />
+          <div className="header-right-area">
+            <div className="header-icon-area">
+              <PresentationIcon />
+            </div>
+            <div className="header-actions-area">
+              <button onClick={() => setShowToast({ label: t("Coming Soon...!") })} className="view-dashboard-btn">
+                <span className="btn-text">{t("View Analytics")}</span>
+                <div className="btn-icon-bg">
+                  <FinanceChartIcon className="finance-chart-icon" />
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </div>
+
+      {showToast && (
+        <Toast
+          label={showToast.label}
+          onClose={clearToast}
+          className="coming-soon-toast"
+          style={{
+            position: "fixed",
+            bottom: "24px",
+            right: "24px",
+            zIndex: 10001,
+            background: "linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+            backdropFilter: "blur(4px)",
+            WebkitBackdropFilter: "blur(4px)",
+            borderRadius: "12px",
+            maxWidth: "350px",
+            minWidth: "200px",
+            padding: "16px",
+            display: "flex",
+            alignItems: "center",
+            transform: "translateY(0)",
+            animation: "toastSlideUp 0.3s ease-out forwards"
+          }}
+        />
+      )}
 
       <div className="employee-home-main-content">
         <div className="ground-container">
