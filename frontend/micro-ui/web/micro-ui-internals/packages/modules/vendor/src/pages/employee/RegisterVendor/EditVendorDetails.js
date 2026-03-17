@@ -93,8 +93,6 @@ const EditVendorDetails = (props) => {
     { enabled: !!dsoId }
   );
 
-  console.log(vendorAdditionalData, "w2e3r4t5yh");
-
   const { mutate } = Digit.Hooks.fsm.useVendorUpdate(tenantId);
 
   function onActionSelect(action) {
@@ -307,7 +305,7 @@ const EditVendorDetails = (props) => {
     <div className="employee-form-content">
       {!isLoading ? (
         <React.Fragment>
-          <Card style={{ position: "relative", paddingLeft: "30px" }} >
+          <Card style={{ position: "relative", paddingLeft: "30px" }}>
             {dsoData?.[0]?.employeeResponse?.map((detail, index) => (
               <React.Fragment key={index}>
                 {index > 0 && <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t(detail.title)}</CardSectionHeader>}

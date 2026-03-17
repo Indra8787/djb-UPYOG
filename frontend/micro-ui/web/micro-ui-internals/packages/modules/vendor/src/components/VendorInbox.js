@@ -22,6 +22,7 @@ const VendorInbox = (props) => {
   const [tableData, setTableData] = useState([]);
   const [showToast, setShowToast] = useState(null);
   const [vendors, setVendors] = useState([]);
+  const [drivers, setDrivers] = useState([]);
   const queryClient = useQueryClient();
   const [address, setAddress] = useState();
 
@@ -32,6 +33,16 @@ const VendorInbox = (props) => {
     error: vendorError,
     refetch: refetchVendor,
   } = Digit.Hooks.fsm.useDsoSearch(tenantId, { sortBy: "name", sortOrder: "ASC", status: "ACTIVE" }, { enabled: false });
+
+  const { data: driverData, refetch: refetchDriver } = Digit.Hooks.fsm.useDriverSearch({
+    tenantId,
+    filters: {
+      sortBy: "name",
+      sortOrder: "ASC",
+      status: "ACTIVE",
+      driverWithNoVendor: true,
+    },
+  });
 
   const {
     isLoading: isUpdateVendorLoading,
@@ -62,7 +73,10 @@ const VendorInbox = (props) => {
   }, [props]);
 
   useEffect(() => {
-    if (props.selectedTab === "DRIVER" || props.selectedTab === "VEHICLE") refetchVendor();
+    if (props.selectedTab === "DRIVER" || props.selectedTab === "VEHICLE") {
+      refetchVendor();
+      refetchDriver();
+    }
   }, [props.selectedTab]);
 
   useEffect(() => {
@@ -71,6 +85,12 @@ const VendorInbox = (props) => {
       setVendors(vendors);
     }
   }, [vendorData]);
+
+  useEffect(() => {
+    if (driverData) {
+      setDrivers(driverData.driver || []);
+    }
+  }, [driverData]);
 
   const closeToast = () => {
     setShowToast(null);
@@ -205,6 +225,31 @@ const VendorInbox = (props) => {
     });
   };
 
+  const onDriverSelect = (row, selectedOption) => {
+    let vehicleData = row.original;
+    let selectedDriver = selectedOption;
+
+    const formData = {
+      vehicle: {
+        ...vehicleData,
+        driverData: selectedDriver,
+      },
+    };
+
+    mutateVehicle(formData, {
+      onError: (error, variables) => {
+        setShowToast({ key: "error", action: error });
+        setTimeout(closeToast, 5000);
+      },
+      onSuccess: (data, variables) => {
+        setShowToast({ key: "success", action: "VEHICLE" });
+        queryClient.invalidateQueries("FSM_VEICLES_SEARCH");
+        props.refetchData();
+        setTimeout(closeToast, 3000);
+      },
+    });
+  };
+
   const onCellClick = (row, column, length) => {
     setTableData((old) =>
       old.map((data, index) => {
@@ -258,14 +303,11 @@ const VendorInbox = (props) => {
   const { data: additionalVendorData } = Digit.Hooks.vendor.useEmpvendorCommonSearch(
     {
       tenantId,
-      filters: { vendorIds: vendorIds },
+      filters: { vendorIds: vendorIds?.join(","), vendorId: vendorIds?.join(",") },
     },
     { enabled: vendorIds?.length > 0 }
   );
 
-  const hasAdditionalDetails = (vendorId) => {
-    return additionalVendorData?.VendorDetails?.some((v) => v.vendorAdditionalDetails?.vendorId === vendorId);
-  };
 
   //used for columns in table
   const columns = React.useMemo(() => {
@@ -539,31 +581,34 @@ const VendorInbox = (props) => {
             disableSortBy: true,
             Cell: ({ row }) => {
               const vendorId = row.original?.id;
-              const hasDetails = hasAdditionalDetails(vendorId);
+
+              // Guard: if data not yet loaded, show a neutral state
+              if (!additionalVendorData) {
+                return <span>Loading...</span>;
+              }
+
+              const hasDetails = additionalVendorData?.VendorDetails?.some((item) => item?.vendorAdditionalDetails?.vendorId === vendorId);
+
+              console.log(hasDetails,"ytgyg")
 
               return (
-                <div>
-                  <span className="link">
-                    <Link
-                      to={
-                        hasDetails
-                          ? "/digit-ui/employee/vendor/registry/additionaldetails/info?vendorId=" + vendorId
-                          : "/digit-ui/employee/vendor/registry/additionaldetails/vendor-details?vendorId=" + vendorId
-                      }
-                    >
-                      <button
-                        className="submit-bar"
-                        type="button"
-                        style={{
-                          color: "white",
-                          backgroundColor: hasDetails ? "#417505" : "#F47738",
-                        }}
-                      >
-                        {hasDetails ? t("ES_VENDOR_VIEW_DETAILS") : t("ES_VENDOR_ADD_DETAILS")}
-                      </button>
-                    </Link>
-                  </span>
-                </div>
+                <Link
+                  to={
+                    hasDetails
+                      ? "/digit-ui/employee/vendor/registry/additionaldetails/info?vendorId=" + vendorId
+                      : "/digit-ui/employee/vendor/registry/additionaldetails/vendor-details?vendorId=" + vendorId
+                  }
+                >
+                  <button
+                    className="submit-bar"
+                    style={{
+                      backgroundColor: hasDetails ? "#417505" : "#F47738",
+                      color: "white",
+                    }}
+                  >
+                    {hasDetails ? "View Details" : "Add Details"}
+                  </button>
+                </Link>
               );
             },
           },
@@ -668,11 +713,46 @@ const VendorInbox = (props) => {
               );
             },
           },
+
+          {
+            Header: t("ES_FSM_REGISTRY_SELECT_DRIVER"),
+            Cell: ({ row }) => {
+              return (
+                <Dropdown
+                  className="fsm-registry-dropdown"
+                  selected={row.original.driver}
+                  option={drivers}
+                  select={(value) => onDriverSelect(row, value)}
+                  optionKey="name"
+                  t={t}
+                />
+              );
+            },
+          },
         ];
 
       //if toggle on driver then it will show the below columns
       case "DRIVER":
         return [
+          //Username
+          {
+            Header: t("ES_FSM_REGISTRY_INBOX_USERNAME"),
+            disableSortBy: true,
+            Cell: ({ row }) => {
+              return (
+                <div>
+                  <span className="link">
+                    <Link to={"/digit-ui/employee/vendor/registry/driver-details/" + row.original["id"]}>
+                      <div>
+                        {row.original.owner?.userName || "NA"}
+                        <br />
+                      </div>
+                    </Link>
+                  </span>
+                </div>
+              );
+            },
+          },
           //driver name
           {
             Header: t("ES_FSM_REGISTRY_INBOX_DRIVER_NAME"),
@@ -738,7 +818,7 @@ const VendorInbox = (props) => {
       default:
         return [];
     }
-  }, [props.selectedTab, vendors]);
+  }, [props.selectedTab, vendors, drivers, tableData, additionalVendorData, t]);
 
   // if it validate the user role then it starts working
   let result;

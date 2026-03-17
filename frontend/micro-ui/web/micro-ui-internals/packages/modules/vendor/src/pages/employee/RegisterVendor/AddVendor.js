@@ -220,7 +220,7 @@
 
 // export default AddVendor;
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FormComposer, Stepper, Toast } from "@djb25/digit-ui-react-components";
 // import { useHistory } from "react-router-dom";
@@ -237,15 +237,17 @@ const AddVendor = ({ parentUrl, heading }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [showToast, setShowToast] = useState(null);
   const [canSubmit, setCanSubmit] = useState(false);
-  const step1DataRef = useRef({}); // 👈 store step 1 data here
+
+  // 👇 store step data
+  const [step1Data, setStep1Data] = useState({});
 
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("FSM_MUTATION_HAPPENED", false);
+
   const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
+
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
 
-  const { isLoading: isLoading, isError: vendorCreateError, data: updateResponse, error: updateError, mutate } = Digit.Hooks.fsm.useVendorCreate(
-    tenantId
-  );
+  const { isLoading, isError: vendorCreateError, data: updateResponse, error: updateError, mutate } = Digit.Hooks.fsm.useVendorCreate(tenantId);
 
   useEffect(() => {
     setMutationHappened(false);
@@ -256,6 +258,11 @@ const AddVendor = ({ parentUrl, heading }) => {
   const Config = VendorConfig(t);
 
   const defaultValues = {
+    serviceType: {
+      code: "WT",
+      name: "WT",
+      i18nKey: "WT",
+    },
     tripData: {
       noOfTrips: 1,
       amountPerTrip: null,
@@ -267,11 +274,10 @@ const AddVendor = ({ parentUrl, heading }) => {
 
   const addressStepConfig = Config.filter((config) => config.head === "ES_FSM_REGISTRY_NEW_ADDRESS_DETAILS");
 
-  // const steps = [t("ES_VRNDOR_NEW_VENDOR_DETAILS"), t("ES_FSM_REGISTRY_NEW_ADDRESS_DETAILS")];
   const steps = [{ label: "ES_VRNDOR_NEW_VENDOR_DETAILS" }, { label: "ES_FSM_REGISTRY_NEW_ADDRESS_DETAILS" }];
 
   const onFormValueChange = (setValue, formData) => {
-    if (formData?.vendorName && formData?.phone && formData?.selectGender?.code) {
+    if (formData?.vendorName && formData?.phone && formData?.selectGender?.code && formData?.serviceType?.code) {
       setCanSubmit(true);
     } else {
       setCanSubmit(false);
@@ -283,15 +289,15 @@ const AddVendor = ({ parentUrl, heading }) => {
   };
 
   const onSubmit = (data) => {
-    // STEP 1 — save data and move to step 2
+    // STEP 1
     if (currentStep === 1) {
-      step1DataRef.current = data; // 👈 save step 1 data
+      setStep1Data(data); // save step1 data
       setCurrentStep(2);
       return;
     }
 
-    // FINAL SUBMIT — merge step1 + step2 data
-    const mergedData = { ...step1DataRef.current, ...data }; // 👈 merge both steps
+    // FINAL SUBMIT
+    const mergedData = { ...step1Data, ...data };
 
     const name = mergedData?.vendorName;
     const pincode = mergedData?.pincode;
@@ -310,7 +316,9 @@ const AddVendor = ({ parentUrl, heading }) => {
     const gender = mergedData?.selectGender?.code;
     const emailId = mergedData?.emailId;
     const phone = mergedData?.phone;
+
     const dob = new Date(`${mergedData.dob}`).getTime() || new Date(`1/1/1970`).getTime();
+
     const additionalDetails = mergedData?.serviceType?.code;
 
     const formData = {
@@ -319,6 +327,7 @@ const AddVendor = ({ parentUrl, heading }) => {
         name,
         agencyType: "ULB",
         paymentPreference: "post-service",
+
         address: {
           tenantId: tenantId,
           landmark,
@@ -332,17 +341,20 @@ const AddVendor = ({ parentUrl, heading }) => {
           country: "in",
           pincode,
           buildingName,
+
           locality: {
             code: localityCode || "",
             name: localityName || "",
             label: "Locality",
             area: localityArea || "",
           },
+
           geoLocation: {
             latitude: mergedData?.address?.latitude || 0,
             longitude: mergedData?.address?.longitude || 0,
           },
         },
+
         owner: {
           tenantId: stateId,
           name: name,
@@ -353,9 +365,11 @@ const AddVendor = ({ parentUrl, heading }) => {
           emailId: emailId || "abc@egov.com",
           mobileNumber: phone,
         },
+
         additionalDetails: {
           serviceType: additionalDetails,
         },
+
         vehicle: [],
         drivers: [],
         source: "WhatsApp",
@@ -363,7 +377,7 @@ const AddVendor = ({ parentUrl, heading }) => {
     };
 
     mutate(formData, {
-      onError: (error, variables) => {
+      onError: (error) => {
         setShowToast({ key: "error", action: error });
         setTimeout(closeToast, 5000);
       },
@@ -376,13 +390,13 @@ const AddVendor = ({ parentUrl, heading }) => {
 
   return (
     <React.Fragment>
-      {/* Timeline */}
-      {/* <Timeline steps={steps} currentStep={currentStep} /> */}
-      <Stepper steps={steps} currentStep={currentStep - 1} onStepClick={(step) => setCurrentStep(step + 1)} t={t} />
+      <Stepper steps={steps} currentStep={currentStep - 1} onStepClick={() => {}} t={t} />
+
       <div style={{ flex: "1", overflowY: "auto" }}>
-        {currentStep === 1 && ( // 👈 conditionally render instead of key prop
+        {/* STEP 1 */}
+        {currentStep === 1 && (
           <FormComposer
-            // isDisabled={!canSubmit}
+            isDisabled={!canSubmit}
             label={t("CS_COMMON_NEXT")}
             config={vendorStepConfig
               .filter((i) => !i.hideInEmployee)
@@ -391,13 +405,17 @@ const AddVendor = ({ parentUrl, heading }) => {
                 body: config.body.filter((a) => !a.hideInEmployee),
               }))}
             onSubmit={onSubmit}
-            defaultValues={defaultValues}
+            defaultValues={{
+              ...defaultValues,
+              ...step1Data,
+            }}
             onFormValueChange={onFormValueChange}
             noBreakLine={true}
           />
         )}
 
-        {currentStep === 2 && ( // 👈 conditionally render instead of key prop
+        {/* STEP 2 */}
+        {currentStep === 2 && (
           <FormComposer
             label={t("ES_COMMON_APPLICATION_SUBMIT")}
             config={addressStepConfig
@@ -408,7 +426,7 @@ const AddVendor = ({ parentUrl, heading }) => {
               }))}
             onSubmit={onSubmit}
             defaultValues={defaultValues}
-            onFormValueChange={onFormValueChange}
+            onFormValueChange={(setValue, formData) => {}}
             noBreakLine={true}
           />
         )}

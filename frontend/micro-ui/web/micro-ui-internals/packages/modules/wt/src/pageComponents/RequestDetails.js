@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, TextInput, CardLabel, RadioButtons, CheckBox, Dropdown, TextArea } from "@djb25/digit-ui-react-components";
+import { FormStep, TextInput, CardLabel, RadioButtons, CheckBox, Dropdown, TextArea, UploadFile } from "@djb25/digit-ui-react-components";
 
 /**
  * Major Page which is developed for Request/Booking detail page
@@ -18,8 +18,8 @@ const RequestDetails = ({ t, config, onSelect, userType, formData }) => {
   const [description, setdescription] = useState(formData?.requestDetails?.description || "");
   const [deliveryTime, setdeliveryTime] = useState(formData?.requestDetails?.deliveryTime || "");
   const [extraCharge, setextraCharge] = useState(formData?.requestDetails?.extraCharge || false);
-  // const [uploadedFile, setUploadedFile] = useState(formData?.requestDetails?.fileStoreId || null);
-  // const [file, setFile] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState(formData?.requestDetails?.fileStoreId || null);
+  const [file, setFile] = useState(null);
   const [error, setError] = useState(null);
   const tenantId = Digit.ULBService.getStateId();
   const inputStyles = { width: user.type === "EMPLOYEE" ? "100%" : "100%" };
@@ -125,32 +125,32 @@ const RequestDetails = ({ t, config, onSelect, userType, formData }) => {
     setdeliveryDate(e.target.value);
   }
 
-  // function selectfile(e) {
-  //   setUploadedFile(null);
-  //   setFile(e.target.files[0]);
-  // }
+  function selectfile(e) {
+    setUploadedFile(null);
+    setFile(e.target.files[0]);
+  }
 
-  // useEffect(() => {
-  //   (async () => {
-  //     setError(null);
-  //     if (file) {
-  //       if (file.size >= 2000000) {
-  //         setError(t("WT_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
-  //       } else {
-  //         try {
-  //           const response = await Digit.UploadServices.Filestorage("wt", file, Digit.ULBService.getStateId());
-  //           if (response?.data?.files?.length > 0) {
-  //             setUploadedFile(response?.data?.files[0]?.fileStoreId);
-  //           } else {
-  //             setError(t("WT_FILE_UPLOAD_ERROR"));
-  //           }
-  //         } catch (err) {
-  //           setError(t("WT_FILE_UPLOAD_ERROR"));
-  //         }
-  //       }
-  //     }
-  //   })();
-  // }, [file]);
+  useEffect(() => {
+    (async () => {
+      setError(null);
+      if (file) {
+        if (file.size >= 2000000) {
+          setError(t("WT_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+        } else {
+          try {
+            const response = await Digit.UploadServices.Filestorage("wt", file, Digit.ULBService.getStateId());
+            if (response?.data?.files?.length > 0) {
+              setUploadedFile(response?.data?.files[0]?.fileStoreId);
+            } else {
+              setError(t("WT_FILE_UPLOAD_ERROR"));
+            }
+          } catch (err) {
+            setError(t("WT_FILE_UPLOAD_ERROR"));
+          }
+        }
+      }
+    })();
+  }, [file]);
 
   const goNext = () => {
     let requestDetails = formData.requestDetails;
@@ -164,7 +164,7 @@ const RequestDetails = ({ t, config, onSelect, userType, formData }) => {
       deliveryTime,
       description,
       extraCharge,
-      // fileStoreId: uploadedFile,
+      fileStoreId: uploadedFile,
     };
     onSelect(config.key, request, false);
   };
@@ -271,7 +271,7 @@ const RequestDetails = ({ t, config, onSelect, userType, formData }) => {
           <TimeInput />
         </div>
 
-        {/* <div>
+        <div>
           <CardLabel>{`${t("WT_UPLOAD_DOCUMENT")}`}</CardLabel>
           <UploadFile
             id={"wt-doc"}
@@ -284,7 +284,7 @@ const RequestDetails = ({ t, config, onSelect, userType, formData }) => {
             message={uploadedFile ? `1 ${t(`WT_ACTION_FILEUPLOADED`)}` : t(`WT_ACTION_NO_FILEUPLOADED`)}
             error={error}
           />
-        </div> */}
+        </div>
         <div>
           <CardLabel>
             {`${t("WT_DESCRIPTION")}`} <span className="astericColor">*</span>

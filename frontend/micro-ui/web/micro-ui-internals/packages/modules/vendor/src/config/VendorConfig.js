@@ -97,23 +97,26 @@ const VendorConfig = (t, disabled = false) => {
             className: "payment-form-text-input-correction",
           },
         },
-        // {
-        //   label: "ES_VENDOR_REGISTRY_SERVICE_TYPE",
-        //   isMandatory: true,
-        //   type: "component",
-        //   route: "select-gender",
-        //   hideInEmployee: false,
-        //   key: "serviceType",
-        //   component: "SelectServiceType",
-        //   disable: disabled,
-        //   texts: {
-        //     headerCaption: "",
-        //     header: "CS_COMMON_CHOOSE_GENDER",
-        //     cardText: "CS_COMMON_SELECT_GENDER",
-        //     submitBarLabel: "CS_COMMON_NEXT",
-        //     skipText: "CORE_COMMON_SKIP_CONTINUE",
-        //   },
-        // },
+        {
+          label: "ES_VENDOR_REGISTRY_SERVICE_TYPE",
+          isMandatory: true,
+          type: "component",
+          key: "serviceType",
+          component: "SelectServiceType",
+          disable: disabled,
+          populators: {
+            name: "serviceType",
+            defaultValue: {
+              code: "WT",
+              name: "WT",
+              i18nKey: "WT",
+            },
+          },
+          texts: {
+            header: "CS_COMMON_CHOOSE_SERVICE_TYPE",
+            submitBarLabel: "CS_COMMON_NEXT",
+          },
+        },
       ],
     },
     {

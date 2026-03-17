@@ -20,6 +20,16 @@ const SelectServiceType = ({ config, onSelect, t, userType, formData }) => {
         value: `${services.name}`,
       }));
       setFormattedServiceTypes(transformedData);
+      // Ensure "WT" is selected by default if nothing is selected or if it's the target default
+      if (!serviceTypes || serviceTypes.code === "WT") {
+        const defaultWT = transformedData.find((item) => item.code === "WT");
+        if (defaultWT) {
+          setserviceTypes(defaultWT);
+          if (userType === "employee") {
+            onSelect(config.key, defaultWT);
+          }
+        }
+      }
     }
   }, [ServiceType]);
 

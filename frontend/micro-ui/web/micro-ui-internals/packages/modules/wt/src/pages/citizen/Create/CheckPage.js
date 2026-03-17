@@ -66,12 +66,23 @@ const WTCheckPage = ({ onSubmit, value = {} }) => {
   const { owner, requestDetails, address, serviceType, toiletRequestDetails, treePruningRequestDetails } = value;
   const [agree, setAgree] = useState(false);
   const immediateRequired = requestDetails?.extraCharge ? "YES" : "NO";
+  const [fileUrl, setFileUrl] = useState(null);
 
   const setdeclarationhandler = () => {
     setAgree(!agree);
   };
 
-
+React.useEffect(() => {
+  if (requestDetails?.fileStoreId) {
+    Digit.UploadServices.Filefetch(
+      [requestDetails?.fileStoreId],
+      Digit.ULBService.getStateId()
+    ).then((res) => {
+      const url = res?.data?.fileStoreIds?.[0]?.url?.split(",")[0];
+      setFileUrl(url);
+    });
+  }
+}, [requestDetails?.fileStoreId]);
   return (
     <React.Fragment>
       <Card>
@@ -119,6 +130,16 @@ const WTCheckPage = ({ onSubmit, value = {} }) => {
                 <Row label={t("WT_DELIVERY_DATE")} text={`${t(checkForNA(formatDate(requestDetails?.deliveryDate)))}`} />
                 <Row label={t("WT_DELIVERY_TIME")} text={`${checkForNA(convertTo12HourFormat(requestDetails?.deliveryTime))}`} />
                 <Row label={t("WT_DESCRIPTION")} text={`${t(checkForNA(requestDetails?.description))}`} />
+                {requestDetails?.fileStoreId && (
+                  <Row
+                    label={t("WT_UPLOAD_DOCUMENT")}
+                    text={
+                      <span style={{ display: "flex", alignItems: "center", gap: "8px",cursor: "pointer" }} onClick={() => openFilePDF(requestDetails?.fileStoreId)}>
+                        <GenericFileIcon />
+                      </span>
+                    }
+                  />
+                )}
                 <Row label={t("WT_IMMEDIATE")} text={`${t(checkForNA(immediateRequired))}`} />
               </StatusTable>
             </>

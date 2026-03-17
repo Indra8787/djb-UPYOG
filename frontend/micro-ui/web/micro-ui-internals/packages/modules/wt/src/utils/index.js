@@ -66,7 +66,8 @@ export const waterTankerPayload = (data) =>{
             houseNo: data?.address?.houseNo,
             landmark: data?.address?.landmark
         },
-        
+      
+        WTfileStoreId: data?.requestDetails?.fileStoreId,
         bookingStatus: "BOOKING_CREATED",
         workflow:{
           action:"APPLY",
