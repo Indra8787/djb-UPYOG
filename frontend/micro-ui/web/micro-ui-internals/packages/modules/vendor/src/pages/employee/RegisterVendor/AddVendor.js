@@ -277,7 +277,7 @@ const AddVendor = ({ parentUrl, heading }) => {
   const steps = [{ label: "ES_VRNDOR_NEW_VENDOR_DETAILS" }, { label: "ES_FSM_REGISTRY_NEW_ADDRESS_DETAILS" }];
 
   const onFormValueChange = (setValue, formData) => {
-    if (formData?.vendorName && formData?.phone && formData?.selectGender?.code && formData?.serviceType?.code) {
+    if (formData?.vendorName && formData?.phone  && formData?.serviceType?.code) {
       setCanSubmit(true);
     } else {
       setCanSubmit(false);
@@ -313,7 +313,7 @@ const AddVendor = ({ parentUrl, heading }) => {
     const localityCode = mergedData?.address?.locality?.code;
     const localityName = mergedData?.address?.locality?.name;
     const localityArea = mergedData?.address?.locality?.area;
-    const gender = mergedData?.selectGender?.code;
+    const gender = "MALE";
     const emailId = mergedData?.emailId;
     const phone = mergedData?.phone;
 
@@ -361,7 +361,7 @@ const AddVendor = ({ parentUrl, heading }) => {
           fatherOrHusbandName: name,
           relationship: "OTHER",
           gender: gender,
-          dob: dob,
+          dob: "915148800",
           emailId: emailId || "abc@egov.com",
           mobileNumber: phone,
         },

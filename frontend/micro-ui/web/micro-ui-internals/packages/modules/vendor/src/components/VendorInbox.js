@@ -308,7 +308,6 @@ const VendorInbox = (props) => {
     { enabled: vendorIds?.length > 0 }
   );
 
-
   //used for columns in table
   const columns = React.useMemo(() => {
     switch (props.selectedTab) {
@@ -588,9 +587,6 @@ const VendorInbox = (props) => {
               }
 
               const hasDetails = additionalVendorData?.VendorDetails?.some((item) => item?.vendorAdditionalDetails?.vendorId === vendorId);
-
-              console.log(hasDetails,"ytgyg")
-
               return (
                 <Link
                   to={
@@ -698,6 +694,22 @@ const VendorInbox = (props) => {
             },
           },
 
+          {
+            Header: t("ES_FSM_REGISTRY_SELECT_DRIVER"),
+            Cell: ({ row }) => {
+              return (
+                <Dropdown
+                  // className="fsm-registry-dropdown"
+                  selected={row.original.driverData || row.original.driver}
+                  option={drivers}
+                  select={(value) => onDriverSelect(row, value)}
+                  optionKey="name"
+                  t={t}
+                />
+              );
+            },
+          },
+
           //enabled
           {
             Header: t("ES_FSM_REGISTRY_INBOX_ENABLED"),
@@ -709,22 +721,6 @@ const VendorInbox = (props) => {
                   value={row.original?.status === "DISABLED" ? false : true}
                   onChange={() => onVehicleUpdate(row)}
                   name={`switch-${row.id}`}
-                />
-              );
-            },
-          },
-
-          {
-            Header: t("ES_FSM_REGISTRY_SELECT_DRIVER"),
-            Cell: ({ row }) => {
-              return (
-                <Dropdown
-                  className="fsm-registry-dropdown"
-                  selected={row.original.driver}
-                  option={drivers}
-                  select={(value) => onDriverSelect(row, value)}
-                  optionKey="name"
-                  t={t}
                 />
               );
             },

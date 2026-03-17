@@ -143,6 +143,10 @@ const VehicleDetails = (props) => {
     const formData = {
       vendor: {
         ...dsoDetails,
+        owner: {
+          ...dsoDetails.owner,
+          gender: dsoDetails.owner?.gender || "OTHERS",
+        },
         vehicles: dsoDetails.vehicles ? [...dsoDetails.vehicles, vehicleDetails] : [vehicleDetails],
       },
     };
@@ -171,6 +175,10 @@ const VehicleDetails = (props) => {
     const formData = {
       vendor: {
         ...dsoDetails,
+        owner: {
+          ...dsoDetails.owner,
+          gender: dsoDetails.owner?.gender || "OTHERS",
+        },
         vehicles: dsoDetails.vehicles ? [...dsoDetails.vehicles, vehicleDetails] : [vehicleDetails],
       },
     };
@@ -206,6 +214,10 @@ const VehicleDetails = (props) => {
     formData = {
       vendor: {
         ...dsoDetails,
+        owner: {
+          ...dsoDetails.owner,
+          gender: dsoDetails.owner?.gender || "OTHERS",
+        },
         vehicles: getVehicleVendorDetails,
       },
     };

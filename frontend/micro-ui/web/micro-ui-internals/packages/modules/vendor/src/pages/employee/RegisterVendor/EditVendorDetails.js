@@ -150,6 +150,10 @@ const EditVendorDetails = (props) => {
       formData = {
         vendor: {
           ...dsoDetails,
+          owner: {
+            ...dsoDetails.owner,
+            gender: dsoDetails.owner?.gender || "OTHERS",
+          },
           vehicles: dsoDetails.vehicles ? [...dsoDetails.vehicles, selectedVehicle] : [selectedVehicle],
         },
       };
@@ -160,6 +164,10 @@ const EditVendorDetails = (props) => {
       formData = {
         vendor: {
           ...dsoDetails,
+          owner: {
+            ...dsoDetails.owner,
+            gender: dsoDetails.owner?.gender || "OTHERS",
+          },
           drivers: dsoDetails.drivers ? [...dsoDetails.drivers, selectedDriver] : [selectedDriver],
         },
       };
@@ -210,6 +218,10 @@ const EditVendorDetails = (props) => {
       formData = {
         vendor: {
           ...dsoDetails,
+          owner: {
+            ...dsoDetails.owner,
+            gender: dsoDetails.owner?.gender || "OTHERS",
+          },
           drivers: drivers,
         },
       };
@@ -226,6 +238,10 @@ const EditVendorDetails = (props) => {
       formData = {
         vendor: {
           ...dsoDetails,
+          owner: {
+            ...dsoDetails.owner,
+            gender: dsoDetails.owner?.gender || "OTHERS",
+          },
           vehicles: vehicles,
         },
       };

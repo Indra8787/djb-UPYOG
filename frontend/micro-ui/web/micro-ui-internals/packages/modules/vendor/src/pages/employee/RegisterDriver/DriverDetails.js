@@ -178,6 +178,10 @@ const DriverDetails = (props) => {
     formData = {
       vendor: {
         ...dsoDetails,
+        owner: {
+          ...dsoDetails.owner,
+          gender: dsoDetails.owner?.gender || "OTHERS",
+        },
         drivers: getDriverVendorDetails,
       },
     };
@@ -204,6 +208,10 @@ const DriverDetails = (props) => {
     const formData = {
       vendor: {
         ...dsoDetails,
+        owner: {
+          ...dsoDetails.owner,
+          gender: dsoDetails.owner?.gender || "OTHERS",
+        },
         drivers: dsoDetails.drivers ? [...dsoDetails.drivers, driverDetails] : [driverDetails],
       },
     };
@@ -232,6 +240,10 @@ const DriverDetails = (props) => {
     const formData = {
       vendor: {
         ...dsoDetails,
+        owner: {
+          ...dsoDetails.owner,
+          gender: dsoDetails.owner?.gender || "OTHERS",
+        },
         drivers: dsoDetails.drivers ? [...dsoDetails.drivers, driverDetails] : [driverDetails],
       },
     };

@@ -13,7 +13,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@djb25/digit-ui-css": "1.0.25",
+    "@djb25/digit-ui-css": "1.0.26",
     "@djb25/digit-ui-libraries": "1.0.0",
     "@djb25/digit-ui-module-bills": "1.0.1",
     "@djb25/digit-ui-module-common": "1.0.1",
@@ -28,10 +28,10 @@
     "@djb25/digit-ui-module-receipts": "1.0.0",
     "@djb25/digit-ui-react-components": "1.0.0",
     "@djb25/digit-ui-module-pgr": "1.0.2",
-    "@djb25/digit-ui-module-vendor": "1.0.10",
-    "@djb25/digit-ui-module-wt": "1.0.10",
+    "@djb25/digit-ui-module-vendor": "1.0.11",
+    "@djb25/digit-ui-module-wt": "1.0.11",
     "@djb25/digit-ui-module-asset": "1.0.6",
-    "@djb25/digit-ui-module-ws": "1.0.9",
+    "@djb25/digit-ui-module-ws": "1.0.10",
     "babel-loader": "9.1.2",
     "@djb25/digit-ui-module-formio": "1.0.0",
     "@djb25/digit-ui-module-ekyc": "1.0.2",

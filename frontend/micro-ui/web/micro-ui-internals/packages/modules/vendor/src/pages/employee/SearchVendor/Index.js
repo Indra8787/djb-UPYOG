@@ -149,6 +149,7 @@ const SearchVendor = () => {
           let vendor = vendorData.find((ele) => ele.dsoDetails?.vehicles?.find((vehicle) => vehicle.id === data.id));
           if (vendor) {
             data.vendor = vendor.dsoDetails;
+            data.driverData = vendor.dsoDetails?.vehicles?.find((vehicle) => vehicle.id === data.id)?.driverData;
           }
           return data;
         });

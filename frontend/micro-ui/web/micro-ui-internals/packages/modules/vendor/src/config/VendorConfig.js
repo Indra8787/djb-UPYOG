@@ -26,43 +26,43 @@ const VendorConfig = (t, disabled = false) => {
 
         // head: "ES_FSM_REGISTRY_PERSONAL_DETAILS",
         // body: [
-        {
-          label: "ES_FSM_REGISTRY_NEW_GENDER",
-          isMandatory: true,
-          type: "component",
-          route: "select-gender",
-          hideInEmployee: false,
-          key: "selectGender",
-          component: "SelectGender",
-          disable: disabled,
-          texts: {
-            headerCaption: "",
-            header: "CS_COMMON_CHOOSE_GENDER",
-            cardText: "CS_COMMON_SELECT_GENDER",
-            submitBarLabel: "CS_COMMON_NEXT",
-            skipText: "CORE_COMMON_SKIP_CONTINUE",
-          },
-        },
-        {
-          label: t("ES_FSM_REGISTRY_NEW_DOB"),
-          isMandatory: false,
-          type: "custom",
-          key: "dob",
-          populators: {
-            name: "dob",
-            validation: {
-              required: true,
-            },
-            component: (props, customProps) => (
-              <DatePicker
-                onChange={props.onChange}
-                date={props.value}
-                {...customProps}
-                max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
-              />
-            ),
-          },
-        },
+        // {
+        //   label: "ES_FSM_REGISTRY_NEW_GENDER",
+        //   isMandatory: true,
+        //   type: "component",
+        //   route: "select-gender",
+        //   hideInEmployee: false,
+        //   key: "selectGender",
+        //   component: "SelectGender",
+        //   disable: disabled,
+        //   texts: {
+        //     headerCaption: "",
+        //     header: "CS_COMMON_CHOOSE_GENDER",
+        //     cardText: "CS_COMMON_SELECT_GENDER",
+        //     submitBarLabel: "CS_COMMON_NEXT",
+        //     skipText: "CORE_COMMON_SKIP_CONTINUE",
+        //   },
+        // },
+        // {
+        //   label: t("ES_FSM_REGISTRY_NEW_DOB"),
+        //   isMandatory: false,
+        //   type: "custom",
+        //   key: "dob",
+        //   populators: {
+        //     name: "dob",
+        //     validation: {
+        //       required: true,
+        //     },
+        //     component: (props, customProps) => (
+        //       <DatePicker
+        //         onChange={props.onChange}
+        //         date={props.value}
+        //         {...customProps}
+        //         max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+        //       />
+        //     ),
+        //   },
+        // },
         {
           label: "ES_FSM_REGISTRY_NEW_EMAIL",
           isMandatory: false,
