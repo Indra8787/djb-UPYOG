@@ -4,6 +4,7 @@ import { ArrowRightInbox } from "./svgindex";
 import ExpandedViewContext from "./ExpandedViewContext";
 import ModuleLinksView from "./ModuleLinksView";
 import CollapsibleModuleSidebar from "./CollapsibleModuleSidebar";
+import { useTranslation } from "react-i18next";
 
 const getNewButtonText = (moduleName, kpis, links) => {
   let path = "";
@@ -124,6 +125,216 @@ const BillsIconComp = () => (
   </svg>
 );
 
+const FsmIconComp = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="fsm-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#92400e" />
+        <stop offset="100%" stopColor="#78350f" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"
+      fill="url(#fsm-grad)"
+    />
+  </svg>
+);
+
+const TLIconComp = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="tl-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#f59e0b" />
+        <stop offset="100%" stopColor="#d97706" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"
+      fill="url(#tl-grad)"
+    />
+  </svg>
+);
+
+const MCollectIconComp = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="mcollect-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#7c3aed" />
+        <stop offset="100%" stopColor="#6d28d9" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+      fill="url(#mcollect-grad)"
+    />
+  </svg>
+);
+
+const ReceiptsIconComp = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="receipts-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#14b8a6" />
+        <stop offset="100%" stopColor="#0d9488" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 14H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V7h10v2z"
+      fill="url(#receipts-grad)"
+    />
+  </svg>
+);
+
+const OBPSIconComp = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="obps-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#3b82f6" />
+        <stop offset="100%" stopColor="#2563eb" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-8h8v8zm-2-6h-4v4h4v-4z"
+      fill="url(#obps-grad)"
+    />
+  </svg>
+);
+
+const PGRIconComp = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="pgr-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#78350f" />
+        <stop offset="100%" stopColor="#451a03" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"
+      fill="url(#pgr-grad)"
+    />
+  </svg>
+);
+
+const PTRIconComp = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="ptr-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#10b981" />
+        <stop offset="100%" stopColor="#059669" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5.5 13c-.83 0-1.5-.67-1.5-1.5S16.67 12 17.5 12s1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM12 17c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm-5.5-2c-.83 0-1.5-.67-1.5-1.5S5.67 12 6.5 12s1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM12 9c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z"
+      fill="url(#ptr-grad)"
+    />
+  </svg>
+);
+
+const CHBIconComp = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="chb-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#7c3aed" />
+        <stop offset="100%" stopColor="#5b21b6" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"
+      fill="url(#chb-grad)"
+    />
+  </svg>
+);
+
+const DSSIconComp = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="dss-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#9333ea" />
+        <stop offset="100%" stopColor="#7e22ce" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"
+      fill="url(#dss-grad)"
+    />
+  </svg>
+);
+
+const EngagementIconComp = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="eng-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#3b82f6" />
+        <stop offset="100%" stopColor="#1d4ed8" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"
+      fill="url(#eng-grad)"
+    />
+  </svg>
+);
+
+const PTIconComp = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="pt-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#a855f7" />
+        <stop offset="100%" stopColor="#7e22ce" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z"
+      fill="url(#pt-grad)"
+    />
+  </svg>
+);
+
+const ADSIconComp = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="ads-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#14b8a6" />
+        <stop offset="100%" stopColor="#0f766e" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M18 11V7l4 3-4 3v-2h-3v-3h3zM12 9c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-3-4l4 3-4 3V5zM3 9c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h2v4h2v-4h1l5 3V6L8 9H3z"
+      fill="url(#ads-grad)"
+    />
+  </svg>
+);
+
+const SurveyIconComp = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="survey-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#3b82f6" />
+        <stop offset="100%" stopColor="#2563eb" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 15H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V7h10v2z"
+      fill="url(#survey-grad)"
+    />
+  </svg>
+);
+
+const EventsIconComp = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <defs>
+      <linearGradient id="event-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#60a5fa" />
+        <stop offset="100%" stopColor="#3b82f6" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"
+      fill="url(#event-grad)"
+    />
+  </svg>
+);
+
 const getModuleIcon = (moduleName, kpis, links, originalIcon) => {
   let path = "";
   if (kpis && kpis.length > 0 && kpis[0].link) {
@@ -142,8 +353,21 @@ const getModuleIcon = (moduleName, kpis, links, originalIcon) => {
   if (path.includes("/vendor/") || name.includes("vendor")) return <VendorIcon />;
   if (path.includes("/hrms/") || name.includes("user management") || name.includes("employee")) return <HrmsIcon />;
   if (path.includes("/asset/") || name.includes("asset")) return <AssetIcon />;
-  if (path.includes("/pt/") || name.includes("property")) return <AssetIcon />;
+  if (path.includes("/pt/") || name.includes("property")) return <PTIconComp />;
   if (path.includes("/bills/") || name.includes("bill") || name.includes("payment")) return <BillsIconComp />;
+  if (path.includes("/fsm/") || name.includes("fsm") || name.includes("sludge")) return <FsmIconComp />;
+  if (path.includes("/tl/") || name.includes("trade")) return <TLIconComp />;
+  if (path.includes("/mcollect/") || name.includes("collect")) return <MCollectIconComp />;
+  if (path.includes("/receipts/") || name.includes("receipt")) return <ReceiptsIconComp />;
+  if (path.includes("/obps/") || name.includes("obps") || name.includes("building")) return <OBPSIconComp />;
+  if (path.includes("/pgr/") || name.includes("pgr") || name.includes("complaint")) return <PGRIconComp />;
+  if (path.includes("/ptr/") || name.includes("ptr") || name.includes("pet")) return <PTRIconComp />;
+  if (path.includes("/chb/") || name.includes("chb") || name.includes("hall")) return <CHBIconComp />;
+  if (path.includes("/ads/") || name.includes("ads") || name.includes("advertisement")) return <ADSIconComp />;
+  if (path.includes("/dss/") || name.includes("dss") || name.includes("dashboard")) return <DSSIconComp />;
+  if (path.includes("/engagement/") || name.includes("engagement")) return <EngagementIconComp />;
+  if (name.includes("survey")) return <SurveyIconComp />;
+  if (name.includes("event")) return <EventsIconComp />;
 
   return originalIcon;
 };
@@ -187,6 +411,7 @@ const getIconColorClass = (moduleName, kpis, links) => {
 };
 
 const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], className, styles }) => {
+  const { t } = useTranslation();
   const history = useHistory();
   const { isExpandedView, isModuleSidebar } = useContext(ExpandedViewContext) || {};
 
@@ -266,7 +491,7 @@ const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], className
         <div className="card-footer-row">
           <div className="footer-links">
             <span className="pill-link" style={{ cursor: "pointer" }}>
-              View Reports
+             {t('View Reports')}
               <svg
                 width="12"
                 height="12"
@@ -287,7 +512,7 @@ const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], className
             </span>
           </div>
           <button className="details-btn" onClick={handleDetailsClick}>
-            Details
+            {t('Details')}
           </button>
         </div>
       </div>
@@ -368,7 +593,7 @@ const ModuleCardFullWidth = ({ Icon, moduleName, kpis = [], links = [], classNam
       <div className="card-footer-row">
         <div className="footer-links">
           <span className="pill-link" style={{ cursor: "pointer" }}>
-            View Reports
+            {t('View Reports')}
             <svg
               width="12"
               height="12"
@@ -389,7 +614,7 @@ const ModuleCardFullWidth = ({ Icon, moduleName, kpis = [], links = [], classNam
           </span>
         </div>
         <button className="details-btn" onClick={handleDetailsClick}>
-          Details
+          {t('Details')}
         </button>
       </div>
     </div>

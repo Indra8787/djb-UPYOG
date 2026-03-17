@@ -318,26 +318,31 @@ const Home = () => {
     options: [
       {
         name: t(citizenServicesObj?.props?.[0]?.label),
+        description: t("File and track your grievances and complaints"),
         Icon: <ComplaintIcon className="fill-path-primary-main" width="40" height="40" />,
         onClick: () => history.push(citizenServicesObj?.props?.[0]?.navigationUrl),
       },
       {
         name: t(citizenServicesObj?.props?.[1]?.label),
+        description: t("Pay your property tax and register property"),
         Icon: <PTIcon className="fill-path-primary-main" />,
         onClick: () => history.push(citizenServicesObj?.props?.[1]?.navigationUrl),
       },
       {
         name: t(citizenServicesObj?.props?.[2]?.label),
+        description: t("View and manage your pending applications"),
         Icon: <CaseIcon className="fill-path-primary-main" />,
         onClick: () => history.push(citizenServicesObj?.props?.[2]?.navigationUrl),
       },
       // {
       //     name: t("ACTION_TEST_WATER_AND_SEWERAGE"),
+      //     description: t("Apply for new water connection"),
       //     Icon: <DropIcon/>,
       //     onClick: () => history.push("/digit-ui/citizen")
       // },
       {
         name: t(citizenServicesObj?.props?.[3]?.label) === "ACTION_TEST_CHB" ? t("Community Halls") : t(citizenServicesObj?.props?.[3]?.label),
+        description: t("Book community halls for your events and functions"),
         Icon: <CHBIcon className="fill-path-primary-main" />,
         onClick: () => history.push(citizenServicesObj?.props?.[3]?.navigationUrl),
       },
@@ -353,21 +358,25 @@ const Home = () => {
     options: [
       {
         name: t(infoAndUpdatesObj?.props?.[0]?.label),
+        description: t("Return to the main dashboard"),
         Icon: <HomeIcon className="fill-path-primary-main" width="40" height="40" />,
         onClick: () => history.push(infoAndUpdatesObj?.props?.[0]?.navigationUrl),
       },
       {
         name: t(infoAndUpdatesObj?.props?.[1]?.label),
+        description: t("View events, holidays, and important dates"),
         Icon: <Calender className="fill-path-primary-main" width="40" height="40" />,
         onClick: () => history.push(infoAndUpdatesObj?.props?.[1]?.navigationUrl),
       },
       {
         name: t(infoAndUpdatesObj?.props?.[2]?.label),
+        description: t("Access your uploaded documents and certificates"),
         Icon: <DocumentIcon className="fill-path-primary-main" />,
         onClick: () => history.push(infoAndUpdatesObj?.props?.[2]?.navigationUrl),
       },
       {
         name: t(infoAndUpdatesObj?.props?.[3]?.label),
+        description: t("Get assistance and find answers to questions"),
         Icon: <HelpIcon className="fill-path-primary-main" />,
         onClick: () => history.push(infoAndUpdatesObj?.props?.[3]?.navigationUrl),
       },
@@ -385,6 +394,127 @@ const Home = () => {
   sessionStorage.removeItem("landmark");
   sessionStorage.removeItem("propertyid");
 
+  // Add these helpers at the top of your Home component (same pattern as EmployeeHome)
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return { text: "Good Morning", emoji: "☀️", icon: "sun" };
+    if (hour < 17) return { text: "Good Afternoon", emoji: "🌤️", icon: "cloud-sun" };
+    return { text: "Good Evening", emoji: "🌙", icon: "moon" };
+  };
+
+  const getFormattedDate = () => {
+    return new Date().toLocaleDateString("en-IN", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+    });
+  };
+
+  const greetingIcons = {
+    sun: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="1.8" strokeLinecap="round" width="32" height="32">
+        <circle cx="12" cy="12" r="5" />
+        <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+        <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+      </svg>
+    ),
+    "cloud-sun": (
+      <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="1.8" strokeLinecap="round" width="32" height="32">
+        <path d="M12 2v2M4.93 4.93l1.41 1.41M2 12h2M19.07 4.93l-1.41 1.41" />
+        <path d="M17 12a5 5 0 00-9.9-1H6a4 4 0 000 8h11a3 3 0 000-6z" />
+      </svg>
+    ),
+    moon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="1.8" strokeLinecap="round" width="32" height="32">
+        <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" />
+      </svg>
+    ),
+  };
+  // Add this component inside Home.jsx, above the return
+  const AnalogClock = () => {
+    const [time, setTime] = React.useState(new Date());
+
+    React.useEffect(() => {
+      const timer = setInterval(() => setTime(new Date()), 1000);
+      return () => clearInterval(timer);
+    }, []);
+
+    const s = time.getSeconds();
+    const m = time.getMinutes();
+    const h = time.getHours() % 12;
+
+    const sDeg = s * 6;
+    const mDeg = m * 6 + s * 0.1;
+    const hDeg = h * 30 + m * 0.5;
+
+    const hh = time.getHours();
+    const mm = String(time.getMinutes()).padStart(2, "0");
+    const ss = String(time.getSeconds()).padStart(2, "0");
+    const ampm = hh >= 12 ? "PM" : "AM";
+    const h12 = hh % 12 || 12;
+
+    const ticks = Array.from({ length: 60 }, (_, i) => i);
+
+    return (
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", position: "relative", zIndex: 1 }}>
+        <div style={{
+          width: "64px", height: "64px", borderRadius: "50%",
+          border: "2px solid rgba(255,255,255,0.3)",
+          background: "rgba(255,255,255,0.1)",
+          position: "relative", display: "flex",
+          alignItems: "center", justifyContent: "center"
+        }}>
+          {ticks.map(i => (
+            <div key={i} style={{
+              position: "absolute",
+              width: i % 5 === 0 ? "2px" : "1px",
+              height: i % 5 === 0 ? "6px" : "4px",
+              background: i % 5 === 0 ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.3)",
+              top: i % 5 === 0 ? "2px" : "3px",
+              left: "50%",
+              transformOrigin: "bottom center",
+              transform: `translateX(-50%) rotate(${i * 6}deg)`
+            }} />
+          ))}
+          <div style={{
+            position: "absolute", bottom: "50%", left: "50%",
+            width: "2.5px", height: "18px", background: "rgba(255,255,255,0.95)",
+            borderRadius: "4px", marginLeft: "-1.25px",
+            transformOrigin: "bottom center",
+            transform: `translateX(-50%) rotate(${hDeg}deg)`
+          }} />
+          <div style={{
+            position: "absolute", bottom: "50%", left: "50%",
+            width: "2px", height: "23px", background: "rgba(255,255,255,0.85)",
+            borderRadius: "4px", marginLeft: "-1px",
+            transformOrigin: "bottom center",
+            transform: `translateX(-50%) rotate(${mDeg}deg)`
+          }} />
+          <div style={{
+            position: "absolute", bottom: "50%", left: "50%",
+            width: "1.5px", height: "25px", background: "#93c5fd",
+            borderRadius: "4px", marginLeft: "-0.75px",
+            transformOrigin: "bottom center",
+            transform: `translateX(-50%) rotate(${sDeg}deg)`
+          }} />
+          <div style={{
+            width: "5px", height: "5px", background: "#fff",
+            borderRadius: "50%", position: "absolute", zIndex: 4
+          }} />
+        </div>
+        <span style={{
+          fontSize: "13px", fontWeight: 600,
+          color: "rgba(255,255,255,0.9)",
+          letterSpacing: "1px", fontVariantNumeric: "tabular-nums"
+        }}>
+          {h12}:{mm}:{ss} {ampm}
+        </span>
+      </div>
+    );
+  };
+  const greeting = getGreeting();
   return isLoading ? (
     <Loader />
   ) : (
@@ -397,22 +527,133 @@ const Home = () => {
           {/* Blue Header Bar */}
           <div className="citizen-module-header">
             <div className="citizen-header-top-section">
-              <p className="citizen-header-title">{t("Welcome")}, {name}</p>
+              <div style={{ position: "relative", zIndex: 1 }}>
+                <p className="citizen-header-title">
+                  <span style={{ marginRight: "8px" }}>{greeting.emoji}</span>
+                  {t(greeting.text)}! {name}
+                </p>
+                <p style={{ margin: 0, fontSize: "13px", color: "rgba(255,255,255,0.7)", marginTop: "5px" }}>
+                  {getFormattedDate()}
+                </p>
+              </div>
+              <AnalogClock />
             </div>
           </div>
 
           {/* Service Cards Grid - Redesigned */}
           <div className="citizen-module-grid">
             {allCitizenServicesProps.options.map((opt, idx) => (
-              <div className="citizen-service-card" key={`svc-${idx}`} onClick={opt.onClick}>
+              <div
+                className="citizen-service-card"
+                key={`svc-${idx}`}
+                onClick={opt.onClick}
+                onMouseEnter={e => {
+                  e.currentTarget.querySelector('.slide-label').style.transform = 'translateY(-110%)';
+                  e.currentTarget.querySelector('.slide-label').style.opacity = '0';
+                  e.currentTarget.querySelector('.slide-desc').style.transform = 'translateY(0)';
+                  e.currentTarget.querySelector('.slide-desc').style.opacity = '1';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.querySelector('.slide-label').style.transform = 'translateY(0)';
+                  e.currentTarget.querySelector('.slide-label').style.opacity = '1';
+                  e.currentTarget.querySelector('.slide-desc').style.transform = 'translateY(110%)';
+                  e.currentTarget.querySelector('.slide-desc').style.opacity = '0';
+                }}
+              >
                 <div className="citizen-service-card__icon">{opt.Icon}</div>
-                <p className="citizen-service-card__label">{opt.name}</p>
+                <div style={{
+                  flex: 1,
+                  position: 'relative',
+                  height: '40px',
+                  overflow: 'hidden',
+                  display: 'block'
+                }}>
+                  <p className="slide-label" style={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    margin: 0,
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    color: '#1e293b',
+                    lineHeight: 1.35,
+                    transition: 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease',
+                    transform: 'translateY(0)',
+                    opacity: 1
+                  }}>{opt.name}</p>
+                  <p className="slide-desc" style={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    margin: 0,
+                    fontSize: '12.5px',
+                    fontWeight: 400,
+                    color: '#2563eb',
+                    lineHeight: 1.4,
+                    transition: 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease',
+                    transform: 'translateY(110%)',
+                    opacity: 0
+                  }}>{opt.description}</p>
+                </div>
               </div>
             ))}
             {allInfoAndUpdatesProps.options.map((opt, idx) => (
-              <div className="citizen-service-card" key={`info-${idx}`} onClick={opt.onClick}>
+              <div
+                className="citizen-service-card"
+                key={`info-${idx}`}
+                onClick={opt.onClick}
+                onMouseEnter={e => {
+                  e.currentTarget.querySelector('.slide-label').style.transform = 'translateY(-110%)';
+                  e.currentTarget.querySelector('.slide-label').style.opacity = '0';
+                  e.currentTarget.querySelector('.slide-desc').style.transform = 'translateY(0)';
+                  e.currentTarget.querySelector('.slide-desc').style.opacity = '1';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.querySelector('.slide-label').style.transform = 'translateY(0)';
+                  e.currentTarget.querySelector('.slide-label').style.opacity = '1';
+                  e.currentTarget.querySelector('.slide-desc').style.transform = 'translateY(110%)';
+                  e.currentTarget.querySelector('.slide-desc').style.opacity = '0';
+                }}
+              >
                 <div className="citizen-service-card__icon">{opt.Icon}</div>
-                <p className="citizen-service-card__label">{opt.name}</p>
+                <div style={{
+                  flex: 1,
+                  position: 'relative',
+                  height: '40px',
+                  overflow: 'hidden',
+                  display: 'block'
+                }}>
+                  <p className="slide-label" style={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    margin: 0,
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    color: '#1e293b',
+                    lineHeight: 1.35,
+                    transition: 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease',
+                    transform: 'translateY(0)',
+                    opacity: 1
+                  }}>{opt.name}</p>
+                  <p className="slide-desc" style={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    margin: 0,
+                    fontSize: '12.5px',
+                    fontWeight: 400,
+                    color: '#2563eb',
+                    lineHeight: 1.4,
+                    transition: 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease',
+                    transform: 'translateY(110%)',
+                    opacity: 0
+                  }}>{opt.description}</p>
+                </div>
               </div>
             ))}
           </div>
