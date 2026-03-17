@@ -293,7 +293,7 @@ const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], className
       </div>
     </Fragment>
   );
-});
+};
 
 const ModuleCardFullWidth = ({ Icon, moduleName, kpis = [], links = [], className, styles }) => {
   const history = useHistory();

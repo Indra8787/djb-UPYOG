@@ -36,8 +36,7 @@ const ErrorComponent = (props) => {
 
     // Not authenticated → trigger login
     if (!kc.authenticated && !isLoginPage) {
-
-      const redirectBase = isEmployee ? "/digit-ui/employee/user/language-selection" : "/digit-ui/citizen";
+      const redirectBase = isEmployee ? "/digit-ui/employee/user/login" : "/digit-ui/citizen";
 
       kc.login({
         redirectUri: window.location.origin + redirectBase + `?from=${encodeURIComponent(pathname + window.location.search)}`,
@@ -47,17 +46,19 @@ const ErrorComponent = (props) => {
 
     // Try refreshing expired token
     if (kc.authenticated && kc.token && kc.isTokenExpired()) {
-      kc.updateToken(30).catch(() => kc.logout({
-        // redirectUri: window.location.origin + "/digit-ui",
-        idTokenHint: kc.idToken
-      }));
+      kc.updateToken(30).catch(() =>
+        kc.logout({
+          // redirectUri: window.location.origin + "/digit-ui",
+          idTokenHint: kc.idToken,
+        })
+      );
     }
 
     // If tokens missing → logout
     if (kc.authenticated && (!kc.token || !kc.refreshToken)) {
       kc.logout({
         // redirectUri: window.location.origin + "/digit-ui",
-        idTokenHint: kc.idToken
+        idTokenHint: kc.idToken,
       });
     }
 

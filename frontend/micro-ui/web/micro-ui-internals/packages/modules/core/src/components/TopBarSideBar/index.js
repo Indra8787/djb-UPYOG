@@ -39,12 +39,12 @@ const TopBarSideBar = ({
         if (kc) {
           await kc.logout({
             // redirectUri: window.location.origin + "/digit-ui",
-            idTokenHint: kc.idToken
+            idTokenHint: kc.idToken,
           });
         }
       } catch (e) {
         console.error("Logout failed", e);
-        window.location.replace("/digit-ui/employee/user/language-selection");
+        window.location.replace("/digit-ui/employee/user/login");
       }
     } else {
       Digit.UserService.logout();

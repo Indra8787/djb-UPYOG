@@ -43,14 +43,14 @@ export const logoutV2 = async () => {
     await logoutEGF();
   } catch (e) {
     console.error("Error during logoutEGF:", e);
-    } finally {
-        window.localStorage.clear();
-        window.sessionStorage.clear();
+  } finally {
+    window.localStorage.clear();
+    window.sessionStorage.clear();
 
-        if (userType === "citizen") {
-            window.location.replace("/digit-ui/citizen");
-        } else {
-            window.location.replace("/digit-ui/employee/user/language-selection");
-        }
-  } 
+    if (userType === "citizen") {
+      window.location.replace("/digit-ui/citizen");
+    } else {
+      window.location.replace("/digit-ui/employee/user/login");
+    }
+  }
 };

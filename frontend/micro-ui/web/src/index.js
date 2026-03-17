@@ -17,30 +17,6 @@ window.process = {
 
 // initLibraries();
 
-initLibraries().then(async () => {
-  const kc = await initKeycloak();
-  window.keycloak = kc;
-
-  // 👇 Protect employee routes manually
-  const path = window.location.pathname;
-
-  const publicRoutes = [
-    "/digit-ui/employee/user/language-selection",
-    "/digit-ui/employee/user/login",
-    // "/digit-ui/citizen/select-language",
-    // "/digit-ui/citizen/select-location",
-    "/digit-ui/citizen",
-  ];
-
-  if ((path.startsWith("/digit-ui/employee") || path.startsWith("/digit-ui/citizen")) && !kc.authenticated) {
-    const isPublic = publicRoutes.some((route) => path.startsWith(route));
-
-    if (!isPublic) {
-      window.location.href = "/digit-ui/employee/user/language-selection";
-      return;
-    }
-  }
-});
 // window.Digit.Customizations = { PGR: {} ,TL:TLCustomisations};
 
 const user = window.Digit.SessionStorage.get("User");
@@ -90,9 +66,24 @@ if (!user || !user.access_token || !user.info) {
   // end
 }
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById("root"),
-);
+// ReactDOM.render(
+//   <React.StrictMode>
+//     <App />
+//   </React.StrictMode>,
+//   document.getElementById("root"),
+// );
+
+function bootstrapApp() {
+  ReactDOM.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
+    document.getElementById("root"),
+  );
+}
+
+initLibraries().then(async () => {
+  const kc = await initKeycloak();
+  window.keycloak = kc;
+  bootstrapApp();
+});

@@ -2,12 +2,17 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useForm, Controller } from "react-hook-form";
 import CardLabel from "../atoms/CardLabel";
 import TextInput from "../atoms/TextInput";
-import TextArea from "../atoms/TextArea";
 import Dropdown from "../atoms/Dropdown";
 import FormStep from "./FormStep";
 import { useLocation } from "react-router-dom";
 
-const AddressDetails = ({ t, config, onSelect, formData, isEdit }) => {
+const allOptions = [
+  { name: "Correspondence", code: "CORRESPONDENCE", i18nKey: "COMMON_ADDRESS_TYPE_CORRESPONDENCE" },
+  { name: "Permanent", code: "PERMANENT", i18nKey: "COMMON_ADDRESS_TYPE_PERMANENT" },
+  { name: "Other", code: "OTHER", i18nKey: "COMMON_ADDRESS_TYPE_OTHER" },
+];
+
+const AddressDetails = ({ t, config, onSelect, formData, isEdit, userDetails }) => {
   const { data: allCities, isLoading } = Digit.Hooks.useTenants();
   let validation = {};
   const convertToObject = (String) => (String ? { i18nKey: String, code: String, value: String } : null);
@@ -39,6 +44,7 @@ const AddressDetails = ({ t, config, onSelect, formData, isEdit }) => {
   const [addressType, setAddressType] = useState(
     convertToObject(formData?.addressType) || formData?.address?.addressType || formData?.infodetails?.existingDataSet?.address?.addressType || ""
   );
+  const [selectedAddress, setSelectedAddress] = useState("");
   const { control } = useForm();
   const location = useLocation();
   const usedAddressTypes = location.state?.usedAddressTypes || [];
@@ -46,11 +52,6 @@ const AddressDetails = ({ t, config, onSelect, formData, isEdit }) => {
   const inputStyles = { width: user.type === "EMPLOYEE" ? "50%" : "86%" };
 
   const availableAddressTypeOptions = useMemo(() => {
-    const allOptions = [
-      { name: "Correspondence", code: "CORRESPONDENCE", i18nKey: "COMMON_ADDRESS_TYPE_CORRESPONDENCE" },
-      { name: "Permanent", code: "PERMANENT", i18nKey: "COMMON_ADDRESS_TYPE_PERMANENT" },
-      { name: "Other", code: "OTHER", i18nKey: "COMMON_ADDRESS_TYPE_OTHER" },
-    ];
     if (usedAddressTypes.length === 3) {
       // If all are available → show only "Other"
       return allOptions.filter((opt) => opt.code === "OTHER");
@@ -93,6 +94,22 @@ const AddressDetails = ({ t, config, onSelect, formData, isEdit }) => {
       onSelect(addressStep);
     }
   }, [pincode, city, locality, houseNo, landmark, addressLine1, addressLine2, streetName, addressType]);
+
+  useEffect(() => {
+    console.log(selectedAddress);
+    if (selectedAddress && Object.keys(selectedAddress).length) {
+      setPincode(selectedAddress.pinCode);
+      setCity(allCities?.find((ele) => ele.name === selectedAddress.city));
+      setLocality(fetchedLocalities?.find((ele) => ele.i18nkey === selectedAddress.locality));
+      setHouseNo(selectedAddress.houseNumber);
+      setstreetName(selectedAddress.streetName);
+      setLandmark(selectedAddress.landmark);
+      setAddressLine1(selectedAddress.address);
+      setAddressLine2(selectedAddress.address2);
+      setAddressType(allOptions?.find((ele) => ele.code === selectedAddress.addressType));
+    }
+  }, [selectedAddress]);
+
   return (
     <React.Fragment>
       <FormStep
@@ -101,6 +118,25 @@ const AddressDetails = ({ t, config, onSelect, formData, isEdit }) => {
         t={t}
         isDisabled={!houseNo || !city || !locality || !pincode || !addressLine1 || !streetName || !addressLine2}
       >
+        {userDetails?.addresses?.length && (
+          <div style={{ gridColumn: "span 2" }}>
+            <CardLabel>
+              {`${t("COMMON_ADDRESS_TYPE")}`} <span className="check-page-link-button">*</span>
+            </CardLabel>
+            <Dropdown
+              className="form-field"
+              selected={selectedAddress}
+              select={setSelectedAddress}
+              disable={isEdit}
+              option={userDetails?.addresses}
+              optionKey="address"
+              optionCardStyles={{ overflowY: "auto", maxHeight: "300px" }}
+              t={t}
+              style={{ width: "100%" }}
+              placeholder={"Select Address Type"}
+            />
+          </div>
+        )}
         <div>
           <CardLabel>
             {`${t("COMMON_ADDRESS_TYPE")}`} <span className="check-page-link-button">*</span>
@@ -272,7 +308,7 @@ const AddressDetails = ({ t, config, onSelect, formData, isEdit }) => {
             control={control}
             name={"locality"}
             defaultValue={locality}
-            rules={{ required: t("CORE_COMMON_REQUIRED_ERRMSG") }}
+            // rules={{ required: t("CORE_COMMON_REQUIRED_ERRMSG") }}
             render={(props) => (
               <Dropdown
                 className="form-field"
@@ -288,7 +324,7 @@ const AddressDetails = ({ t, config, onSelect, formData, isEdit }) => {
             )}
           />
         </div>
-        <div style={{paddingBottom:"10px"}}>
+        <div style={{ paddingBottom: "10px" }}>
           <CardLabel>
             {`${t("PINCODE")}`} <span className="check-page-link-button">*</span>
           </CardLabel>

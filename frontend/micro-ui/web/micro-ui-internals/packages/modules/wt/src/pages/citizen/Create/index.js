@@ -14,11 +14,14 @@ const WTCreate = () => {
 
   let config = [];
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("WT_Create", {});
+  const userInfo = Digit.UserService.getUser();
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const uuid = userInfo?.info?.uuid;
+  const { data: userDetails, isLoading: isUserLoading } = Digit.Hooks.useUserSearch(tenantId, { uuid: [uuid] }, {}, { enabled: uuid ? true : false });
 
   // Sets the serviceType in case of employee side for WT, MT, and TP
   if ((!params.serviceType || Object.keys(params.serviceType).length === 0) && pathname.includes("employee")) {
     if (pathname.includes("mt")) {
-      console.log("MT Create");
       setParams({
         serviceType: {
           serviceType: {
@@ -174,7 +177,13 @@ const WTCreate = () => {
               const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
               return (
                 <Route path={`${match.path}/${routeObj.route}`} key={index}>
-                  <Component config={{ texts, inputs, key, additionaFields }} onSelect={handleSelect} t={t} formData={params} />
+                  <Component
+                    config={{ texts, inputs, key, additionaFields }}
+                    onSelect={handleSelect}
+                    t={t}
+                    formData={params}
+                    userDetails={userDetails?.user?.[0]}
+                  />
                 </Route>
               );
             })}
