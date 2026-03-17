@@ -307,7 +307,7 @@ const AddressDetails = ({ t, config, onSelect, formData, isEdit, userDetails }) 
             control={control}
             name={"locality"}
             defaultValue={locality}
-            // rules={{ required: t("CORE_COMMON_REQUIRED_ERRMSG") }}
+            rules={{ required: t("CORE_COMMON_REQUIRED_ERRMSG") }}
             render={(props) => (
               <Dropdown
                 className="form-field"
