@@ -61,7 +61,7 @@ const AddDriver = ({ parentUrl, heading }) => {
     const license = data?.license;
     const gender = data?.selectGender?.code;
     const emailId = data?.emailId;
-    // const phone = data?.phone;
+    const phone = data?.phone;
     const dob = new Date(`${data.dob}`).getTime() || new Date(`1/1/1970`).getTime();
     const additionalDetails = data?.additionalDetails?.code;
     const formData = {
@@ -78,7 +78,7 @@ const AddDriver = ({ parentUrl, heading }) => {
           gender: gender,
           dob: dob,
           emailId: emailId || "abc@egov.com",
-          // mobileNumber: phone,
+          mobileNumber: phone,
         },
         additionalDetails: {
           serviceType: additionalDetails,

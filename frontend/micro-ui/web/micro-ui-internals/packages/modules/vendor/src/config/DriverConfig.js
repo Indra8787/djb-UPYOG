@@ -114,7 +114,7 @@ const DriverConfig = (t, disabled = false) => {
             className: "payment-form-text-input-correction",
           },
         },
-       /* {
+        {
           label: "ES_FSM_REGISTRY_DRIVER_PHONE",
           isMandatory: true,
           type: "mobileNumber",
@@ -131,7 +131,7 @@ const DriverConfig = (t, disabled = false) => {
             className: "payment-form-text-input-correction",
             labelStyle: { border: "1px solid black", borderRight: "none" },
           },
-        }, */
+        }, 
       ],
     },
   ];
