@@ -58,12 +58,12 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
   const [userAddresses, setUserAddresses] = useState([]); // Separate state for addresses
   const [name, setName] = useState(userInfo?.name ? userInfo.name : "");
   const dateOfBirth = userDetails?.dob;
-  const formattedDob = dateOfBirth !== undefined ? format(new Date(dateOfBirth), "MM/dd/yyyy") : "";
+  const formattedDob = dateOfBirth && !isNaN(new Date(dateOfBirth).getTime()) ? format(new Date(dateOfBirth), "MM/dd/yyyy") : "";
   //const dateOfBirth1= (dateOfBirth!==undefined) ?dateOfBirth.split("-").reverse().join("-") : ""
   const [dob, setDob] = useState(dateOfBirth);
   const [email, setEmail] = useState(userInfo?.emailId ? userInfo.emailId : "");
   const [gender, setGender] = useState(userDetails?.gender);
-  const [city, setCity] = useState(userInfo?.permanentCity ? userInfo.permanentCity : cityDetails.name);
+  const [city, setCity] = useState(userInfo?.permanentCity ? userInfo.permanentCity : cityDetails?.name || "");
   const [mobileNumber, setMobileNo] = useState(userInfo?.mobileNumber ? userInfo.mobileNumber : "");
   const [altMobileNumber, setAltMobileNo] = useState(userInfo?.altContactNumber ? userInfo.altContactNumber : "");
   const [profilePic, setProfilePic] = useState(userDetails?.photo ? userDetails?.photo : "");
@@ -98,12 +98,18 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
         const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
         if (usersResponse && usersResponse.user && usersResponse.user.length && isMounted.current) {
           setUserDetails(usersResponse.user[0]);
+        } else if (isMounted.current) {
+          setLoading(false);
         }
       } catch (error) {
         console.error("Error fetching user info:", error);
         if (isMounted.current) {
           setLoading(false);
         }
+      }
+    } else {
+      if (isMounted.current) {
+        setLoading(false);
       }
     }
   };
@@ -143,42 +149,37 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
       const thumbs = userDetails?.photo?.split(",");
       setProfileImg(thumbs?.at(0));
 
+      if (userDetails.dob) {
+        setDob(userDetails.dob);
+      }
+
+      // 🔄 Sync form fields with fetched user details
+      if (userDetails.name) setName(userDetails.name);
+      if (userDetails.emailId) setEmail(userDetails.emailId);
+      if (userDetails.mobileNumber) setMobileNo(userDetails.mobileNumber);
+      if (userDetails.altContactNumber) setAltMobileNo(userDetails.altContactNumber);
+      if (userDetails.permanentCity) setCity(userDetails.permanentCity);
+
       setLoading(false);
     }
   }, [userDetails]);
 
   // Session storage polling with proper cleanup and dependencies
   useEffect(() => {
-    let interval = null;
-    let isActive = true;
-
-    interval = setInterval(() => {
-      if (!isActive) return;
-
+    const interval = setInterval(() => {
       const storedDesignation = Digit.SessionStorage.get("Employee.designation");
       const storedDepartment = Digit.SessionStorage.get("Employee.department");
 
-      if ((storedDesignation && storedDesignation !== designationName) || (storedDepartment && storedDepartment !== departmentName)) {
-        if (storedDesignation && storedDesignation !== designationName && isActive) {
-          setDesignationName(storedDesignation);
-        }
-
-        if (storedDepartment && storedDepartment !== departmentName && isActive) {
-          setDepartmentName(storedDepartment);
-        }
-
-        if (interval) {
-          clearInterval(interval);
-        }
+      if (storedDesignation && storedDesignation !== designationName) {
+        setDesignationName(storedDesignation);
       }
-    }, 300);
 
-    return () => {
-      isActive = false;
-      if (interval) {
-        clearInterval(interval);
+      if (storedDepartment && storedDepartment !== departmentName) {
+        setDepartmentName(storedDepartment);
       }
-    };
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, [designationName, departmentName]);
 
   let validation = {};
@@ -301,7 +302,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
       const requestData = {
         ...userInfo,
         name,
-        dob: dob !== undefined ? dob.split("-").reverse().join("/") : "",
+        dob: dob && dob.includes("-") ? dob.split("-").reverse().join("/") : dob,
         gender: gender?.value,
         emailId: email,
         altContactNumber: altMobileNumber,
