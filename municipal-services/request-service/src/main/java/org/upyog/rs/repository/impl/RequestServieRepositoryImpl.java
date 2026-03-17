@@ -73,7 +73,8 @@ public class RequestServieRepositoryImpl implements RequestServiceRepository {
 		/*passed the preparedStmtList and search criteria inside the getWaterTankerQuery method
 		 developed inside query builder to build and get the data as per search criteria*/
 		String query = queryBuilder.getWaterTankerQuery(waterTankerBookingSearchCriteria, preparedStmtList);
-		log.info("Final query for getWaterTankerBookingDetails {} and paramsList {} : " , preparedStmtList);
+		log.info("Final query for getWaterTankerBookingDetails {} and paramsList {} : ", query, preparedStmtList);
+
 		/*
 		*  Execute the query using JdbcTemplate with a generic row mapper
 		*  Converts result set directly to a list of WaterTankerBookingDetail objects
@@ -90,7 +91,7 @@ public class RequestServieRepositoryImpl implements RequestServiceRepository {
 		if (query == null)
 			return 0;
 
-		log.info("Final query for getWaterTankerBookingDetails {} and paramsList {} : " , preparedStatement);
+		log.info("Final query for getWaterTankerBookingDetails {} and paramsList {} : ", query, preparedStatement);
 
 		Integer count = jdbcTemplate.queryForObject(query, preparedStatement.toArray(), Integer.class);
 		return count;
