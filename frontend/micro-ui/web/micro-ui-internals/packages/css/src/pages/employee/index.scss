@@ -74,6 +74,26 @@
   }
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.hide-x-scrollbar {
+  overflow-x: auto;
+}
+
+.hide-x-scrollbar::-webkit-scrollbar:horizontal {
+  display: none;
+}
+
+/* Firefox */
+.hide-x-scrollbar {
+  scrollbar-width: none;
+}
+
 .employee-main-application-details {
   width: 100%;
   overflow-y: scroll;
@@ -866,7 +886,6 @@
     }
   }
 }
-
 
 .top-info-cards-wrapper {
   display: flex;

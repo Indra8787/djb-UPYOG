@@ -24,13 +24,26 @@ const FilterFormFieldsComponent = ({
     defaultValue: filterFormState?.applicationType || null,
   });
 
-  let totalnewWSCount = 0, totalModifyWSCount = 0,  totalDisconnectionWSCount = 0, totalnewSWCOunt = 0, totalModifySWCount = 0, totalDisconnectionSWCount = 0;
-  const totalnewWS = statuses?.filter((e) => e.businessservice === "NewWS1")?.forEach(data => totalnewWSCount = totalnewWSCount +  data?.count);
-  const totalModifyWS = statuses?.filter((e) => e.businessservice === "ModifyWSConnection")?.forEach(data => totalModifyWSCount = totalModifyWSCount +  data?.count);;
-  const totalDisconnectionWS = statuses?.filter((e) => e.businessservice === "DisconnectWSConnection")?.forEach(data => totalDisconnectionWSCount = totalDisconnectionWSCount +  data?.count);;
-  const totalnewSW = statuses?.filter((e) => e.businessservice === "NewSW1")?.forEach(data => totalnewSWCOunt = totalnewSWCOunt +  data?.count);;
-  const totalModifySW = statuses?.filter((e) => e.businessservice === "ModifySWConnection")?.forEach(data => totalModifySWCount = totalModifySWCount +  data?.count);;
-  const totalDisconnectionSW = statuses?.filter((e) => e.businessservice === "DisconnectSWConnection")?.forEach(data => totalDisconnectionSWCount = totalDisconnectionSWCount +  data?.count);;
+  let totalnewWSCount = 0,
+    totalModifyWSCount = 0,
+    totalDisconnectionWSCount = 0,
+    totalnewSWCOunt = 0,
+    totalModifySWCount = 0,
+    totalDisconnectionSWCount = 0;
+  const totalnewWS = statuses?.filter((e) => e.businessservice === "NewWS1")?.forEach((data) => (totalnewWSCount = totalnewWSCount + data?.count));
+  const totalModifyWS = statuses
+    ?.filter((e) => e.businessservice === "ModifyWSConnection")
+    ?.forEach((data) => (totalModifyWSCount = totalModifyWSCount + data?.count));
+  const totalDisconnectionWS = statuses
+    ?.filter((e) => e.businessservice === "DisconnectWSConnection")
+    ?.forEach((data) => (totalDisconnectionWSCount = totalDisconnectionWSCount + data?.count));
+  const totalnewSW = statuses?.filter((e) => e.businessservice === "NewSW1")?.forEach((data) => (totalnewSWCOunt = totalnewSWCOunt + data?.count));
+  const totalModifySW = statuses
+    ?.filter((e) => e.businessservice === "ModifySWConnection")
+    ?.forEach((data) => (totalModifySWCount = totalModifySWCount + data?.count));
+  const totalDisconnectionSW = statuses
+    ?.filter((e) => e.businessservice === "DisconnectSWConnection")
+    ?.forEach((data) => (totalDisconnectionSWCount = totalDisconnectionSWCount + data?.count));
 
   const applicationTypeStatuses = checkPathName
     ? [
@@ -127,7 +140,7 @@ const FilterFormFieldsComponent = ({
                   defaultLabel={t("ES_WS_ALL_SELECTED")}
                   defaultUnit={t("WS_SELECTED_TEXT")}
                 />
-                <div className="tag-container">{renderRemovableTokens}</div>
+                <div className="tag-container hide-x-scrollbar">{renderRemovableTokens}</div>
               </>
             );
           }}

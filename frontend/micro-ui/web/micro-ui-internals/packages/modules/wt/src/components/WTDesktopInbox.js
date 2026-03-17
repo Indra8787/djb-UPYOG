@@ -83,9 +83,9 @@ const WTDesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
   return (
     <div className="inbox-container">
       {!props.isSearch && (
-        <div className="filters-container">
+        <div className="side-panel-item">
           <InboxLinks parentRoute={props.parentRoute} businessService={props.moduleCode} />
-          <div>
+          <div className="filter-form ">
             {
               <FilterComponent
                 defaultSearchParams={props.defaultSearchParams}
@@ -100,7 +100,7 @@ const WTDesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
           </div>
         </div>
       )}
-      <div style={{ flex: 1 }}>
+      <div className="employee-form-content" style={{ flex: 1 }}>
         <SearchApplication
           defaultSearchParams={props.defaultSearchParams}
           onSearch={(d) => {
@@ -113,7 +113,7 @@ const WTDesktopInbox = ({ tableConfig, filterComponent, ...props }) => {
           searchParams={props.searchParams}
           clearSearch={() => setClearSearchCalled(true)}
         />
-        <div className="result" style={{ marginLeft: !props?.isSearch ? "16px" : "", flex: 1 }}>
+        <div className="result" style={{ flex: 1 }}>
           {result}
         </div>
       </div>

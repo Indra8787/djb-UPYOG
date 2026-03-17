@@ -49,14 +49,7 @@ const Inbox = ({
     ? { limit: 100, offset: 0, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" }
     : { limit: pageSize, offset: pageOffset, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" };
 
-  const {
-    isFetching,
-    isLoading: hookLoading,
-    searchResponseKey,
-    data,
-    searchFields,
-    ...rest
-  } = useNewInboxAPI
+  const { isFetching, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = useNewInboxAPI
     ? Digit.Hooks.useNewInboxGeneral({
         tenantId,
         ModuleCode: moduleCode,
@@ -129,7 +122,7 @@ const Inbox = ({
       );
     } else {
       return (
-        <div style={{ padding: user?.type === "CITIZEN" ? "0 24px" : "" }}>
+        <div className="app-container" style={{ padding: user?.type === "CITIZEN" ? "0 24px" : "" }}>
           <WTDesktopInbox
             moduleCode={moduleCode}
             data={data}

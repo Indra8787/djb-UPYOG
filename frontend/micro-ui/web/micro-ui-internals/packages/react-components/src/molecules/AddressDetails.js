@@ -44,6 +44,12 @@ const AddressDetails = ({ t, config, onSelect, formData, isEdit, userDetails }) 
   const [addressType, setAddressType] = useState(
     convertToObject(formData?.addressType) || formData?.address?.addressType || formData?.infodetails?.existingDataSet?.address?.addressType || ""
   );
+  const [latitude, setLatitude] = useState(
+    formData?.latitude || formData?.address?.latitude || formData?.infodetails?.existingDataSet?.address?.latitude || ""
+  );
+  const [longitude, setLongitude] = useState(
+    formData?.longitude || formData?.address?.longitude || formData?.infodetails?.existingDataSet?.address?.longitude || ""
+  );
   const [selectedAddress, setSelectedAddress] = useState("");
   const { control } = useForm();
   const location = useLocation();
@@ -75,9 +81,26 @@ const AddressDetails = ({ t, config, onSelect, formData, isEdit, userDetails }) 
       structuredLocality.push({ i18nKey: local.i18nkey, code: local.code, label: local.label, area: local.area, boundaryNum: local.boundaryNum });
     });
 
+  useEffect(() => {
+    handleGetLocation();
+  }, []);
+
   const goNext = () => {
     let ownerAddress = formData.address;
-    let addressStep = { ...ownerAddress, pincode, city, locality, houseNo, landmark, addressLine1, addressLine2, streetName, addressType };
+    let addressStep = {
+      ...ownerAddress,
+      pincode,
+      city,
+      locality,
+      houseNo,
+      landmark,
+      addressLine1,
+      addressLine2,
+      streetName,
+      addressType,
+      latitude,
+      longitude,
+    };
     onSelect(config.key, { ...formData[config.key], ...addressStep }, false);
     // Checks if the `config` is undefined, and if so, calls the `onSelect` function with the `addressStep` object.
     // This ensures that the address step is selected when no specific configuration is provided.
@@ -89,11 +112,11 @@ const AddressDetails = ({ t, config, onSelect, formData, isEdit, userDetails }) 
     containing the address details and calls the `onSelect` function with it.
    **/
   useEffect(() => {
-    if (config === undefined && houseNo && city && locality && pincode && addressLine1 && streetName && addressLine2) {
-      let addressStep = { pincode, city, locality, houseNo, landmark, addressLine1, addressLine2, streetName, addressType };
+    if (config === undefined && houseNo && city && locality && pincode && addressLine1 && streetName && addressLine2 && latitude && longitude) {
+      let addressStep = { pincode, city, locality, houseNo, landmark, addressLine1, addressLine2, streetName, addressType, latitude, longitude };
       onSelect(addressStep);
     }
-  }, [pincode, city, locality, houseNo, landmark, addressLine1, addressLine2, streetName, addressType]);
+  }, [pincode, city, locality, houseNo, landmark, addressLine1, addressLine2, streetName, addressType, latitude, longitude]);
 
   useEffect(() => {
     if (selectedAddress && Object.keys(selectedAddress).length) {
@@ -105,9 +128,32 @@ const AddressDetails = ({ t, config, onSelect, formData, isEdit, userDetails }) 
       setLandmark(selectedAddress.landmark);
       setAddressLine1(selectedAddress.address);
       setAddressLine2(selectedAddress.address2);
+      setLatitude(selectedAddress.latitude);
+      setLongitude(selectedAddress.longitude);
       setAddressType(allOptions?.find((ele) => ele.code === selectedAddress.addressType));
     }
   }, [selectedAddress]);
+
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation not supported");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        setLatitude(lat);
+        setLongitude(lng);
+      },
+      (error) => {
+        console.error(error);
+        alert("Unable to fetch location");
+      }
+    );
+  };
 
   return (
     <React.Fragment>
@@ -321,6 +367,61 @@ const AddressDetails = ({ t, config, onSelect, formData, isEdit, userDetails }) 
                 placeholder={"Select"}
               />
             )}
+          />
+        </div>
+        <div>
+          <CardLabel>
+            {`${t("LATITUDE")}`} <span className="check-page-link-button">*</span>
+          </CardLabel>
+
+          <TextInput
+            t={t}
+            type="text"
+            isMandatory={false}
+            name="latitude"
+            value={latitude}
+            onChange={(e) => {
+              setLatitude(e.target.value);
+            }}
+            style={{ width: "100%" }}
+            placeholder="Enter latitude (e.g. 28.6139)"
+            ValidationRequired={true}
+            validation={{
+              required: true,
+              pattern: "^[0-9]{6}$",
+              type: "number",
+              title: t("SV_ADDRESS_PINCODE_INVALID"),
+            }}
+            step="any"
+            className="form-field"
+          />
+        </div>
+
+        <div>
+          <CardLabel>
+            {`${t("LONGITUDE")}`} <span className="check-page-link-button">*</span>
+          </CardLabel>
+
+          <TextInput
+            t={t}
+            type="text"
+            isMandatory={false}
+            name="longitude"
+            value={longitude}
+            onChange={(e) => {
+              setLongitude(e.target.value);
+            }}
+            style={{ width: "100%" }}
+            placeholder="Enter longitude (e.g. 28.6139)"
+            ValidationRequired={true}
+            validation={{
+              required: true,
+              pattern: "^[0-9]{6}$",
+              type: "number",
+              title: t("SV_ADDRESS_PINCODE_INVALID"),
+            }}
+            step="any"
+            className="form-field"
           />
         </div>
         <div style={{ paddingBottom: "10px" }}>

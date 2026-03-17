@@ -13,11 +13,9 @@ export const fetchUserDetails = async (kc) => {
     userInfo: {
       email: kc?.email || "",
       name: kc?.userName || "",
-      tenantId: Digit.ULBService.getCurrentTenantId()|| "",
+      tenantId: Digit.ULBService.getCurrentTenantId() || "",
     },
   };
-
-  console.log(requestData, "eee");
 
   return Request({
     url: Urls.UserDetails,

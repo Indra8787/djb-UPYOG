@@ -35,31 +35,32 @@ const ActionButton = ({ jumpTo }) => {
   );
 };
 // this is file open service
-  const openFilePDF = (fileId) => {
-    Digit.UploadServices.Filefetch([fileId], Digit.ULBService.getStateId()).then((res) => {
-  
+const openFilePDF = (fileId) => {
+  Digit.UploadServices.Filefetch([fileId], Digit.ULBService.getStateId())
+    .then((res) => {
       // Extract the concatenated URL string
       const concatenatedUrls = res?.data?.fileStoreIds?.[0]?.url;
-  
+
       if (concatenatedUrls) {
         // Split the string by commas to get individual URLs
-        const urlArray = concatenatedUrls.split(',');
-  
+        const urlArray = concatenatedUrls.split(",");
+
         // Pick the first URL (or any other logic to decide which URL to open)
         const fileUrl = urlArray[0];
-  
+
         if (fileUrl) {
-          window.open(fileUrl, '_blank'); // Open the file in a new tab
+          window.open(fileUrl, "_blank"); // Open the file in a new tab
         } else {
-          console.error('No valid URL found to open!');
+          console.error("No valid URL found to open!");
         }
       } else {
-        console.error('URL is missing in the response!');
+        console.error("URL is missing in the response!");
       }
-    }).catch((error) => {
-      console.error('Error fetching file:', error);
+    })
+    .catch((error) => {
+      console.error("Error fetching file:", error);
     });
-  };
+};
 
 const WTCheckPage = ({ onSubmit, value = {} }) => {
   const { t } = useTranslation();
@@ -72,17 +73,15 @@ const WTCheckPage = ({ onSubmit, value = {} }) => {
     setAgree(!agree);
   };
 
-React.useEffect(() => {
-  if (requestDetails?.fileStoreId) {
-    Digit.UploadServices.Filefetch(
-      [requestDetails?.fileStoreId],
-      Digit.ULBService.getStateId()
-    ).then((res) => {
-      const url = res?.data?.fileStoreIds?.[0]?.url?.split(",")[0];
-      setFileUrl(url);
-    });
-  }
-}, [requestDetails?.fileStoreId]);
+  React.useEffect(() => {
+    if (requestDetails?.fileStoreId) {
+      Digit.UploadServices.Filefetch([requestDetails?.fileStoreId], Digit.ULBService.getStateId()).then((res) => {
+        const url = res?.data?.fileStoreIds?.[0]?.url?.split(",")[0];
+        setFileUrl(url);
+      });
+    }
+  }, [requestDetails?.fileStoreId]);
+
   return (
     <React.Fragment>
       <Card>
@@ -134,7 +133,10 @@ React.useEffect(() => {
                   <Row
                     label={t("WT_UPLOAD_DOCUMENT")}
                     text={
-                      <span style={{ display: "flex", alignItems: "center", gap: "8px",cursor: "pointer" }} onClick={() => openFilePDF(requestDetails?.fileStoreId)}>
+                      <span
+                        style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}
+                        onClick={() => openFilePDF(requestDetails?.fileStoreId)}
+                      >
                         <GenericFileIcon />
                       </span>
                     }
@@ -177,22 +179,20 @@ React.useEffect(() => {
                 <Row
                   label={t("UPLOAD_THE_SITE_PHOTOGRAPH")}
                   text={
-                    <span style={{ display: "flex", alignItems: "center", gap: "8px",cursor: "pointer" }} onClick={() => openFilePDF(treePruningRequestDetails?.supportingDocumentFile)}>
+                    <span
+                      style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}
+                      onClick={() => openFilePDF(treePruningRequestDetails?.supportingDocumentFile)}
+                    >
                       <GenericFileIcon />
                       {/* {t(treePruningRequestDetails.supportingDocumentFile)} */}
                     </span>
                   }
                 />
               </StatusTable>
-              
             </>
           )}
 
-          <CheckBox
-            label={t("FINAL_DECLARATION_MESSAGE")}
-            onChange={setdeclarationhandler}
-            checked={agree}
-          />
+          <CheckBox label={t("FINAL_DECLARATION_MESSAGE")} onChange={setdeclarationhandler} checked={agree} />
         </div>
         <SubmitBar label={t("COMMON_BUTTON_SUBMIT")} onSubmit={onSubmit} disabled={!agree} />
       </Card>
