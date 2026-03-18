@@ -68,7 +68,8 @@
 .formcomposer-section-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 8px;
+  column-gap: 24px;
   width: 100%;
   .grid-title {
     grid-column: span 2;

@@ -142,8 +142,12 @@
 
 .upload-file {
   min-height: 40px;
-  @apply relative border border-input-border w-full rounded-md;
-
+  border: 2px solid #e5e5e7;
+  @apply relative w-full rounded-md;
+  &:hover {
+    border: 2px solid #a1a1aa;
+    @apply rounded-md;
+  }
   div {
     @apply flex flex-row h-full items-center pl-md mt-sm flex-wrap;
 

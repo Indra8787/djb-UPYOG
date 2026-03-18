@@ -22,9 +22,11 @@
   @apply relative rounded-md;
 
   .select {
-    @apply relative block w-full h-10 border border-solid border-input-border rounded-md;
+    border: 2px solid #e5e5e7;
+    @apply relative block w-full h-10 rounded-md;
     &:hover {
-      @apply border-2 border-solid border-primary-main rounded-md;
+      border: 2px solid #a1a1aa;
+      @apply rounded-md;
     }
     input[type="text"] {
       width: calc(100% - 32px);
