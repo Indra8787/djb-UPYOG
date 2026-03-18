@@ -2,6 +2,8 @@ package org.upyog.rs.repository.rowMapper;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.upyog.rs.web.models.Address;
+import org.upyog.rs.web.models.AuditDetails;
+import org.upyog.rs.web.models.DriverTrip;
 import org.upyog.rs.web.models.RequestDetailsByDriverId;
 
 import java.sql.ResultSet;
@@ -64,6 +66,43 @@ public class DriverDetailsRowMapper implements RowMapper<RequestDetailsByDriverI
         details.setRegistrationNumber(rs.getString("registrationNumber"));
         details.setVehicleModel(rs.getString("vehicle_model"));
 
+
+        if (rs.getString("trip_booking_id") != null) {
+
+            DriverTrip trip = new DriverTrip();
+
+            trip.setId(rs.getString("trip_id"));
+            trip.setBookingId(rs.getString("trip_booking_id"));
+            trip.setBookingNo(rs.getString("trip_booking_no"));
+            trip.setTenantId(rs.getString("tenant_id")); // from main table OK
+
+            trip.setTankerType(rs.getString("trip_tanker_type"));
+            trip.setVendorId(rs.getString("trip_vendor_id"));
+            trip.setVehicleId(rs.getString("trip_vehicle_id"));
+            trip.setDriverId(rs.getString("trip_driver_id"));
+            trip.setCurrentStatus(rs.getString("trip_current_status"));
+
+            trip.setStartLatitude(rs.getBigDecimal("trip_start_latitude"));
+            trip.setStartLongitude(rs.getBigDecimal("trip_start_longitude"));
+            trip.setStartFileStoreId(rs.getString("trip_start_file_store_id"));
+
+            trip.setEndLatitude(rs.getBigDecimal("trip_end_latitude"));
+            trip.setEndLongitude(rs.getBigDecimal("trip_end_longitude"));
+            trip.setEndFileStoreId(rs.getString("trip_end_file_store_id"));
+
+            trip.setRemark(rs.getString("trip_remark"));
+
+            AuditDetails audit = AuditDetails.builder()
+                    .createdBy(rs.getString("trip_created_by"))
+                    .lastModifiedBy(rs.getString("trip_last_modified_by"))
+                    .createdTime(rs.getLong("trip_created_time"))
+                    .lastModifiedTime(rs.getLong("trip_last_modified_time"))
+                    .build();
+
+            trip.setAuditDetails(audit);
+
+            details.setDriverTrip(trip);
+         }
         return details;
     }
 }

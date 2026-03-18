@@ -204,12 +204,14 @@ public class RequestDetailsByDriverId {
         @JsonProperty("address")
         private Address address;
 
+        @JsonProperty("driverTripDetails")
+        private DriverTrip driverTrip;
+
         private String longitude;
         @JsonProperty("registrationnumber")
         private String registrationNumber;
 
         @JsonProperty("vehicle_model")
-
         private String vehicleModel;
     }
 }
