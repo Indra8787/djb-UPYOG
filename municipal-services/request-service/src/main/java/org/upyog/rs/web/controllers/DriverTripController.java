@@ -1,13 +1,11 @@
 package org.upyog.rs.web.controllers;
 
+import digit.models.coremodels.RequestInfoWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.egov.common.contract.response.ResponseInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.upyog.rs.service.DriverTripService;
 import org.upyog.rs.util.ResponseInfoFactory;
 import org.upyog.rs.web.models.DriverTrip;
@@ -46,4 +44,21 @@ public class DriverTripController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+//
+//    @PostMapping("/trip/_history")
+//    public ResponseEntity<DriverTripResponse> getTripHistory(
+//            @RequestBody RequestInfoWrapper requestInfoWrapper,
+//            @RequestParam String driverId) {
+//
+//        List<DriverTrip> history = driverTripService.getDriverHistory(driverId);
+//
+//        ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true);
+//
+//        DriverTripResponse response = DriverTripResponse.builder()
+//                .driverTrips(history)
+//                .responseInfo(responseInfo)
+//                .build();
+//
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 }

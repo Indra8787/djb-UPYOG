@@ -64,6 +64,8 @@ public class Address {
 
 	private String longitude;
 
+	private String type;
+
 	@NotBlank
 	private String pincode;
 

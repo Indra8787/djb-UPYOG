@@ -4,6 +4,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.validation.annotation.Validated;
 import org.upyog.rs.validator.CreateApplicationGroup;
 
@@ -43,6 +44,9 @@ public class ApplicantDetail   {
 	private String mobileNumber;
 
 	private String alternateNumber;
+
+	@JsonProperty("type")
+	private String type;
 
 	@NotBlank
 	@Email

@@ -28,11 +28,7 @@ import org.upyog.rs.web.models.mobileToilet.MobileToiletBookingRequest;
 import org.upyog.rs.web.models.mobileToilet.MobileToiletBookingResponse;
 import org.upyog.rs.web.models.mobileToilet.MobileToiletBookingSearchCriteria;
 import org.upyog.rs.web.models.mobileToilet.MobileToiletBookingSearchResponse;
-import org.upyog.rs.web.models.waterTanker.WaterTankerBookingDetail;
-import org.upyog.rs.web.models.waterTanker.WaterTankerBookingRequest;
-import org.upyog.rs.web.models.waterTanker.WaterTankerBookingResponse;
-import org.upyog.rs.web.models.waterTanker.WaterTankerBookingSearchCriteria;
-import org.upyog.rs.web.models.waterTanker.WaterTankerBookingSearchResponse;
+import org.upyog.rs.web.models.waterTanker.*;
 import org.upyog.rs.web.models.ResponseInfo.StatusEnum;
 
 import digit.models.coremodels.RequestInfoWrapper;
@@ -72,6 +68,20 @@ public class RequestServiceController {
 		return new ResponseEntity<WaterTankerBookingResponse>(response, HttpStatus.OK);
 	}
 
+
+	@PostMapping("/water-tanker/fixed-point/v1/_create")
+	public ResponseEntity<WaterTankerFixedPointResponse> createWaterTankerBookingFixedPOint(
+			@RequestBody WaterTankerFixedPointRequest waterTankerFixedPointRequest) {
+		log.info("waterTankerbookingRequest : {}" , waterTankerFixedPointRequest);
+		WaterTankerFixedPointDetail waterTankerFixedPointDetail = waterTankerService.createFixedPointWaterTankerBookingRequest(waterTankerFixedPointRequest);
+		ResponseInfo info = RequestServiceUtil.createReponseInfo(waterTankerFixedPointRequest.getRequestInfo(),
+				RequestServiceConstants.BOOKING_CREATED, StatusEnum.SUCCESSFUL);
+		WaterTankerFixedPointResponse response = WaterTankerFixedPointResponse.builder()
+				.waterTankerFixedPointDetail(waterTankerFixedPointDetail)
+				.responseInfo(info).build();
+		return new ResponseEntity<WaterTankerFixedPointResponse>(response, HttpStatus.OK);
+	}
+
 	@PostMapping("/water-tanker/v1/_search")
 	public ResponseEntity<WaterTankerBookingSearchResponse> searchWaterTankerBookingDetails(
 			@ApiParam(value = "Details for the water tanker booking time, payment and documents", required = true) @Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
@@ -100,7 +110,29 @@ public class RequestServiceController {
 				.waterTankerBookingDetails(applications).responseInfo(responseInfo).count(count).build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
+
+
+	// Fixed Point Water Tanked Search
+
+	@PostMapping("/water-tanker/fixed-point/v1/_search")
+	public ResponseEntity<WaterTankerFixedPointBookingSearchResponse> searchWaterTankerFixedPointBookingDetails(
+			@ApiParam(value = "Details for the water tanker booking time, payment and documents", required = true) @Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+			@ModelAttribute WaterTankerFixedPointBookingSearchCriteria waterTankerFixedPointBookingSearchCriteria) {
+
+		List<WaterTankerFixedPointDetail> applications = null;
+		Integer count = 0;
+
+		applications = waterTankerService.getWaterTankerFixedPointBookingDetails(requestInfoWrapper.getRequestInfo(),
+				waterTankerFixedPointBookingSearchCriteria);
+
+		ResponseInfo responseInfo = RequestServiceUtil.createReponseInfo(requestInfoWrapper.getRequestInfo(),
+				RequestServiceConstants.BOOKING_DETAIL_FOUND, StatusEnum.SUCCESSFUL);
+
+		WaterTankerFixedPointBookingSearchResponse response = WaterTankerFixedPointBookingSearchResponse.builder()
+				.waterTankerFixedPointDetails(applications).responseInfo(responseInfo).count(count).build();
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
 	@PostMapping("/water-tanker/v1/_update")
 	public ResponseEntity<WaterTankerBookingResponse> waterTankerUpdate(
 			@ApiParam(value = "Updated water tanker details and RequestInfo meta data.", required = true)

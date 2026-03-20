@@ -7,15 +7,17 @@ import org.upyog.rs.web.models.RequestDetailsByDriverId;
 import org.upyog.rs.web.models.mobileToilet.MobileToiletBookingDetail;
 import org.upyog.rs.web.models.mobileToilet.MobileToiletBookingRequest;
 import org.upyog.rs.web.models.mobileToilet.MobileToiletBookingSearchCriteria;
-import org.upyog.rs.web.models.waterTanker.WaterTankerBookingDetail;
-import org.upyog.rs.web.models.waterTanker.WaterTankerBookingRequest;
-import org.upyog.rs.web.models.waterTanker.WaterTankerBookingSearchCriteria;
+import org.upyog.rs.web.models.waterTanker.*;
 
 public interface RequestServiceRepository {
 
 	void saveWaterTankerBooking(WaterTankerBookingRequest waterTankerRequest);
 
+	void saveFixedPointWaterTanker(WaterTankerFixedPointRequest waterTankerFixedPointRequest);
+
 	List<WaterTankerBookingDetail> getWaterTankerBookingDetails(WaterTankerBookingSearchCriteria waterTankerBookingSearchCriteria);
+
+	List<WaterTankerFixedPointDetail> getWaterTankerFixedPointBookingDetails(WaterTankerFixedPointBookingSearchCriteria waterTankerFixedPointBookingSearchCriteria);
 
 	Integer getApplicationsCount(WaterTankerBookingSearchCriteria criteria);
 

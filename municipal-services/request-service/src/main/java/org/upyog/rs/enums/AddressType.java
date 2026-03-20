@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
  */
 public enum AddressType {
 
-    PERMANENT("PERMANENT"), CORRESPONDENCE("CORRESPONDENCE"), OTHER("OTHER");
+    PERMANENT("PERMANENT"), CORRESPONDENCE("CORRESPONDENCE"), OTHER("OTHER"),FIXED("FIXED");
 
     @JsonCreator
     public static AddressType fromValue(String text) {

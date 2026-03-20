@@ -1,5 +1,6 @@
 package org.upyog.rs.service;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,6 +15,7 @@ import org.upyog.rs.enums.RequestServiceStatus;
 import org.upyog.rs.repository.IdGenRepository;
 import org.upyog.rs.util.RequestServiceUtil;
 import org.upyog.rs.util.UserUtil;
+import org.upyog.rs.web.models.Address;
 import org.upyog.rs.web.models.ApplicantDetail;
 import org.upyog.rs.web.models.AuditDetails;
 import org.upyog.rs.web.models.mobileToilet.MobileToiletBookingDetail;
@@ -26,6 +28,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import digit.models.coremodels.IdResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.upyog.rs.web.models.waterTanker.WaterTankerFixedPointDetail;
+import org.upyog.rs.web.models.waterTanker.WaterTankerFixedPointRequest;
 
 @Service
 @Slf4j
@@ -123,6 +127,43 @@ public class EnrichmentService {
 		waterTankerDetail.getAddress().setApplicantId(waterTankerDetail.getApplicantDetail().getApplicantId());
 		
 		log.info("Enriched application request data :" + waterTankerDetail);
+
+	}
+
+	// Fixed Point Request
+	public void enrichCreateFixedPointWaterTankerRequest(WaterTankerFixedPointRequest waterTankerFixedPointRequest) {
+		String bookingId = RequestServiceUtil.getRandonUUID();
+		log.info("Enriching water tanker booking id :" + bookingId);
+
+		WaterTankerFixedPointDetail waterTankerFixedPointDetail = waterTankerFixedPointRequest.getWaterTankerFixedPointDetail();
+		RequestInfo requestInfo = waterTankerFixedPointRequest.getRequestInfo();
+		AuditDetails auditDetails = RequestServiceUtil.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+
+		waterTankerFixedPointDetail.setAuditDetails(auditDetails);
+		waterTankerFixedPointDetail.setTenantId(waterTankerFixedPointRequest.getWaterTankerFixedPointDetail().getTenantId());
+
+		List<String> customIds = getIdList(requestInfo, waterTankerFixedPointDetail.getTenantId(),
+				config.getWaterTankerApplicationKey(), config.getWaterTankerApplicationFormat(), 1);
+
+		log.info("Enriched application request application no :" + customIds.get(0));
+		waterTankerFixedPointDetail.setBookingNo(customIds.get(0));
+
+		ApplicantDetail applicantDetail = waterTankerFixedPointDetail.getApplicantDetail();
+		Address address = waterTankerFixedPointDetail.getAddress();
+
+		waterTankerFixedPointDetail.setBookingId(bookingId);
+		waterTankerFixedPointDetail.getApplicantDetail().setBookingId(bookingId);
+		waterTankerFixedPointDetail.setMobileNumber(applicantDetail.getMobileNumber());
+//		waterTankerFixedPointDetail.setLocalityCode(address.getLocalityCode());
+//		waterTankerFixedPointDetail.setLatitude(address.getLatitude());
+//		waterTankerFixedPointDetail.setLongitude(address.getLongitude());
+
+		waterTankerFixedPointDetail.getApplicantDetail().setApplicantId(RequestServiceUtil.getRandonUUID());
+		waterTankerFixedPointDetail.getAddress().setAddressId(RequestServiceUtil.getRandonUUID());
+		waterTankerFixedPointDetail.getApplicantDetail().setAuditDetails(auditDetails);
+		waterTankerFixedPointDetail.getAddress().setApplicantId(waterTankerFixedPointDetail.getApplicantDetail().getApplicantId());
+
+		log.info("Enriched application request data :" + waterTankerFixedPointDetail);
 
 	}
 

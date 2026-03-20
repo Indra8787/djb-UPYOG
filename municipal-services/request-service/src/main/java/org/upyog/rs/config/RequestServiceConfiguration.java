@@ -53,12 +53,23 @@ public class RequestServiceConfiguration {
 	@Value("${egov.idgen.mobile.toilet.booking.id.format}")
 	private String mobileToiletApplicationFormat;
 
+	// Save fixed Point Booking Details
+	@Value("{kafka.topics.save.fixed.point.booking}")
+	private String saveFixedPointDetails;
+
 	// Kafka topics for saving water tanker data
 	@Value("${persister.create.water-tanker.topic}")
 	private String waterTankerApplicationSaveTopic;
 
+	@Value("${persister.create.fixed-point.water-tanker.topic}")
+	private String fixedPointWaterTankerApplicationSaveTopic;
+
+
 	@Value("${persister.create.water-tanker.with.profile.topic}")
 	private String waterTankerApplicationWithProfileSaveTopic;
+
+	@Value("${persister.create.fixed-point.water-tanker.with.profile.topic}")
+	private String fixedPointWaterTankerApplicationWithProfileSaveTopic;
 
 	@Value("${persister.create.mobile-toilet.with.profile.topic}")
 	private String mobileToiletApplicationWithProfileSaveTopic;

@@ -46,9 +46,12 @@ public class DriverTripServiceImpl implements DriverTripService {
         existingTrip.setRemark(updateReq.getRemark());
         existingTrip.setAuditDetails(RequestServiceUtil.getAuditDetails(userUuid, false));
 
-        request.setDriverTrip(existingTrip);
+        repository.update(existingTrip);
+        repository.saveTripHistory(existingTrip);
 
+        request.setDriverTrip(existingTrip);
         producer.push(RequestServiceConstants.KAFKA_UPDATE_DRIVER_TRIP_TOPIC, request);
+
         return existingTrip;
     }
 }

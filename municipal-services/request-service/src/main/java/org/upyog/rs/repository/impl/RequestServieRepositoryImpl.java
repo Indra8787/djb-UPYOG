@@ -12,16 +12,16 @@ import org.upyog.rs.kafka.Producer;
 import org.upyog.rs.repository.RequestServiceRepository;
 import org.upyog.rs.repository.querybuilder.DriverDetailsQueryBuilder;
 import org.upyog.rs.repository.querybuilder.RequestServiceQueryBuilder;
+import org.upyog.rs.repository.querybuilder.WaterTankerFixedPointQueryBuilder;
 import org.upyog.rs.repository.rowMapper.DriverDetailsRowMapper;
 import org.upyog.rs.repository.rowMapper.GenericRowMapper;
+import org.upyog.rs.repository.rowMapper.WaterTankerFixedPointRowMapper;
 import org.upyog.rs.web.models.PersisterWrapper;
 import org.upyog.rs.web.models.RequestDetailsByDriverId;
 import org.upyog.rs.web.models.mobileToilet.MobileToiletBookingDetail;
 import org.upyog.rs.web.models.mobileToilet.MobileToiletBookingRequest;
 import org.upyog.rs.web.models.mobileToilet.MobileToiletBookingSearchCriteria;
-import org.upyog.rs.web.models.waterTanker.WaterTankerBookingDetail;
-import org.upyog.rs.web.models.waterTanker.WaterTankerBookingRequest;
-import org.upyog.rs.web.models.waterTanker.WaterTankerBookingSearchCriteria;
+import org.upyog.rs.web.models.waterTanker.*;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,6 +42,12 @@ public class RequestServieRepositoryImpl implements RequestServiceRepository {
 	@Autowired
 	RequestServiceConfiguration requestServiceConfiguration;
 
+	@Autowired
+	private WaterTankerFixedPointQueryBuilder waterTankerFixedPointQueryBuilder;
+
+	@Autowired
+	private WaterTankerFixedPointRowMapper waterTankerFixedPointRowMapper;
+
 	@Override
 	public void saveWaterTankerBooking(WaterTankerBookingRequest waterTankerRequest) {
 		log.info("Saving water tanker booking request data for booking no : "
@@ -59,9 +65,25 @@ public class RequestServieRepositoryImpl implements RequestServiceRepository {
 		else {
 			producer.push(requestServiceConfiguration.getWaterTankerApplicationSaveTopic(), waterTankerRequest);
 		}
-
-
 	}
+
+	@Override
+	public void saveFixedPointWaterTanker(WaterTankerFixedPointRequest waterTankerFixedPointRequest) {
+		WaterTankerFixedPointDetail waterTankerFixedPointDetail = waterTankerFixedPointRequest.getWaterTankerFixedPointDetail();
+		PersisterWrapper<WaterTankerFixedPointDetail> persisterWrapper = new PersisterWrapper<WaterTankerFixedPointDetail>(
+				waterTankerFixedPointDetail);
+		pushWaterTankerFixedPointRequestToKafka(waterTankerFixedPointRequest);
+	}
+
+	private void pushWaterTankerFixedPointRequestToKafka(WaterTankerFixedPointRequest waterTankerRequest) {
+		if(requestServiceConfiguration.getIsUserProfileEnabled()) {
+			producer.push(requestServiceConfiguration.getFixedPointWaterTankerApplicationWithProfileSaveTopic(), waterTankerRequest);
+		}
+		else {
+			producer.push(requestServiceConfiguration.getFixedPointWaterTankerApplicationSaveTopic(), waterTankerRequest);
+		}
+	}
+
 
 
 	@Override
@@ -81,6 +103,16 @@ public class RequestServieRepositoryImpl implements RequestServiceRepository {
 		*  Uses custom GenericRowMapper for flexible and recursive object mapping
 		* */
 		return jdbcTemplate.query(query, preparedStmtList.toArray(), new GenericRowMapper<>(WaterTankerBookingDetail.class));
+	}
+
+	@Override
+	public List<WaterTankerFixedPointDetail> getWaterTankerFixedPointBookingDetails(
+			WaterTankerFixedPointBookingSearchCriteria criteria) {
+
+		List<Object> preparedStmtList = new ArrayList<>();
+		String query = waterTankerFixedPointQueryBuilder.getWaterTankerFixedPointQuery(criteria, preparedStmtList);
+
+		return jdbcTemplate.query(query, preparedStmtList.toArray(), waterTankerFixedPointRowMapper);
 	}
 
 	@Override

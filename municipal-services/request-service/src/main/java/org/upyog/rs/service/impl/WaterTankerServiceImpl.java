@@ -2,6 +2,7 @@ package org.upyog.rs.service.impl;
 
 import java.util.*;
 
+import digit.models.coremodels.UserDetailResponse;
 import org.apache.commons.lang.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
@@ -22,9 +23,7 @@ import org.upyog.rs.service.WorkflowService;
 import org.upyog.rs.web.models.ApplicantDetail;
 import org.upyog.rs.web.models.CriteriyaSearchDto;
 import org.upyog.rs.web.models.RequestDetailsByDriverId;
-import org.upyog.rs.web.models.waterTanker.WaterTankerBookingDetail;
-import org.upyog.rs.web.models.waterTanker.WaterTankerBookingRequest;
-import org.upyog.rs.web.models.waterTanker.WaterTankerBookingSearchCriteria;
+import org.upyog.rs.web.models.waterTanker.*;
 import org.upyog.rs.web.models.Workflow;
 import org.upyog.rs.web.models.workflow.State;
 
@@ -92,6 +91,38 @@ public class WaterTankerServiceImpl implements WaterTankerService {
 		return waterTankerDetail;
 	}
 
+
+	@Override
+	public WaterTankerFixedPointDetail createFixedPointWaterTankerBookingRequest(WaterTankerFixedPointRequest waterTankerFixedPointRequest) {
+
+		log.info("Create water tanker booking for user : " + waterTankerFixedPointRequest.getRequestInfo().getUserInfo().getUuid()
+				+ " for the request : " + waterTankerFixedPointRequest.getWaterTankerFixedPointDetail());
+
+		enrichmentService.enrichCreateFixedPointWaterTankerRequest(waterTankerFixedPointRequest);
+
+		try {
+			RequestInfo requestInfo = waterTankerFixedPointRequest.getRequestInfo();
+			ApplicantDetail applicantDetail = waterTankerFixedPointRequest.getWaterTankerFixedPointDetail().getApplicantDetail();
+			String tenantId = waterTankerFixedPointRequest.getWaterTankerFixedPointDetail().getTenantId();
+			org.upyog.rs.web.models.user.User user = userService.fetchExistingUser(tenantId, applicantDetail, requestInfo);
+//			if (user == null) {
+//				throw new RuntimeException("User not found for this mobile number: " +
+//						applicantDetail.getMobileNumber());
+//			}
+//			log.info("Applicant or User Uuid: " + user.getUuid());
+		} catch (Exception e) {
+			log.error("Error fetching or creating user: " + e.getMessage(), e);
+			throw new RuntimeException("Failed to fetch/create user: " + e.getMessage(), e);
+		}
+
+		requestServiceRepository.saveFixedPointWaterTanker(waterTankerFixedPointRequest);
+
+		WaterTankerFixedPointDetail waterTankerFixedPointDetail = waterTankerFixedPointRequest.getWaterTankerFixedPointDetail();
+
+		return waterTankerFixedPointDetail;
+
+	}
+
 	@Override
 	public List<WaterTankerBookingDetail> getWaterTankerBookingDetails(RequestInfo requestInfo,
 			WaterTankerBookingSearchCriteria waterTankerBookingSearchCriteria) {
@@ -117,6 +148,22 @@ public class WaterTankerServiceImpl implements WaterTankerService {
 			}
 		}
 		// Return retrieved application
+		return applications;
+	}
+
+	@Override
+	public List<WaterTankerFixedPointDetail> getWaterTankerFixedPointBookingDetails(RequestInfo requestInfo, WaterTankerFixedPointBookingSearchCriteria waterTankerFixedPointBookingSearchCriteria) {
+		List<WaterTankerFixedPointDetail> applications = requestServiceRepository
+				.getWaterTankerFixedPointBookingDetails(waterTankerFixedPointBookingSearchCriteria);
+
+		if (CollectionUtils.isEmpty(applications)) {
+			return new ArrayList<>();
+		}
+//		if (config.getIsUserProfileEnabled()) {
+//			for (WaterTankerFixedPointDetail booking : applications) {
+//				userService.enrichBookingWithUserDetails(booking, waterTankerFixedPointBookingSearchCriteria);
+//			}
+//		}
 		return applications;
 	}
 
