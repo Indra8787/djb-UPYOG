@@ -20,7 +20,8 @@ public interface WaterTankerService {
 
 	public List<WaterTankerFixedPointDetail> getWaterTankerFixedPointBookingDetails(RequestInfo requestInfo, WaterTankerFixedPointBookingSearchCriteria waterTankerFixedPointBookingSearchCriteria);
 
-
+	WaterTankerFixedPointDetail updateFixedPointWaterTankerBookingRequest(
+			WaterTankerFixedPointRequest waterTankerFixedPointRequest);
 	public Integer getApplicationsCount(WaterTankerBookingSearchCriteria waterTankerBookingSearchCriteria, RequestInfo requestInfo);
 
 	public void updateWaterTankerBooking(PaymentRequest paymentRequest, String applicationStatus);

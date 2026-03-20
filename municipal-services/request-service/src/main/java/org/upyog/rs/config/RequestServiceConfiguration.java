@@ -78,6 +78,12 @@ public class RequestServiceConfiguration {
 	@Value("${persister.create.mobile-toilet.topic}")
 	private String mobileToiletApplicationSaveTopic;
 
+	@Value("${persister.update.fixed-point.water-tanker.topic}")
+	private String fixedPointWaterTankerApplicationUpdateTopic;
+
+	@Value("${persister.update.fixed-point.water-tanker.with.profile.topic}")
+	private String fixedPointWaterTankerApplicationWithProfileUpdateTopic;
+
 	@Value("${persister.update.water-tanker.topic}")
 	private String waterTankerApplicationUpdateTopic;
 

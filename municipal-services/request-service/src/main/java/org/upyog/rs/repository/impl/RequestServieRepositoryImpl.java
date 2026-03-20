@@ -106,6 +106,28 @@ public class RequestServieRepositoryImpl implements RequestServiceRepository {
 	}
 
 	@Override
+	public void updateFixedPointWaterTanker(WaterTankerFixedPointRequest waterTankerFixedPointRequest) {
+		WaterTankerFixedPointDetail waterTankerFixedPointDetail =
+				waterTankerFixedPointRequest.getWaterTankerFixedPointDetail();
+		// Wrap for audit trail (mirrors create pattern)
+		PersisterWrapper<WaterTankerFixedPointDetail> persisterWrapper =
+				new PersisterWrapper<>(waterTankerFixedPointDetail);
+		pushFixedPointWaterTankerUpdateToKafka(waterTankerFixedPointRequest);
+	}
+
+	private void pushFixedPointWaterTankerUpdateToKafka(WaterTankerFixedPointRequest waterTankerRequest) {
+		if (requestServiceConfiguration.getIsUserProfileEnabled()) {
+			producer.push(
+					requestServiceConfiguration.getFixedPointWaterTankerApplicationWithProfileUpdateTopic(),
+					waterTankerRequest);
+		} else {
+			producer.push(
+					requestServiceConfiguration.getFixedPointWaterTankerApplicationUpdateTopic(),
+					waterTankerRequest);
+		}
+	}
+
+	@Override
 	public List<WaterTankerFixedPointDetail> getWaterTankerFixedPointBookingDetails(
 			WaterTankerFixedPointBookingSearchCriteria criteria) {
 

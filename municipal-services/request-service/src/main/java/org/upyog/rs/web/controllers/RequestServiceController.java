@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -145,6 +146,33 @@ public class RequestServiceController {
 						RequestServiceConstants.APPLICATION_UPDATED, StatusEnum.SUCCESSFUL))
 				.build();
 		return new ResponseEntity<WaterTankerBookingResponse>(response, HttpStatus.OK);
+	}
+
+
+	@PostMapping("/water-tanker/fixed-point/v1/_update")
+	public ResponseEntity<WaterTankerFixedPointResponse> updateWaterTankerFixedPointBooking(
+			@RequestBody WaterTankerFixedPointRequest waterTankerFixedPointRequest) {
+
+		log.info("updateWaterTankerFixedPointRequest : {}", waterTankerFixedPointRequest);
+
+		if (waterTankerFixedPointRequest.getWaterTankerFixedPointDetail() == null
+				|| waterTankerFixedPointRequest.getWaterTankerFixedPointDetail().getBookingId() == null) {
+			throw new CustomException("INVALID_REQUEST", "bookingId is mandatory for update");
+		}
+
+		WaterTankerFixedPointDetail updated =
+				waterTankerService.updateFixedPointWaterTankerBookingRequest(waterTankerFixedPointRequest);
+
+		ResponseInfo info = RequestServiceUtil.createReponseInfo(
+				waterTankerFixedPointRequest.getRequestInfo(),
+				RequestServiceConstants.APPLICATION_UPDATED,
+				StatusEnum.SUCCESSFUL);
+
+		WaterTankerFixedPointResponse response = WaterTankerFixedPointResponse.builder()
+				.waterTankerFixedPointDetail(updated)
+				.responseInfo(info).build();
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@PostMapping("/mobile-toilet/v1/_create")

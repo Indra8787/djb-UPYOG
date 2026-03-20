@@ -46,23 +46,41 @@ public class WaterTankerFixedPointQueryBuilder {
             List<Object> preparedStmtList) {
 
         StringBuilder query = new StringBuilder(BASE_QUERY);
-        boolean isWhereAdded = false;
 
+        query.append(" WHERE ad.type = ? ");
+        preparedStmtList.add("FIXED-POINT");
+
+        // Since we already added WHERE for the type, subsequent conditions use AND
         if (criteria.getMobileNumber() != null && !criteria.getMobileNumber().trim().isEmpty()) {
-            query.append(isWhereAdded ? " AND " : " WHERE ");
-            query.append("ad.mobile_number = ? ");
+            query.append(" AND ad.mobile_number = ? ");
             preparedStmtList.add(criteria.getMobileNumber());
-            isWhereAdded = true;
         }
 
         if (criteria.getName() != null && !criteria.getName().trim().isEmpty()) {
-            query.append(isWhereAdded ? " AND " : " WHERE ");
-            query.append("ad.name ILIKE ? ");
+            query.append(" AND ad.name ILIKE ? ");
             preparedStmtList.add("%" + criteria.getName() + "%");
-            isWhereAdded = true;
         }
 
         query.append(ORDER_BY);
         return query.toString();
     }
+//        boolean isWhereAdded = false;
+//
+//        if (criteria.getMobileNumber() != null && !criteria.getMobileNumber().trim().isEmpty()) {
+//            query.append(isWhereAdded ? " AND " : " WHERE ");
+//            query.append("ad.mobile_number = ? ");
+//            preparedStmtList.add(criteria.getMobileNumber());
+//            isWhereAdded = true;
+//        }
+//
+//        if (criteria.getName() != null && !criteria.getName().trim().isEmpty()) {
+//            query.append(isWhereAdded ? " AND " : " WHERE ");
+//            query.append("ad.name ILIKE ? ");
+//            preparedStmtList.add("%" + criteria.getName() + "%");
+//            isWhereAdded = true;
+//        }
+//
+//        query.append(ORDER_BY);
+//        return query.toString();
+//    }
 }

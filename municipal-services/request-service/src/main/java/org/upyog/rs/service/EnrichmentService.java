@@ -119,7 +119,7 @@ public class EnrichmentService {
                 .map(Role::getName)
                 .collect(Collectors.joining(", "));
 		waterTankerDetail.setBookingCreatedBy(roles);
-		
+
 		waterTankerDetail.getApplicantDetail().setBookingId(bookingId);
 		waterTankerDetail.getApplicantDetail().setApplicantId(RequestServiceUtil.getRandonUUID());
 		waterTankerDetail.getAddress().setAddressId(RequestServiceUtil.getRandonUUID());
@@ -158,6 +158,7 @@ public class EnrichmentService {
 //		waterTankerFixedPointDetail.setLatitude(address.getLatitude());
 //		waterTankerFixedPointDetail.setLongitude(address.getLongitude());
 
+		waterTankerFixedPointDetail.getApplicantDetail().setType("FIXED-POINT");
 		waterTankerFixedPointDetail.getApplicantDetail().setApplicantId(RequestServiceUtil.getRandonUUID());
 		waterTankerFixedPointDetail.getAddress().setAddressId(RequestServiceUtil.getRandonUUID());
 		waterTankerFixedPointDetail.getApplicantDetail().setAuditDetails(auditDetails);
@@ -165,6 +166,34 @@ public class EnrichmentService {
 
 		log.info("Enriched application request data :" + waterTankerFixedPointDetail);
 
+	}
+
+	public void enrichUpdateFixedPointWaterTankerRequest(
+			WaterTankerFixedPointRequest waterTankerFixedPointRequest) {
+
+		log.info("Enriching update for fixed point water tanker booking id: "
+				+ waterTankerFixedPointRequest.getWaterTankerFixedPointDetail().getBookingId());
+
+		RequestInfo requestInfo = waterTankerFixedPointRequest.getRequestInfo();
+		WaterTankerFixedPointDetail detail = waterTankerFixedPointRequest.getWaterTankerFixedPointDetail();
+
+		// For update: preserve createdBy/createdTime, only refresh lastModified fields
+		AuditDetails existingAudit = detail.getAuditDetails();
+		AuditDetails updatedAudit = AuditDetails.builder()
+				.createdBy(existingAudit != null ? existingAudit.getCreatedBy() : null)
+				.createdTime(existingAudit != null ? existingAudit.getCreatedTime() : null)
+				.lastModifiedBy(requestInfo.getUserInfo().getUuid())
+				.lastModifiedTime(System.currentTimeMillis())
+				.build();
+
+		detail.setAuditDetails(updatedAudit);
+
+		// Propagate audit to child objects if present
+		if (detail.getApplicantDetail() != null) {
+			detail.getApplicantDetail().setAuditDetails(updatedAudit);
+		}
+
+		log.info("Enriched update request: " + detail);
 	}
 
 	/**
