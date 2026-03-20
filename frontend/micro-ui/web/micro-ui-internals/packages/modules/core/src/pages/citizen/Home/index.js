@@ -14,7 +14,7 @@ import {
   WhatsNewCard,
   OBPSIcon,
   WSICon,
-  CHBIcon
+  CHBIcon,
 } from "@djb25/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -134,7 +134,7 @@ import ChatBot from "./ChatBot";
 //   sessionStorage.removeItem("pincode");
 //   sessionStorage.removeItem("tenantId");
 //   sessionStorage.removeItem("localityCode");
-//   sessionStorage.removeItem("landmark"); 
+//   sessionStorage.removeItem("landmark");
 //   sessionStorage.removeItem("propertyid");
 
 //   return isLoading ? (
@@ -155,7 +155,6 @@ import ChatBot from "./ChatBot";
 //           <CardBasedOptions style={isMobile ? {marginTop:"-30px"} : {marginTop:"-30px"}} {...allInfoAndUpdatesProps} />
 //         </div>
 //         </div>}
-
 
 //         {(whatsAppBannerMobObj || whatsAppBannerWebObj) && (
 //           <div className="WhatsAppBanner">
@@ -187,7 +186,6 @@ import ChatBot from "./ChatBot";
 // };
 
 // export default Home;
-
 
 // import React, { useEffect, useState } from "react";
 // import {
@@ -230,7 +228,7 @@ const Home = () => {
   const userInfo = Digit.UserService.getUser();
   const name = userInfo?.info?.name;
   let isMobile = window.Digit.Utils.browser.isMobile();
-  if (window.Digit.SessionStorage.get("TL_CREATE_TRADE")) window.Digit.SessionStorage.set("TL_CREATE_TRADE", {})
+  if (window.Digit.SessionStorage.get("TL_CREATE_TRADE")) window.Digit.SessionStorage.set("TL_CREATE_TRADE", {});
 
   const conditionsToDisableNotificationCountTrigger = () => {
     if (Digit.UserService?.getUser()?.info?.type === "EMPLOYEE") return false;
@@ -245,7 +243,6 @@ const Home = () => {
       enabled: conditionsToDisableNotificationCountTrigger(),
     },
   });
-
 
   if (!tenantId) {
     Digit.SessionStorage.get("locale") === null
@@ -281,17 +278,18 @@ const Home = () => {
   useEffect(async () => {
     //sessionStorage.setItem("DigiLocker.token1","cf87055822e4aa49b0ba74778518dc400a0277e5")
     if (window.location.href.includes("code")) {
-      let code = window.location.href.split("=")[1].split("&")[0]
+      let code = window.location.href.split("=")[1].split("&")[0];
       let TokenReq = {
-        dlReqRef: localStorage.getItem('code_verfier_register'),
-        code: code, module: "SSO"
-
-      }
-      const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.DigiLockerService.token({ TokenReq })
+        dlReqRef: localStorage.getItem("code_verfier_register"),
+        code: code,
+        module: "SSO",
+      };
+      const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.DigiLockerService.token({ TokenReq });
       setUser({ info, ...tokens });
-      setCitizenDetail(info, tokens?.access_token, info?.tenantId)
+      setCitizenDetail(info, tokens?.access_token, info?.tenantId);
     }
-  }, [])
+  }, []);
+
   useEffect(() => {
     if (!user) {
       return;
@@ -308,7 +306,7 @@ const Home = () => {
       history.replace(redirectPath);
     }
   }, [user]);
-  console.log("citizenServicesObjcitizenServicesObj", citizenServicesObj)
+
   const allCitizenServicesProps = {
     header: t(citizenServicesObj?.headerLabel),
     sideOption: {
@@ -414,10 +412,14 @@ const Home = () => {
     sun: (
       <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="1.8" strokeLinecap="round" width="32" height="32">
         <circle cx="12" cy="12" r="5" />
-        <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
-        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-        <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
-        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+        <line x1="12" y1="1" x2="12" y2="3" />
+        <line x1="12" y1="21" x2="12" y2="23" />
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+        <line x1="1" y1="12" x2="3" y2="12" />
+        <line x1="21" y1="12" x2="23" y2="12" />
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
       </svg>
     ),
     "cloud-sun": (
@@ -459,56 +461,96 @@ const Home = () => {
 
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", position: "relative", zIndex: 1 }}>
-        <div style={{
-          width: "64px", height: "64px", borderRadius: "50%",
-          border: "2px solid rgba(255,255,255,0.3)",
-          background: "rgba(255,255,255,0.1)",
-          position: "relative", display: "flex",
-          alignItems: "center", justifyContent: "center"
-        }}>
-          {ticks.map(i => (
-            <div key={i} style={{
-              position: "absolute",
-              width: i % 5 === 0 ? "2px" : "1px",
-              height: i % 5 === 0 ? "6px" : "4px",
-              background: i % 5 === 0 ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.3)",
-              top: i % 5 === 0 ? "2px" : "3px",
-              left: "50%",
-              transformOrigin: "bottom center",
-              transform: `translateX(-50%) rotate(${i * 6}deg)`
-            }} />
+        <div
+          style={{
+            width: "64px",
+            height: "64px",
+            borderRadius: "50%",
+            border: "2px solid rgba(255,255,255,0.3)",
+            background: "rgba(255,255,255,0.1)",
+            position: "relative",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {ticks.map((i) => (
+            <div
+              key={i}
+              style={{
+                position: "absolute",
+                width: i % 5 === 0 ? "2px" : "1px",
+                height: i % 5 === 0 ? "6px" : "4px",
+                background: i % 5 === 0 ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.3)",
+                top: i % 5 === 0 ? "2px" : "3px",
+                left: "50%",
+                transformOrigin: "bottom center",
+                transform: `translateX(-50%) rotate(${i * 6}deg)`,
+              }}
+            />
           ))}
-          <div style={{
-            position: "absolute", bottom: "50%", left: "50%",
-            width: "2.5px", height: "18px", background: "rgba(255,255,255,0.95)",
-            borderRadius: "4px", marginLeft: "-1.25px",
-            transformOrigin: "bottom center",
-            transform: `translateX(-50%) rotate(${hDeg}deg)`
-          }} />
-          <div style={{
-            position: "absolute", bottom: "50%", left: "50%",
-            width: "2px", height: "23px", background: "rgba(255,255,255,0.85)",
-            borderRadius: "4px", marginLeft: "-1px",
-            transformOrigin: "bottom center",
-            transform: `translateX(-50%) rotate(${mDeg}deg)`
-          }} />
-          <div style={{
-            position: "absolute", bottom: "50%", left: "50%",
-            width: "1.5px", height: "25px", background: "#93c5fd",
-            borderRadius: "4px", marginLeft: "-0.75px",
-            transformOrigin: "bottom center",
-            transform: `translateX(-50%) rotate(${sDeg}deg)`
-          }} />
-          <div style={{
-            width: "5px", height: "5px", background: "#fff",
-            borderRadius: "50%", position: "absolute", zIndex: 4
-          }} />
+          <div
+            style={{
+              position: "absolute",
+              bottom: "50%",
+              left: "50%",
+              width: "2.5px",
+              height: "18px",
+              background: "rgba(255,255,255,0.95)",
+              borderRadius: "4px",
+              marginLeft: "-1.25px",
+              transformOrigin: "bottom center",
+              transform: `translateX(-50%) rotate(${hDeg}deg)`,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              bottom: "50%",
+              left: "50%",
+              width: "2px",
+              height: "23px",
+              background: "rgba(255,255,255,0.85)",
+              borderRadius: "4px",
+              marginLeft: "-1px",
+              transformOrigin: "bottom center",
+              transform: `translateX(-50%) rotate(${mDeg}deg)`,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              bottom: "50%",
+              left: "50%",
+              width: "1.5px",
+              height: "25px",
+              background: "#93c5fd",
+              borderRadius: "4px",
+              marginLeft: "-0.75px",
+              transformOrigin: "bottom center",
+              transform: `translateX(-50%) rotate(${sDeg}deg)`,
+            }}
+          />
+          <div
+            style={{
+              width: "5px",
+              height: "5px",
+              background: "#fff",
+              borderRadius: "50%",
+              position: "absolute",
+              zIndex: 4,
+            }}
+          />
         </div>
-        <span style={{
-          fontSize: "13px", fontWeight: 600,
-          color: "rgba(255,255,255,0.9)",
-          letterSpacing: "1px", fontVariantNumeric: "tabular-nums"
-        }}>
+        <span
+          style={{
+            fontSize: "13px",
+            fontWeight: 600,
+            color: "rgba(255,255,255,0.9)",
+            letterSpacing: "1px",
+            fontVariantNumeric: "tabular-nums",
+          }}
+        >
           {h12}:{mm}:{ss} {ampm}
         </span>
       </div>
@@ -532,9 +574,7 @@ const Home = () => {
                   <span style={{ marginRight: "8px" }}>{greeting.emoji}</span>
                   {t(greeting.text)}! {name}
                 </p>
-                <p style={{ margin: 0, fontSize: "13px", color: "rgba(255,255,255,0.7)", marginTop: "5px" }}>
-                  {getFormattedDate()}
-                </p>
+                <p style={{ margin: 0, fontSize: "13px", color: "rgba(255,255,255,0.7)", marginTop: "5px" }}>{getFormattedDate()}</p>
               </div>
               <AnalogClock />
             </div>
@@ -547,55 +587,67 @@ const Home = () => {
                 className="citizen-service-card"
                 key={`svc-${idx}`}
                 onClick={opt.onClick}
-                onMouseEnter={e => {
-                  e.currentTarget.querySelector('.slide-label').style.transform = 'translateY(-110%)';
-                  e.currentTarget.querySelector('.slide-label').style.opacity = '0';
-                  e.currentTarget.querySelector('.slide-desc').style.transform = 'translateY(0)';
-                  e.currentTarget.querySelector('.slide-desc').style.opacity = '1';
+                onMouseEnter={(e) => {
+                  e.currentTarget.querySelector(".slide-label").style.transform = "translateY(-110%)";
+                  e.currentTarget.querySelector(".slide-label").style.opacity = "0";
+                  e.currentTarget.querySelector(".slide-desc").style.transform = "translateY(0)";
+                  e.currentTarget.querySelector(".slide-desc").style.opacity = "1";
                 }}
-                onMouseLeave={e => {
-                  e.currentTarget.querySelector('.slide-label').style.transform = 'translateY(0)';
-                  e.currentTarget.querySelector('.slide-label').style.opacity = '1';
-                  e.currentTarget.querySelector('.slide-desc').style.transform = 'translateY(110%)';
-                  e.currentTarget.querySelector('.slide-desc').style.opacity = '0';
+                onMouseLeave={(e) => {
+                  e.currentTarget.querySelector(".slide-label").style.transform = "translateY(0)";
+                  e.currentTarget.querySelector(".slide-label").style.opacity = "1";
+                  e.currentTarget.querySelector(".slide-desc").style.transform = "translateY(110%)";
+                  e.currentTarget.querySelector(".slide-desc").style.opacity = "0";
                 }}
               >
                 <div className="citizen-service-card__icon">{opt.Icon}</div>
-                <div style={{
-                  flex: 1,
-                  position: 'relative',
-                  height: '40px',
-                  overflow: 'hidden',
-                  display: 'block'
-                }}>
-                  <p className="slide-label" style={{
-                    position: 'absolute',
-                    inset: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    margin: 0,
-                    fontSize: '14px',
-                    fontWeight: 600,
-                    color: '#1e293b',
-                    lineHeight: 1.35,
-                    transition: 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease',
-                    transform: 'translateY(0)',
-                    opacity: 1
-                  }}>{opt.name}</p>
-                  <p className="slide-desc" style={{
-                    position: 'absolute',
-                    inset: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    margin: 0,
-                    fontSize: '12.5px',
-                    fontWeight: 400,
-                    color: '#2563eb',
-                    lineHeight: 1.4,
-                    transition: 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease',
-                    transform: 'translateY(110%)',
-                    opacity: 0
-                  }}>{opt.description}</p>
+                <div
+                  style={{
+                    flex: 1,
+                    position: "relative",
+                    height: "40px",
+                    overflow: "hidden",
+                    display: "block",
+                  }}
+                >
+                  <p
+                    className="slide-label"
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      margin: 0,
+                      fontSize: "14px",
+                      fontWeight: 600,
+                      color: "#1e293b",
+                      lineHeight: 1.35,
+                      transition: "transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease",
+                      transform: "translateY(0)",
+                      opacity: 1,
+                    }}
+                  >
+                    {opt.name}
+                  </p>
+                  <p
+                    className="slide-desc"
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      margin: 0,
+                      fontSize: "12.5px",
+                      fontWeight: 400,
+                      color: "#2563eb",
+                      lineHeight: 1.4,
+                      transition: "transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease",
+                      transform: "translateY(110%)",
+                      opacity: 0,
+                    }}
+                  >
+                    {opt.description}
+                  </p>
                 </div>
               </div>
             ))}
@@ -604,55 +656,67 @@ const Home = () => {
                 className="citizen-service-card"
                 key={`info-${idx}`}
                 onClick={opt.onClick}
-                onMouseEnter={e => {
-                  e.currentTarget.querySelector('.slide-label').style.transform = 'translateY(-110%)';
-                  e.currentTarget.querySelector('.slide-label').style.opacity = '0';
-                  e.currentTarget.querySelector('.slide-desc').style.transform = 'translateY(0)';
-                  e.currentTarget.querySelector('.slide-desc').style.opacity = '1';
+                onMouseEnter={(e) => {
+                  e.currentTarget.querySelector(".slide-label").style.transform = "translateY(-110%)";
+                  e.currentTarget.querySelector(".slide-label").style.opacity = "0";
+                  e.currentTarget.querySelector(".slide-desc").style.transform = "translateY(0)";
+                  e.currentTarget.querySelector(".slide-desc").style.opacity = "1";
                 }}
-                onMouseLeave={e => {
-                  e.currentTarget.querySelector('.slide-label').style.transform = 'translateY(0)';
-                  e.currentTarget.querySelector('.slide-label').style.opacity = '1';
-                  e.currentTarget.querySelector('.slide-desc').style.transform = 'translateY(110%)';
-                  e.currentTarget.querySelector('.slide-desc').style.opacity = '0';
+                onMouseLeave={(e) => {
+                  e.currentTarget.querySelector(".slide-label").style.transform = "translateY(0)";
+                  e.currentTarget.querySelector(".slide-label").style.opacity = "1";
+                  e.currentTarget.querySelector(".slide-desc").style.transform = "translateY(110%)";
+                  e.currentTarget.querySelector(".slide-desc").style.opacity = "0";
                 }}
               >
                 <div className="citizen-service-card__icon">{opt.Icon}</div>
-                <div style={{
-                  flex: 1,
-                  position: 'relative',
-                  height: '40px',
-                  overflow: 'hidden',
-                  display: 'block'
-                }}>
-                  <p className="slide-label" style={{
-                    position: 'absolute',
-                    inset: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    margin: 0,
-                    fontSize: '14px',
-                    fontWeight: 600,
-                    color: '#1e293b',
-                    lineHeight: 1.35,
-                    transition: 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease',
-                    transform: 'translateY(0)',
-                    opacity: 1
-                  }}>{opt.name}</p>
-                  <p className="slide-desc" style={{
-                    position: 'absolute',
-                    inset: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    margin: 0,
-                    fontSize: '12.5px',
-                    fontWeight: 400,
-                    color: '#2563eb',
-                    lineHeight: 1.4,
-                    transition: 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease',
-                    transform: 'translateY(110%)',
-                    opacity: 0
-                  }}>{opt.description}</p>
+                <div
+                  style={{
+                    flex: 1,
+                    position: "relative",
+                    height: "40px",
+                    overflow: "hidden",
+                    display: "block",
+                  }}
+                >
+                  <p
+                    className="slide-label"
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      margin: 0,
+                      fontSize: "14px",
+                      fontWeight: 600,
+                      color: "#1e293b",
+                      lineHeight: 1.35,
+                      transition: "transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease",
+                      transform: "translateY(0)",
+                      opacity: 1,
+                    }}
+                  >
+                    {opt.name}
+                  </p>
+                  <p
+                    className="slide-desc"
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      margin: 0,
+                      fontSize: "12.5px",
+                      fontWeight: 400,
+                      color: "#2563eb",
+                      lineHeight: 1.4,
+                      transition: "transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease",
+                      transform: "translateY(110%)",
+                      opacity: 0,
+                    }}
+                  >
+                    {opt.description}
+                  </p>
                 </div>
               </div>
             ))}

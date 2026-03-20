@@ -474,12 +474,13 @@ input[type="number"] {
 }
 .phone-input-wrapper:hover {
   .employee-card-input--front {
-    border: 1px solid #667eea;
+    border: 2px solid #a1a1aa;
     border-right: 0;
+    color: #a1a1aa;
   }
 
   input {
-    border: 1px solid #667eea;
+    border: 1px solid #e5e5e7;
   }
 }
 
@@ -488,8 +489,7 @@ input[type="number"] {
 
   input {
     &:hover {
-      --border-opacity: 1;
-      border: 1px solid #667eea;
+      border: 2px solid #a1a1aa;
     }
   }
 }
