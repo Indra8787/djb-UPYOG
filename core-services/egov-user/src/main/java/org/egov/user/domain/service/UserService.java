@@ -61,7 +61,7 @@ public class UserService {
     @Value("${user.default.password.enabled}")
     private boolean defaultPasswordEnabled;
 
-    @Value("${user.default.password.pattern")
+    @Value("${user.default.password.pattern}")
     private String defaultPasswordPattern;
 
     private UserRepository userRepository;
