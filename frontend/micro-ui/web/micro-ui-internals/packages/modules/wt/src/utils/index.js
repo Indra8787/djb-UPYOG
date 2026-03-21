@@ -168,3 +168,98 @@ export const treePruningPayload = (data) => {
   };
   return formdata;
 };
+
+export const fillingPointPayload = (data) => {
+  const formdata = {
+    waterTankerBookingDetail: {
+      tenantId: data?.tenantId,
+      bookingId: data?.bookingId || "",
+      auditDetails: data?.auditDetails || null,
+      fillingpointmetadata: {
+        name: data?.owner?.name,
+        mobileNumber: data?.owner?.mobileNumber,
+        emailId: data?.owner?.emailId,
+        jeName: data?.owner?.jeName,
+        jeMobileNumber: data?.owner?.jeMobileNumber,
+        jeEmailId: data?.owner?.jeEmailId,
+        eeName: data?.owner?.eeName,
+        eeMobileNumber: data?.owner?.eeMobileNumber,
+        eeEmailId: data?.owner?.eeEmailId,
+        type: "FILLING-POINT",
+      },
+      address: {
+        addressType: data?.address?.addressType?.code || data?.address?.addressType || "",
+        type: "FILLING-POINT",
+        city: data?.address?.city?.name || data?.address?.city || "",
+        cityCode: data?.address?.city?.code || data?.address?.cityCode || "",
+        locality: data?.address?.locality?.name || data?.address?.locality?.label || data?.address?.locality || "",
+        localityCode: data?.address?.locality?.code || data?.address?.localityCode || "",
+        pincode: data?.address?.pincode,
+        landmark: data?.address?.landmark,
+        houseNo: data?.address?.houseNo,
+        streetName: data?.address?.streetName,
+        addressLine1: data?.address?.addressLine1,
+        addressLine2: data?.address?.addressLine2,
+        latitude: data?.address?.latitude,
+        longitude: data?.address?.longitude,
+      },
+    },
+  };
+  return formdata;
+};
+
+export const fixedPointPayload = (data) => {
+  return {
+    waterTankerBookingDetail: {
+      tenantId: data?.tenantId,
+      bookingId: data?.bookingId || "",
+      auditDetails: data?.auditDetails || null,
+
+      applicantDetail: {
+        name: data?.owner?.name || data?.owner?.applicantName || "",
+        mobileNumber: data?.owner?.mobileNumber || "",
+        alternateNumber: data?.owner?.alternateNumber || "",
+        emailId: data?.owner?.emailId || "",
+        type: "FIXED-POINT",
+      },
+
+      address: {
+        type: "FIXED-POINT",
+        addressType:
+          data?.address?.addressType?.code ||
+          data?.address?.addressType ||
+          "",
+
+        city:
+          data?.address?.city?.name ||
+          data?.address?.city ||
+          "",
+
+        cityCode:
+          data?.address?.city?.code ||
+          data?.address?.cityCode ||
+          "",
+
+        locality:
+          data?.address?.locality?.label ||
+          data?.address?.locality?.name ||
+          data?.address?.locality ||
+          "",
+
+        localityCode:
+          data?.address?.locality?.code ||
+          data?.address?.localityCode ||
+          "",
+
+        houseNo: data?.address?.houseNo || "",
+        streetName: data?.address?.streetName || "",
+        addressLine1: data?.address?.addressLine1 || "",
+        addressLine2: data?.address?.addressLine2 || "",
+        landmark: data?.address?.landmark || "",
+        pincode: data?.address?.pincode || "",
+        latitude: data?.address?.latitude || "",
+        longitude: data?.address?.longitude || "",
+      },
+    },
+  };
+};

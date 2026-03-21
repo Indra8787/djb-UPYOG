@@ -13,7 +13,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@djb25/digit-ui-css": "1.0.26",
+    "@djb25/digit-ui-css": "1.0.27",
     "@djb25/digit-ui-libraries": "1.0.0",
     "@djb25/digit-ui-module-bills": "1.0.1",
     "@djb25/digit-ui-module-common": "1.0.1",
@@ -28,8 +28,8 @@
     "@djb25/digit-ui-module-receipts": "1.0.0",
     "@djb25/digit-ui-react-components": "1.0.0",
     "@djb25/digit-ui-module-pgr": "1.0.2",
-    "@djb25/digit-ui-module-vendor": "1.0.11",
-    "@djb25/digit-ui-module-wt": "1.0.11",
+    "@djb25/digit-ui-module-vendor": "1.0.12",
+    "@djb25/digit-ui-module-wt": "1.0.12",
     "@djb25/digit-ui-module-asset": "1.0.6",
     "@djb25/digit-ui-module-ws": "1.0.10",
     "babel-loader": "9.1.2",
@@ -53,7 +53,9 @@
     "glob": "7.2.3",
     "minimatch": "3.1.2",
     "filelist": "1.0.4",
-    "dompurify": "3.0.6"
+    "dompurify": "3.0.6",
+    "react-leaflet": "3.1.0",
+    "@react-leaflet/core": "1.0.2"
   },
   "scripts": {
     "start": "react-scripts start",

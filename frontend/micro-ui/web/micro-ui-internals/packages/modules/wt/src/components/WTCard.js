@@ -47,6 +47,18 @@ const WTCard = () => {
       label: t("WT_APPLICATION_CREATE"),
       link: `${APPLICATION_PATH}/employee/wt/request-service`,
     },
+    {
+      label: t("WT_FIXED_POINT_SCHEDULE_MANAGEMENT"),
+      link: `${APPLICATION_PATH}/employee/wt/fixed-point-schedule`,
+    },
+    {
+      label: t("WT_LIVE_TRACKING_SYSTEM"),
+      link: `${APPLICATION_PATH}/employee/wt/live-tracking`,
+    },
+    {
+      label: t("WT_SEARCH_FIX_POINT"),
+      link: `${APPLICATION_PATH}/employee/wt/search-filling-fix-point`,
+    }
   ];
   const WT_CEMP = Digit.UserService.hasAccess(["WT_CEMP"]) || false;
 

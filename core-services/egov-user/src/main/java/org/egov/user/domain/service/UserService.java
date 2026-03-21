@@ -58,6 +58,15 @@ import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 @Slf4j
 public class UserService {
 
+    @Value("${user.default.password.enabled}")
+    private boolean defaultPasswordEnabled;
+
+    @Value("${user.default.password.pattern}")
+    private String defaultPasswordPattern;
+
+    @Value("${citizen.registration.default.active:true}")
+    private boolean defaultCitizenActive;
+
     private UserRepository userRepository;
     private OtpRepository otpRepository;
     private PasswordEncoder passwordEncoder;
@@ -358,7 +367,17 @@ public class UserService {
         user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
         validateUserUniqueness(user);
         if (isEmpty(user.getPassword())) {
-            user.setPassword(UUID.randomUUID().toString());
+            if (defaultPasswordEnabled) {
+                String username = user.getUsername();
+                if (isEmpty(username)) {
+                    throw new IllegalArgumentException("Username is required to generate default password");
+                }
+                String generatedPassword = defaultPasswordPattern.replace("{username}", username);
+                user.setPassword(generatedPassword);
+            }
+            else{
+                user.setPassword(UUID.randomUUID().toString());
+            }
         } else {
             validatePassword(user.getPassword());
         }
@@ -394,6 +413,7 @@ public class UserService {
      * @return
      */
     public User createCitizen(User user, RequestInfo requestInfo) {
+        user.setActive(defaultCitizenActive);
         validateAndEnrichCitizen(user);
         return createUser(user, requestInfo);
     }

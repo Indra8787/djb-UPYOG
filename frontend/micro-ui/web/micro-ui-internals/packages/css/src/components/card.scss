@@ -835,7 +835,6 @@
   stroke: #ffffff;
 }
 
-/* --- RIGHT CONTENT --- */
 .expanded-content {
   flex: 1;
   background-color: #ffffff;
@@ -866,7 +865,6 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  /* Items touch borders */
 }
 
 .content-link-row {
@@ -899,17 +897,30 @@
   padding: 20px 0;
 }
 
-/* --- EXPANDED VIEW OVERLAY --- */
 .expanded-page-container {
   display: flex;
+  flex-direction: column;
   width: 100%;
-
-  min-height: calc(100vh - 100px);
-  overflow: hidden;
-  gap: 20px;
   padding-bottom: 40px;
 }
-
+.mobile-sidebar-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #1a365d;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+.hamburger-icon {
+  width: 22px;
+  height: 22px;
+}
 .expanded-overlay {
   position: fixed;
   top: 0;
@@ -935,16 +946,35 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
-/* --- LEFT SIDEBAR --- */
 .expanded-sidebar {
-  width: 20%;
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 80%; 
+  max-width: 320px;
+  height: 100vh;
   background-color: #ffffff;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  flex-shrink: 0;
+  padding: 24px 20px;
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
 }
-
+.expanded-sidebar.open {
+  left: 0;
+}
+.sidebar-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  backdrop-filter: blur(2px);
+}
 .sidebar-title {
   font-size: 1.2rem;
   font-weight: 600;
@@ -997,7 +1027,6 @@
   margin-right: 12px;
 }
 
-/* Make SVG white when active */
 .sidebar-item.active .sidebar-icon-placeholder svg {
   stroke: #ffffff !important;
   fill: none;
@@ -1017,7 +1046,6 @@
   opacity: 1;
 }
 
-/* --- RIGHT CONTENT --- */
 .expanded-content {
   flex: 1;
   background-color: #ffffff;
@@ -1138,11 +1166,9 @@
 }
 
 :root {
-  /* Dimensions */
   --sidebar-expanded: 280px;
   --sidebar-collapsed: 80px;
 
-  /* Colors */
   --bg-color: #ffffff;
   --border-color: #f1f5f9;
   --text-main: #0f172a;
@@ -1151,13 +1177,10 @@
   --active-bg: #eff6ff;
   --active-text: #1a67a3;
 
-  /* Animations */
   --transition-slow: 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-  /* Slow, elegant easing curve */
   --transition-fast: 0.3s ease;
 }
 
-/* --- Base Sidebar --- */
 .premium-sidebar {
   height: 100%;
   display: flex;
@@ -1183,12 +1206,20 @@
 /* --- Header & Brand --- */
 .sidebar-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 24px 20px;
-  margin-bottom: 12px;
-  position: relative;
-  white-space: nowrap;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.mobile-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px;
+}
+.expanded-content-area {
+  flex: 1;
 }
 
 .brand-container {
@@ -1289,7 +1320,6 @@
   font-weight: 500;
   white-space: nowrap;
   margin-left: 16px;
-  /* Spacing applied here */
   opacity: 1;
   transition: opacity 0.2s ease, width 0.3s ease, margin 0.3s ease;
   overflow: hidden;
@@ -1314,7 +1344,6 @@
   color: #ffffff;
 }
 
-/* --- COLLAPSED STATE STYLES --- */
 
 .collapsed .brand-name,
 .collapsed .nav-text {
@@ -1324,7 +1353,6 @@
   pointer-events: none;
 }
 
-/* Re-stack header elements to center */
 .collapsed .sidebar-header {
   padding: 24px 0;
   flex-direction: column;
@@ -1336,7 +1364,6 @@
   justify-content: center;
 }
 
-/* Re-center navigation icons */
 .collapsed .sidebar-nav {
   padding: 0 12px;
 }
@@ -1344,4 +1371,30 @@
 .collapsed .nav-item-content {
   justify-content: center;
   padding: 12px 0;
+}
+@media (min-width: 768px) {
+  .mobile-sidebar-toggle,
+  .mobile-close-btn,
+  .sidebar-backdrop {
+    display: none;
+  }
+
+  .expanded-page-container {
+    flex-direction: row;
+    gap: 24px;
+  }
+
+  .expanded-sidebar {
+    position: static;
+    left: 0;
+    width: 25%;
+    max-width: 300px;
+    height: auto;
+    z-index: auto;
+    box-shadow: none;
+    border-right: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    transition: none; 
+  }
 }

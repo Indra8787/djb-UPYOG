@@ -103,6 +103,8 @@ module.exports = function (app) {
     "/asset-services/v1/assets/assignment/_search",
     "/request-service/water-tanker/v1/_search",
     "/request-service/water-tanker/v1/_update",
+    "/request-service/water-tanker/fixed-point/v1/_create",
+    "/request-service/water-tanker/fixed-point/v1/_search",
     "/vendor-management/api/v1/_create",
     "/sv-services/street-vending/_createdemand",
     "/request-service/mobile-toilet/v1/_create",

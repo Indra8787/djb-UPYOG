@@ -254,6 +254,10 @@ const Urls = {
     create: "/request-service/water-tanker/v1/_create",
     update: "/request-service/water-tanker/v1/_update",
     search: "/request-service/water-tanker/v1/_search",
+    createfixedpoint: "/request-service/water-tanker/fixed-point/v1/_create",
+    searchfixedpoint: "/request-service/water-tanker/fixed-point/v1/_search",
+    createfillpoint: "/request-service/water-tanker/fill-point/v1/_create",
+    searchfillpoint: "/request-service/water-tanker/fill-point/v1/_search",
   },
   mt: {
     create: "/request-service/mobile-toilet/v1/_create",

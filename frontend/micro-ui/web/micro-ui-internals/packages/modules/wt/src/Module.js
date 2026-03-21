@@ -29,6 +29,12 @@ import TPAcknowledgement from "./pages/citizen/Create/TPAcknowledgement";
 import MTApplicationDetails from "./pages/citizen/MTApplicationDetails";
 import TPApplicationDetails from "./pages/citizen/TPApplicationDetails";
 import MTCitizenCard from "./components/MTCitizenCard";
+import FixedPointScheduleManagement from "./pages/employee/FixedPointScheduleManagement";
+import LiveTrackingSystem from "./components/LiveTrackingSystem";
+import AddFillingPointAddress from "./components/AddFillingPointAddress";
+import AddFixPointAddress from "./components/AddFixPointAddress";
+import AddFillingPointMetaData from "./components/AddFillingPointMetaData";
+import WTSearchPointAddress from "./components/SearchFillingPointAddress";
 
 // Parent component of module
 export const WTModule = ({ stateCode, userType, tenants }) => {
@@ -111,6 +117,12 @@ const componentsToRegister = {
   MTAcknowledgement,
   TPAcknowledgement,
   MTCitizenCard: MTCitizenCard,
+  FixedPointScheduleManagement,
+  LiveTrackingSystem,
+  AddFillingPointAddress,
+  AddFixPointAddress,
+  AddFillingPointMetaData,
+  WTSearchPointAddress,
 };
 
 export const initWTComponents = () => {

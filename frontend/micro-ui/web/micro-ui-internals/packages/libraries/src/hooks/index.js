@@ -348,6 +348,10 @@ import useVendorAdditionaldetailsAPI from "./vendor/useVendorAdditionaldetailsAP
 import useCreateDemand from "./sv/useCreateDemand";
 import useEmpvendorCommonSearch from "./vendor/useEmpvendorCommonSearch";
 import { useGetConnection, useValidateUser, useGetConnectionTypeV2, useGetUserType, useGetFloorCount, useGetPropertyType } from "./ekyc/useEkyc";
+import {useCreateFixedPoint} from "./wt/createFixedPoint";
+import {useUpdateFixedPoint} from "./wt/updateFixedPoint";
+import useFixedPointSearchAPI from "./wt/useFixedPointSearchAPI";
+import useFillPointSearch from "./wt/useFillPointSearch";
 
 const wt={
   useTankerCreateAPI,
@@ -358,7 +362,11 @@ const wt={
   useMobileToiletSearchAPI,
   useMTApplicationDetail,
   useMTApplicationAction,
-  useWTMDMS
+  useWTMDMS,
+  useCreateFixedPoint,
+  useUpdateFixedPoint,
+  useFixedPointSearchAPI,
+  useFillPointSearch,
 };
 
 const pgr = {
