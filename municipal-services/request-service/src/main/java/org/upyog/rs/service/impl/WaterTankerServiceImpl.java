@@ -124,6 +124,22 @@ public class WaterTankerServiceImpl implements WaterTankerService {
 	}
 
 	@Override
+	public WaterTankerFixedPointDetail updateFixedPointWaterTankerBookingRequest(
+			WaterTankerFixedPointRequest waterTankerFixedPointRequest) {
+
+		log.info("Update fixed point water tanker booking for user: "
+				+ waterTankerFixedPointRequest.getRequestInfo().getUserInfo().getUuid()
+				+ " for bookingId: "
+				+ waterTankerFixedPointRequest.getWaterTankerFixedPointDetail().getBookingId());
+
+		enrichmentService.enrichUpdateFixedPointWaterTankerRequest(waterTankerFixedPointRequest);
+
+		requestServiceRepository.updateFixedPointWaterTanker(waterTankerFixedPointRequest);
+
+		return waterTankerFixedPointRequest.getWaterTankerFixedPointDetail();
+	}
+
+	@Override
 	public List<WaterTankerBookingDetail> getWaterTankerBookingDetails(RequestInfo requestInfo,
 			WaterTankerBookingSearchCriteria waterTankerBookingSearchCriteria) {
 		/*
