@@ -483,7 +483,7 @@ public class EnrichmentService {
 				fp.getAddress().setAddressId(RequestServiceUtil.getRandonUUID());
 
 				// 🔥 CRITICAL FIX
-				fp.getAddress().setFillingPointId(fp.getId());
+//				fp.getAddress().setFillingPointId(fp.getId());
 			}
 		}
 	}
