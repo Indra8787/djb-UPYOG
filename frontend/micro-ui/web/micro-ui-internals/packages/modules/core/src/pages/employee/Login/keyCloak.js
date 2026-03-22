@@ -18,11 +18,11 @@ export const initKeycloak = async () => {
     checkLoginIframe: false,
   });
 
-  if (!authenticated) {
-    await _kc.login({
-      redirectUri: window.location.href,
-    });
-  }
+  // if (!authenticated) {
+  //   await _kc.login({
+  //     redirectUri: window.location.href,
+  //   });
+  // }
 
   return _kc;
 };

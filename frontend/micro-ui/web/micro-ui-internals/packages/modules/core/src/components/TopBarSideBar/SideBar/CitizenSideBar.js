@@ -1,6 +1,4 @@
-import {
-  Loader, NavBar
-} from "@djb25/digit-ui-react-components";
+import { Loader, NavBar } from "@djb25/digit-ui-react-components";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -69,20 +67,28 @@ const Profile = ({ info, stateName, t }) => {
         !window.location.href.includes("/employee/user/login") &&
         !window.location.href.includes("employee/user/language-selection") && <ChangeCity t={t} mobileView={true} />}
       <div id="profile-location" className="label-container loc-Profile">
-        <div className="label-text"><ChangeRole t={t} mobileView={true} /></div>
+        <div className="label-text">
+          <ChangeRole t={t} mobileView={true} />
+        </div>
       </div>
     </div>
   );
 };
-const PoweredBy = () => (
-  <div className="digit-footer" style={{ marginBottom: 0 }}>
-  </div>
-);
+const PoweredBy = () => <div className="digit-footer" style={{ marginBottom: 0 }}></div>;
 
 /* 
 Feature :: Citizen Webview sidebar
 */
-export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogout, isEmployee = false, linkData, islinkDataLoading, isSideBarScroll }) => {
+export const CitizenSideBar = ({
+  isOpen,
+  isMobile = false,
+  toggleSidebar,
+  onLogout,
+  isEmployee = false,
+  linkData,
+  islinkDataLoading,
+  isSideBarScroll,
+}) => {
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
@@ -108,6 +114,10 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
     history.push(`${APPLICATION_PATH}/citizen/login`);
     closeSidebar();
   };
+  const redirectToRegisterPage = () => {
+    history.push(`${APPLICATION_PATH}/citizen/register/mobile-number`);
+    closeSidebar();
+  };
   // Function to redirect the user to the EDCR scrutiny page
   const redirectToScrutinyPage = () => {
     // localStorage.clear();
@@ -117,13 +127,15 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
   if (islinkDataLoading || isLoading || !isFetched) {
     return <Loader />;
   }
-  const filteredTenantContact = storeData?.tenants.filter((e) => e.code === tenantId)[0]?.contactNumber || storeData?.tenants[0]?.contactNumber;
+  const filteredTenantContact = storeData?.tenants?.filter((e) => e.code === tenantId)[0]?.contactNumber || storeData?.tenants?.[0]?.contactNumber;
 
-  let menuItems = [...SideBarMenu(t, closeSidebar, redirectToLoginPage, redirectToScrutinyPage, isEmployee, storeData, tenantId)];
+  let menuItems = [
+    ...SideBarMenu(t, closeSidebar, redirectToLoginPage, redirectToRegisterPage, redirectToScrutinyPage, isEmployee, storeData, tenantId),
+  ];
   let profileItem;
   if (isFetched && user && user.access_token) {
     profileItem = <Profile info={user?.info} stateName={stateInfo?.name} t={t} />;
-    menuItems = menuItems.filter((item) => item?.id !== "login-btn" && item?.id !== "help-line");
+    menuItems = menuItems.filter((item) => item?.id !== "login-btn" && item?.id !== "register-btn" && item?.id !== "help-line");
     menuItems = [
       ...menuItems,
       {
@@ -165,8 +177,8 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
     if (linkData && linkData.FSM) {
       let FSM = [];
       linkData.FSM.map((ele) => {
-        ele.id && ele.link && FSM.push(ele)
-      })
+        ele.id && ele.link && FSM.push(ele);
+      });
       linkData.FSM = FSM;
     }
     Object.keys(linkData)
@@ -225,19 +237,21 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
         menuItems.splice(1, 0, {
           type: "dynamic",
           moduleName: t(`ACTION_TEST_${getParentDisplayName}`),
-          links: configEmployeeSideBar[keys[i]]?.map((ob) => { return { ...ob, displayName: t(`ACTION_TEST_${ob?.displayName?.toUpperCase()?.replace(/[ -]/g, "_")}`) } }),
+          links: configEmployeeSideBar[keys[i]]?.map((ob) => {
+            return { ...ob, displayName: t(`ACTION_TEST_${ob?.displayName?.toUpperCase()?.replace(/[ -]/g, "_")}`) };
+          }),
           icon: configEmployeeSideBar[keys[i]][1]?.leftIcon,
         });
       }
     }
-    const indx = menuItems.findIndex(a => a.element === "HOME");
+    const indx = menuItems.findIndex((a) => a.element === "HOME");
     const home = menuItems.splice(indx, 1);
-    const comp = menuItems.findIndex(a => a.element === "LANGUAGE");
+    const comp = menuItems.findIndex((a) => a.element === "LANGUAGE");
     const part = menuItems.splice(comp, menuItems?.length - comp);
     menuItems.sort((a, b) => {
       let c1 = a?.type === "dynamic" ? a?.moduleName : a?.text;
       let c2 = b?.type === "dynamic" ? b?.moduleName : b?.text;
-      return c1.localeCompare(c2)
+      return c1.localeCompare(c2);
     });
     home?.[0] && menuItems.splice(0, 0, home[0]);
     menuItems = part?.length > 0 ? menuItems.concat(part) : menuItems;

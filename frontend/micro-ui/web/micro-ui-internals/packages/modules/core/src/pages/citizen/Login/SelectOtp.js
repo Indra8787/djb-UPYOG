@@ -6,87 +6,56 @@ const SelectOtp = ({ config, otp, onOtpChange, onResend, onSelect, t, error, use
   const [timeLeft, setTimeLeft] = useState(180);
   const TYPE_REGISTER = { type: "register" };
   const TYPE_LOGIN = { type: "login" };
-  const [errorRegister, setErrorRegister]= useState(false)
+  const [errorRegister, setErrorRegister] = useState(false);
   const getUserType = () => Digit.UserService.getType();
-  let newData={}
+
   useInterval(
     () => {
       setTimeLeft(timeLeft - 1);
     },
     timeLeft > 0 ? 1000 : null
   );
-  useEffect(async ()=>{
-    //sessionStorage.setItem("DigiLocker.token1","cf87055822e4aa49b0ba74778518dc400a0277e5")
-  if(window.location.href.includes("code"))
-  {
-    let code =window.location.href.split("=")[1].split("&")[0]
-    let TokenReq = {
-      code_verifier: sessionStorage.getItem("code_verfier_register"),
-      code: code, module: "REGISTER",
-      redirect_uri: "https://upyog.niua.org/digit-ui/citizen/login/otp",
+
+  useEffect(async () => {
+    if (window.location.href.includes("code")) {
+      let code = window.location.href.split("=")[1].split("&")[0];
+      let TokenReq = {
+        code_verifier: sessionStorage.getItem("code_verfier_register"),
+        code: code,
+        module: "REGISTER",
+        redirect_uri: "https://upyog.niua.org/digit-ui/citizen/login/otp",
+      };
+      const data = await Digit.DigiLockerService.token({ TokenReq });
+      registerUser(data);
+    } else if (window.location.href.includes("error=")) {
+      window.location.href = window.location.href.split("/otp")[0];
     }
-    console.log("token",code,TokenReq,sessionStorage.getItem("code_verfier_register"))
-    const data = await Digit.DigiLockerService.token({TokenReq })
-    registerUser(data)
-  // fetch('https://api.digitallocker.gov.in/public/oauth2/1/token', {
-  //   method: 'POST',
-  //   mode: 'cors',
-  //   headers: {
-  //     'Content-Type': 'application/x-www-form-urlencoded',
-  //     "Access-Control-Allow-Origin": "*",
-  //     "Access-Control-Allow-Methods": "PUT, DELETE,POST"
-  //   },
-  //   body: new URLSearchParams({
-  //     'code': code,
-  //     'grant_type': "authorization_code",
-  //     'client_id': "YN77ADDADE",
-  //     "client_secret": "71abd480b5811ab72277",
-  //     "redirect_uri": "https://upyog.niua.org/digit-ui/citizen/login/otp",
-  //     "code_verifier": sessionStorage.getItem("code_verfier_register")
-  //   })
-  // }) .then(response =>
-  //   {response.json().then(data => (
+  }, []);
 
-      
-    
-
-  //   ))})
-
-
-    //console.log("datadatadata",data,newData)
-    //sessionStorage.setItem("DigiLocker.registerToken",data?.TokenRes?.access_token)
-    
-  }
-  else if (window.location.href.includes("error="))
-  {
-    window.location.href = window.location.href.split("/otp")[0]
-  }
-  },[])
   const registerUser = async (response) => {
-    console.log("registerUser",response?.TokenRes?.mobile)
     const data = {
-      dob: response?.TokenRes?.dob.substring(0, 2) +"/"+response?.TokenRes?.dob.substring(2,4)+"/"+response?.TokenRes?.dob.substring(4, 8),
+      dob: response?.TokenRes?.dob.substring(0, 2) + "/" + response?.TokenRes?.dob.substring(2, 4) + "/" + response?.TokenRes?.dob.substring(4, 8),
       mobileNumber: response?.TokenRes?.mobile,
       name: response?.TokenRes?.name,
       tenantId: "pg",
       userType: getUserType(),
     };
-      sessionStorage.setItem("userName",response?.TokenRes?.mobile)
-      console.log("datadatadata",data,sessionStorage.getItem("userName"))
-      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
-      if (!err) {
-        history.replace(`${path}/otp`, { from: getFromLocation(location.state, searchParams) });
-        return;
-      }
-      else {
-        const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } })
-        sessionStorage.setItem("userName",response?.TokenRes?.mobile)
-      }
-  }; 
+    sessionStorage.setItem("userName", response?.TokenRes?.mobile);
+    const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
+    if (!err) {
+      history.replace(`${path}/otp`, { from: getFromLocation(location.state, searchParams) });
+      return;
+    } else {
+      await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
+      sessionStorage.setItem("userName", response?.TokenRes?.mobile);
+    }
+  };
+
   const handleResendOtp = () => {
     onResend();
-    setTimeLeft(2);
+    setTimeLeft(180);
   };
+
   const sendOtp = async (data) => {
     try {
       const res = await Digit.UserService.sendOtp(data, "pg");
@@ -95,35 +64,64 @@ const SelectOtp = ({ config, otp, onOtpChange, onResend, onSelect, t, error, use
       return [null, err];
     }
   };
+
   if (userType === "employee") {
     return (
       <Fragment>
-        <OTPInput length={6} onChange={onOtpChange} value={otp} />
+        <div style={{ display: "flex", justifyContent: "center", margin: "20px 0" }}>
+          <OTPInput length={6} onChange={onOtpChange} value={otp} />
+        </div>
         {timeLeft > 0 ? (
-          <CardText>{`${t("CS_RESEND_ANOTHER_OTP")} ${timeLeft} ${t("CS_RESEND_SECONDS")}`}</CardText>
+          <CardText style={{ textAlign: "center", color: "#505A5F" }}>{`${t("CS_RESEND_ANOTHER_OTP")} ${timeLeft} ${t(
+            "CS_RESEND_SECONDS"
+          )}`}</CardText>
         ) : (
-          <p className="card-text-button" onClick={handleResendOtp}>
+          <p
+            className="card-text-button"
+            onClick={handleResendOtp}
+            style={{ textAlign: "center", color: "#F47738", cursor: "pointer", fontWeight: "bold" }}
+          >
             {t("CS_RESEND_OTP")}
           </p>
         )}
-        {!error && <CardLabelError>{t("CS_INVALID_OTP")}</CardLabelError>}
+        {error && <CardLabelError style={{ textAlign: "center" }}>{t("CS_INVALID_OTP")}</CardLabelError>}
       </Fragment>
     );
   }
 
   return (
-    <FormStep onSelect={onSelect} config={config} t={t} isDisabled={!(otp?.length === 6 && canSubmit)}>
-      <OTPInput length={6} onChange={onOtpChange} value={otp} />
-      {timeLeft > 0 ? (
-        <CardText>{`${t("CS_RESEND_ANOTHER_OTP")} ${timeLeft} ${t("CS_RESEND_SECONDS")}`}</CardText>
-      ) : (
-        <p className="card-text-button" onClick={handleResendOtp}>
-          {t("CS_RESEND_OTP")}
-        </p>
-      )}
-      {!error && <CardLabelError>{t("CS_INVALID_OTP")}</CardLabelError>}
-      {errorRegister && <CardLabelError>{t("CS_ALREADY_REGISTERED")}</CardLabelError>}
-    </FormStep>
+    <div className="select-otp-wrapper">
+      <FormStep onSelect={onSelect} config={config} t={t} isDisabled={!(otp?.length === 6 && canSubmit)} cardStyle={{ display: "contents" }}>
+        <div style={{ display: "flex", justifyContent: "center", margin: "32px 0" }}>
+          <OTPInput length={6} onChange={onOtpChange} value={otp} />
+        </div>
+
+        <div style={{ textAlign: "center", marginBottom: "24px" }}>
+          {timeLeft > 0 ? (
+            <CardText style={{ color: "#6B7280", fontSize: "16px" }}>
+              {t("CS_RESEND_ANOTHER_OTP")} <span style={{ fontWeight: "700", color: "#0B0B0B" }}>{timeLeft}</span> {t("CS_RESEND_SECONDS")}
+            </CardText>
+          ) : (
+            <p
+              className="card-text-button"
+              onClick={handleResendOtp}
+              style={{
+                color: "#F47738",
+                cursor: "pointer",
+                fontWeight: "700",
+                fontSize: "16px",
+                textDecoration: "underline",
+              }}
+            >
+              {t("CS_RESEND_OTP")}
+            </p>
+          )}
+        </div>
+
+        {error && <CardLabelError style={{ textAlign: "center", marginTop: "12px" }}>{t("CS_INVALID_OTP")}</CardLabelError>}
+        {errorRegister && <CardLabelError style={{ textAlign: "center", marginTop: "12px" }}>{t("CS_ALREADY_REGISTERED")}</CardLabelError>}
+      </FormStep>
+    </div>
   );
 };
 
