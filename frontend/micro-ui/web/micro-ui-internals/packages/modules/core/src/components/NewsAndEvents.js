@@ -78,6 +78,7 @@ const NewsAndEvents = () => {
   const [previewDocTitle, setPreviewDocTitle] = useState("");
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+  const [isDocLoading, setIsDocLoading] = useState(false);
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
