@@ -5,7 +5,6 @@
   "homepage": "/digit-ui",
   "workspaces": [
     "micro-ui-internals/packages/libraries",
-    "micro-ui-internals/packages/react-components",
     "micro-ui-internals/packages/modules/core",
     "micro-ui-internals/packages/modules/common"
   ],
@@ -26,7 +25,7 @@
     "@djb25/digit-ui-module-mcollect": "1.0.0",
     "@djb25/digit-ui-module-commonpt": "1.0.1",
     "@djb25/digit-ui-module-receipts": "1.0.0",
-    "@djb25/digit-ui-react-components": "1.0.0",
+    "@djb25/digit-ui-react-components": "1.0.2",
     "@djb25/digit-ui-module-pgr": "1.0.2",
     "@djb25/digit-ui-module-vendor": "1.0.12",
     "@djb25/digit-ui-module-wt": "1.0.12",

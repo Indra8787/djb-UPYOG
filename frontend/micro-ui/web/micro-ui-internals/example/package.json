@@ -35,7 +35,7 @@
     "@djb25/digit-ui-module-noc": "1.0.0",
     "@djb25/digit-ui-module-pt": "1.0.0",
     "@djb25/digit-ui-module-dss": "1.0.1",
-    "@djb25/digit-ui-react-components": "1.0.0",
+    "@djb25/digit-ui-react-components": "1.0.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-i18next": "11.16.2",
