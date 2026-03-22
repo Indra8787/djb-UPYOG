@@ -30,7 +30,11 @@ RUN cd web/ \
     && node -e 'console.log(v8.getHeapStatistics().heap_size_limit/(8192*8192))' \
     &&  ./install-deps.sh \
     && yarn install \
-    && yarn build 
+    \
+    # THIS LINE BUILDS THE REACT COMPONENTS IN THE MONOREPO, IF THIS IS NOT BUILT THEN THE BUILD OF THE MAIN APP FAILS AS IT DEPENDS ON THE COMPONENTS
+    && cd micro-ui-internals/packages/react-components && yarn build && cd ../../../ \
+    \
+    && yarn build
     
 
 FROM nginx:mainline-alpine
