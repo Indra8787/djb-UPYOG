@@ -53,9 +53,7 @@ public class FillingPointController {
         ResponseInfo responseInfo = responseInfoFactory
                 .createResponseInfoFromRequestInfo(request.getRequestInfo(), true);
 
-        return ResponseEntity.ok(
-                new FillingPointResponse(responseInfo, result)
-        );
+        return ResponseEntity.ok(new FillingPointResponse(responseInfo, result));
     }
 
     @PostMapping("/_update")

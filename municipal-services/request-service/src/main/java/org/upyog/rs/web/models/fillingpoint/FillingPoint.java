@@ -1,10 +1,12 @@
 package org.upyog.rs.web.models.fillingpoint;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.upyog.rs.web.models.Address;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class FillingPoint {
 
     private String id;

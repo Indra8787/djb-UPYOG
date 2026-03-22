@@ -9,20 +9,19 @@ public class FillingPointSearchCriteria {
     @JsonProperty("tenantId")
     private String tenantId;
 
-    @JsonProperty("designation")
+    @JsonProperty("id")
+    private String id;
+
+    @JsonProperty("fillingPointName")
+    private String fillingPointName;
+
+    @JsonProperty("designation")       // EE / AE / JE
     private String designation;
 
-    @JsonProperty("name")
+    @JsonProperty("name")              // JE/AE/EE ka naam
     private String name;
 
-    @JsonProperty("mobileNo")
+    @JsonProperty("mobileNo")          // JE/AE/EE ka mobile
     private String mobileNo;
-
-    public boolean isValidSearch() {
-        return tenantId != null && !tenantId.isEmpty() &&
-                name != null && !name.isEmpty() &&
-                mobileNo != null && !mobileNo.isEmpty() &&
-                designation != null && !designation.isEmpty();
-    }
 
 }

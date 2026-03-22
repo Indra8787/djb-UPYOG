@@ -49,7 +49,6 @@ public class FillingPointServiceImpl implements FillingPointService {
         return request.getFillingPoints();
     }
 
-    // ─── Frontend water tanker payload create ────────────────────────────────
     @Override
     public List<FillingPoint> createFromWaterTankerRequest(FillingPointRequest request) {
 
@@ -59,7 +58,6 @@ public class FillingPointServiceImpl implements FillingPointService {
 
         FillingPoint fp = new FillingPoint();
 
-        // Map metadata → FillingPoint
         fp.setFillingPointName(meta.getName());
         fp.setEmergencyName(meta.getName());
 
@@ -71,23 +69,19 @@ public class FillingPointServiceImpl implements FillingPointService {
         fp.setJeEmail(meta.getJeEmailId());
         fp.setJeMobile(meta.getJeMobileNumber());
 
-        // AE - coming soon from frontend
         fp.setAeName(meta.getAeName());
         fp.setAeEmail(meta.getAeEmailId());
         fp.setAeMobile(meta.getAeMobileNumber());
 
         fp.setTenantId(wt.getTenantId());
 
-        // Map address directly
         fp.setAddress(address);
+        fp.getAddress().setType("FILLING-POINT"); // ← ADDED
 
-        // Wrap in single-item list
         request.setFillingPoints(Collections.singletonList(fp));
 
-        // Enrich IDs + audit
         enrichmentService.enrichCreateFillingPointRequest(request);
 
-        // Push to Kafka
         FillingPointKafkaRequest kafkaRequest = new FillingPointKafkaRequest();
         kafkaRequest.setRequestInfo(request.getRequestInfo());
         kafkaRequest.setFillingPoint(fp);
@@ -96,7 +90,6 @@ public class FillingPointServiceImpl implements FillingPointService {
         return request.getFillingPoints();
     }
 
-    // ─── Search ───────────────────────────────────────────────────────────────
     @Override
     public List<FillingPoint> search(FillingPointSearchCriteria criteria) {
 
@@ -105,28 +98,16 @@ public class FillingPointServiceImpl implements FillingPointService {
         for (FillingPoint fp : list) {
 
             if ("EE".equalsIgnoreCase(criteria.getDesignation())) {
-                fp.setAeName(null);
-                fp.setAeEmail(null);
-                fp.setAeMobile(null);
-                fp.setJeName(null);
-                fp.setJeEmail(null);
-                fp.setJeMobile(null);
+                fp.setAeName(null);   fp.setAeEmail(null);   fp.setAeMobile(null);
+                fp.setJeName(null);   fp.setJeEmail(null);   fp.setJeMobile(null);
 
             } else if ("AE".equalsIgnoreCase(criteria.getDesignation())) {
-                fp.setEeName(null);
-                fp.setEeEmail(null);
-                fp.setEeMobile(null);
-                fp.setJeName(null);
-                fp.setJeEmail(null);
-                fp.setJeMobile(null);
+                fp.setEeName(null);   fp.setEeEmail(null);   fp.setEeMobile(null);
+                fp.setJeName(null);   fp.setJeEmail(null);   fp.setJeMobile(null);
 
             } else if ("JE".equalsIgnoreCase(criteria.getDesignation())) {
-                fp.setEeName(null);
-                fp.setEeEmail(null);
-                fp.setEeMobile(null);
-                fp.setAeName(null);
-                fp.setAeEmail(null);
-                fp.setAeMobile(null);
+                fp.setEeName(null);   fp.setEeEmail(null);   fp.setEeMobile(null);
+                fp.setAeName(null);   fp.setAeEmail(null);   fp.setAeMobile(null);
             }
         }
 

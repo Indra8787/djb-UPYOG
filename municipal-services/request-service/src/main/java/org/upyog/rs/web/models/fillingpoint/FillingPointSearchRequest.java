@@ -10,5 +10,6 @@ public class FillingPointSearchRequest {
     @JsonProperty("RequestInfo")
     private RequestInfo requestInfo;
 
+    @JsonProperty("criteria")
     private FillingPointSearchCriteria criteria;
 }

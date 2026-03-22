@@ -463,27 +463,23 @@ public class EnrichmentService {
 
 
 	public void enrichCreateFillingPointRequest(FillingPointRequest request) {
-
 		String userId = request.getRequestInfo().getUserInfo().getUuid();
 		Long now = System.currentTimeMillis();
 
 		for (FillingPoint fp : request.getFillingPoints()) {
-
-			// 1️⃣ Generate filling point ID
 			fp.setId(RequestServiceUtil.getRandonUUID());
-
-			// 2️⃣ Audit
 			fp.setCreatedBy(userId);
 			fp.setLastModifiedBy(userId);
 			fp.setCreatedTime(now);
 			fp.setLastModifiedTime(now);
 
-			// 3️⃣ Address enrichment
 			if (fp.getAddress() != null) {
 				fp.getAddress().setAddressId(RequestServiceUtil.getRandonUUID());
-
-				// 🔥 CRITICAL FIX
-				fp.getAddress().setAddressId(fp.getId());
+				fp.getAddress().setApplicantId(fp.getId());
+				// ← ADD THIS
+				if (fp.getAddress().getType() == null) {
+					fp.getAddress().setType("FILLING-POINT");
+				}
 			}
 		}
 	}

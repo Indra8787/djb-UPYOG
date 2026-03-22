@@ -14,4 +14,5 @@ public class FillingPointResponse {
 
     private ResponseInfo responseInfo;
     private List<FillingPoint> fillingPoints;
+
 }
