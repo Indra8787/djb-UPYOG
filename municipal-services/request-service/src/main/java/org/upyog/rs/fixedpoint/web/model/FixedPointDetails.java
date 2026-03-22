@@ -9,6 +9,7 @@ import org.upyog.rs.web.models.AuditDetails;
 @Getter
 @Setter
 @Builder
+
 public class FixedPointDetails {
 
     @JsonProperty("system_assigned_schedule_id")

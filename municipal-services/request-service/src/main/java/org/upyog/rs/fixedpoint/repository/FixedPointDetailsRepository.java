@@ -1,9 +1,14 @@
 package org.upyog.rs.fixedpoint.repository;
 
-import org.upyog.rs.fixedpoint.web.model.FixedPointDetailsRequest;
+import org.egov.common.contract.request.RequestInfo;
+import org.springframework.stereotype.Repository;
+import org.upyog.rs.fixedpoint.web.model.FixedPointDetails;
 
-public interface FixedPointDetailsRepository {
+import java.util.List;
 
-    public void saveFixedPointDetails(FixedPointDetailsRequest fixedPointDetailsRequest);
+@Repository
+public interface FixedPointDetailsRepository  {
+
+void saveFixedPointDetails(List<FixedPointDetails> fixedPointDetailsList, RequestInfo requestInfo);
 
 }
