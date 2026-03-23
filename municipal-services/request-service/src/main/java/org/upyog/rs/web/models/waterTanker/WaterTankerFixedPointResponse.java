@@ -24,6 +24,4 @@ public class WaterTankerFixedPointResponse {
     @Valid
     private WaterTankerFixedPointDetail waterTankerFixedPointDetail;
 
-    @JsonProperty("fillingPoint")
-    private FillingPoint fillingPoint;
 }

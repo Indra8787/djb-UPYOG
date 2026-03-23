@@ -175,11 +175,6 @@ public class WaterTankerServiceImpl implements WaterTankerService {
 		if (CollectionUtils.isEmpty(applications)) {
 			return new ArrayList<>();
 		}
-//		if (config.getIsUserProfileEnabled()) {
-//			for (WaterTankerFixedPointDetail booking : applications) {
-//				userService.enrichBookingWithUserDetails(booking, waterTankerFixedPointBookingSearchCriteria);
-//			}
-//		}
 		return applications;
 	}
 
@@ -371,5 +366,12 @@ public class WaterTankerServiceImpl implements WaterTankerService {
 		requestServiceRepository.updateWaterTankerBooking(waterTankerRequest);
 
 		return waterTankerRequest.getWaterTankerBookingDetail();
+	}
+
+	public FixedFillingPointMapping createMapping(FixedFillingPointMappingRequest request) {
+		log.info("Creating FixedFillingPointMapping");
+		FixedFillingPointMapping mapping = request.getFixedFillingPointMapping();
+		requestServiceRepository.save(mapping);
+		return mapping;
 	}
 }

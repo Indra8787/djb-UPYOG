@@ -227,5 +227,19 @@ public class RequestServieRepositoryImpl implements RequestServiceRepository {
 				new DriverDetailsRowMapper());
 	}
 
+	private static final String INSERT_QUERY =
+			"INSERT INTO upyog_rs_water_tanker_filling_point_fixed_point_mapping " +
+					"(fixed_pt_name, filling_pt_name) VALUES (?, ?)";
+
+
+	@Override
+	public void save(FixedFillingPointMapping mapping) {
+		log.info("Saving FixedFillingPointMapping: {}", mapping);
+		jdbcTemplate.update(INSERT_QUERY,
+				mapping.getFixed_pt_name(),
+				mapping.getFilling_pt_name()
+		);
+	}
+
 
 }

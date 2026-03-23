@@ -1,8 +1,8 @@
 package org.upyog.rs.web.controllers;
 
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.upyog.rs.constant.RequestServiceConstants;
 import org.upyog.rs.service.MobileToiletService;
 import org.upyog.rs.service.WaterTankerService;
@@ -283,4 +282,22 @@ public class RequestServiceController {
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+
+	@PostMapping("/water-tanker/fixed-filling/v1/_mapping")
+	public ResponseEntity<FixedFillingPointMappingResponse> create(
+			@Valid @RequestBody FixedFillingPointMappingRequest request) {
+
+		log.info("Received request to create FixedFillingPointMapping");
+		FixedFillingPointMapping mapping = waterTankerService.createMapping(request);
+
+		FixedFillingPointMappingResponse response = FixedFillingPointMappingResponse.builder()
+				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(
+						request.getRequestInfo(), true))
+				.fixedFillingPointMappings(Collections.singletonList(mapping))
+				.message("Mapping created successfully")
+				.build();
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	}
+
 }

@@ -31,4 +31,6 @@ public interface WaterTankerService {
 
 	List<WaterTankerBookingDetail> getDriverAssignedBookings(CriteriyaSearchDto criteriyaSearchDto);
 	WaterTankerBookingDetail updateBookingLifecycle(WaterTankerBookingRequest request);
+
+	FixedFillingPointMapping createMapping(FixedFillingPointMappingRequest request);
 }
