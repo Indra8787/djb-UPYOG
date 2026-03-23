@@ -3,8 +3,11 @@
   "version": "1.7.2",
   "private": true,
   "homepage": "/digit-ui",
-  "workspaces": [ 
-    
+  "workspaces": [
+    "micro-ui-internals/packages/libraries",
+    "micro-ui-internals/packages/react-components",
+    "micro-ui-internals/packages/modules/core",
+    "micro-ui-internals/packages/modules/common"
   ],
   "engines": {
     "node": ">=18"
