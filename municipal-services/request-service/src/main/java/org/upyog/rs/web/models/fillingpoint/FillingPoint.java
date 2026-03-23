@@ -14,10 +14,10 @@ public class FillingPoint {
     @JsonProperty("tenantId")
     private String tenantId;
 
-    @JsonProperty("fillingPointName")  // ← add this
+    @JsonProperty("fillingPointName")
     private String fillingPointName;
 
-    @JsonProperty("emergencyName")     // ← add this
+    @JsonProperty("emergencyName")
     private String emergencyName;
 
     @JsonProperty("eeName")

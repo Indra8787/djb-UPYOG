@@ -492,6 +492,11 @@ public class EnrichmentService {
 		for (FillingPoint fp : request.getFillingPoints()) {
 			fp.setLastModifiedBy(userId);
 			fp.setLastModifiedTime(now);
+
+			// address audit not needed — just ensure type is set
+			if (fp.getAddress() != null && fp.getAddress().getType() == null) {
+				fp.getAddress().setType("FILLING-POINT");
+			}
 		}
 	}
 }

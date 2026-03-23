@@ -33,7 +33,7 @@ public class FillingPointServiceImpl implements FillingPointService {
     @Autowired
     private RequestServiceConfiguration config;
 
-    // ─── Direct API create ────────────────────────────────────────────────────
+
     @Override
     public List<FillingPoint> create(FillingPointRequest request) {
 
@@ -114,7 +114,6 @@ public class FillingPointServiceImpl implements FillingPointService {
         return list;
     }
 
-    // ─── Update ───────────────────────────────────────────────────────────────
     @Override
     public List<FillingPoint> update(FillingPointRequest request) {
 
