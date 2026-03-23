@@ -258,6 +258,7 @@ const Urls = {
     updatefixedpoint: "/request-service/water-tanker/fixed-point/v1/_update",
     searchfixedpoint: "/request-service/water-tanker/fixed-point/v1/_search",
     createfixedpointschedule: "/request-service/water-tanked/fixed/time/v1/_create",
+    searchfixedpointschedule: "/request-service/water-tanked/fixed/time/v1/_search",
     createfillpoint: "/request-service/wt/filling-point/_create",
     searchfillpoint: "/request-service/wt/filling-point/_search",
   },

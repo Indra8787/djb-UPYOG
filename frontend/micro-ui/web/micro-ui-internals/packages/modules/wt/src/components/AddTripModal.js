@@ -14,13 +14,13 @@ const AddTripModal = ({ t, closeModal, onSubmit, initialValues }) => {
   });
 
   const dayOptions = [
-    { label: t("MON"), value: "Mon" },
-    { label: t("TUE"), value: "Tue" },
-    { label: t("WED"), value: "Wed" },
-    { label: t("THU"), value: "Thu" },
-    { label: t("FRI"), value: "Fri" },
-    { label: t("SAT"), value: "Sat" },
-    { label: t("SUN"), value: "Sun" },
+    { label: t("MONDAY"), value: "MONDAY" },
+    { label: t("TUESDAY"), value: "TUESDAY" },
+    { label: t("WEDNESDAY"), value: "WEDNESDAY" },
+    { label: t("THURSDAY"), value: "THURSDAY" },
+    { label: t("FRIDAY"), value: "FRIDAY" },
+    { label: t("SATURDAY"), value: "SATURDAY" },
+    { label: t("SUNDAY"), value: "SUNDAY" },
   ];
 
   const activeOptions = [
@@ -97,10 +97,6 @@ const AddTripModal = ({ t, closeModal, onSubmit, initialValues }) => {
           }}
         >
           <div className="add-trip-form" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
-            <div className="field-group">
-              <CardLabel style={{ marginBottom: "8px", fontWeight: "500" }}>{t("WT_SCHEDULE_ID")}</CardLabel>
-              <TextInput name="scheduleId" inputRef={register()} />
-            </div>
             <div className="field-group">
               <CardLabel style={{ marginBottom: "8px", fontWeight: "500" }}>{t("WT_FIXED_POINT_CODE")}</CardLabel>
               <TextInput name="fixedPointCode" inputRef={register()} />

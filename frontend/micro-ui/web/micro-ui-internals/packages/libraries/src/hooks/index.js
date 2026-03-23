@@ -354,6 +354,7 @@ import {useUpdateFixedPoint} from "./wt/updateFixedPoint";
 import useFixedPointSearchAPI from "./wt/useFixedPointSearchAPI";
 import useFillPointSearch from "./wt/useFillPointSearch";
 import {useCreateFillPoint} from "./wt/createFillPoint"
+import useFixedPointScheduleSearch from "./wt/useFixedPointScheduleSearch";
 
 const wt={
   useTankerCreateAPI,
@@ -371,6 +372,7 @@ const wt={
   useFixedPointSearchAPI,
   useFillPointSearch,
   useCreateFillPoint,
+  useFixedPointScheduleSearch,
 };
 
 const pgr = {

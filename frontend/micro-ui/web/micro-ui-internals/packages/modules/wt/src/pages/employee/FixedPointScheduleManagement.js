@@ -17,12 +17,15 @@ const FixedPointScheduleManagement = () => {
   const [vehicle, setVehicle] = useState({ label: "DL1LAG7729", value: "DL1LAG7729" });
   const [editingRowIndex, setEditingRowIndex] = useState(null);
 
+  const [filters, setFilters] = useState({});
+
+  const { isLoading, data: scheduleData, refetch: reSearch } = Digit.Hooks.wt.useFixedPointScheduleSearch(tenantId, filters);
+
   const { mutate: createSchedule } = Digit.Hooks.wt.useCreateFixedPointSchedule(tenantId);
 
   const closeToast = () => {
     setToast(null);
   };
-
 
   const handleDelete = (index) => {
     const updatedData = data.filter((_, i) => i !== index);
@@ -36,14 +39,16 @@ const FixedPointScheduleManagement = () => {
     } else {
       // Fallback to CSV if Digit.Download.Excel is not available
       const csvRows = [];
-      const headers = Object.keys(data[0]);
-      csvRows.push(headers.join(","));
-      for (const row of data) {
-        const values = headers.map((header) => {
-          const escaped = ("" + row[header]).replace(/"/g, '\\"');
-          return `"${escaped}"`;
-        });
-        csvRows.push(values.join(","));
+      if (data.length > 0) {
+        const headers = Object.keys(data[0]);
+        csvRows.push(headers.join(","));
+        for (const row of data) {
+          const values = headers.map((header) => {
+            const escaped = ("" + row[header]).replace(/"/g, '\\"');
+            return `"${escaped}"`;
+          });
+          csvRows.push(values.join(","));
+        }
       }
       const blob = new Blob([csvRows.join("\n")], { type: "text/csv" });
       const url = window.URL.createObjectURL(blob);
@@ -57,88 +62,35 @@ const FixedPointScheduleManagement = () => {
     }
   };
 
-  const [data, setData] = useState([
-    {
-      scheduleId: "SASID-0001",
-      fixedPoint: "FP01",
-      day: "Mon",
-      freq: "1",
-      arrToFpl: "06:00",
-      depFromFpl: "06:10",
-      arrAtFixedPoint: "06:40",
-      depAtFixedPoint: "06:55",
-      returnToFpl: "07:20",
-      volume: "3 KL",
-      vehicle: "DL1LAG7729",
-      active: "Y",
-    },
-    {
-      scheduleId: "SASID-0002",
-      fixedPoint: "FP01",
-      day: "Mon",
-      freq: "2",
-      arrToFpl: "07:20",
-      depFromFpl: "07:30",
-      arrAtFixedPoint: "08:00",
-      depAtFixedPoint: "08:15",
-      returnToFpl: "08:40",
-      volume: "3 KL",
-      vehicle: "DL1LAG7729",
-      active: "Y",
-    },
-    {
-      scheduleId: "SASID-0003",
-      fixedPoint: "FP02",
-      day: "Tue",
-      freq: "3",
-      arrToFpl: "08:40",
-      depFromFpl: "08:50",
-      arrAtFixedPoint: "09:20",
-      depAtFixedPoint: "09:35",
-      returnToFpl: "10:00",
-      volume: "3 KL",
-      vehicle: "DL1LAG7730",
-      active: "Y",
-    },
-    {
-      scheduleId: "SASID-0004",
-      fixedPoint: "FP03",
-      day: "Wed",
-      freq: "1",
-      arrToFpl: "09:00",
-      depFromFpl: "09:10",
-      arrAtFixedPoint: "09:40",
-      depAtFixedPoint: "09:55",
-      returnToFpl: "10:20",
-      volume: "5 KL",
-      vehicle: "DL1LAG7731",
-      active: "N",
-    },
-  ]);
+  const [data, setData] = useState([]);
 
-  const [masterData] = useState(data);
+  React.useEffect(() => {
+    if (scheduleData?.fixedPointTimeTableDetails) {
+      const mappedData = scheduleData.fixedPointTimeTableDetails.map((item) => ({
+        scheduleId: item.systemAssignedScheduleId,
+        fixedPoint: item.fixedPointCode,
+        day: item.day,
+        freq: item.tripNo,
+        arrToFpl: item.arrivalTimeToFpl,
+        depFromFpl: item.departureTimeFromFpl,
+        arrAtFixedPoint: item.arrivalTimeDeliveryPoint,
+        depAtFixedPoint: item.departureTimeDeliveryPoint,
+        returnToFpl: item.timeOfArrivingBackFplAfterDelivery,
+        volume: item.volumeWaterTobeDelivery,
+        vehicle: item.vehicleId,
+        active: item.isEnable ? "Y" : "N",
+      }));
+      setData(mappedData);
+    }
+  }, [scheduleData]);
 
   const handleSearch = () => {
-    let filteredData = [...masterData];
-
-    if (year?.value) {
-      // Logic for year filtering if applicable in real data
-    }
-    if (fixedPoint?.value && fixedPoint.value !== "all") {
-      filteredData = filteredData.filter((item) => item.fixedPoint === fixedPoint.value);
-    }
-    if (day?.value && day.value !== "all") {
-      filteredData = filteredData.filter((item) => item.day === day.value);
-    }
-    if (status?.value && status.value !== "all") {
-      const activeStatus = status.value === "Active" ? "Y" : "N";
-      filteredData = filteredData.filter((item) => item.active === activeStatus);
-    }
-    if (vehicle?.value && vehicle.value !== "all") {
-      filteredData = filteredData.filter((item) => item.vehicle === vehicle.value);
-    }
-
-    setData(filteredData);
+    setFilters({
+      fixedPointCode: fixedPoint?.value === "all" ? "" : fixedPoint?.value,
+      day: day?.value === "all" ? "" : day?.value?.toUpperCase(),
+      status: status?.value === "all" ? "" : status?.value,
+      vehicleId: vehicle?.value === "all" ? "" : vehicle?.value,
+    });
   };
 
   const columns = React.useMemo(
@@ -326,6 +278,7 @@ const FixedPointScheduleManagement = () => {
           getCellProps={(cellInfo) => ({})}
           styles={{ minWidth: "1200px" }}
           inboxStyles={{ overflowX: "auto" }}
+          isLoading={isLoading}
         />
         <span>
           <button
@@ -409,16 +362,14 @@ const FixedPointScheduleManagement = () => {
                 setTimeout(closeToast, 5000);
                 setShowModal(false);
                 setEditingRowIndex(null);
-                // In a real app, we might want to re-fetch the data here
+                reSearch();
               },
             });
           }}
-
         />
       )}
       {toast && <Toast error={toast.key === "error"} label={toast.label} onClose={closeToast} />}
     </div>
-
   );
 };
 
