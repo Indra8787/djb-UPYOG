@@ -3,6 +3,8 @@ import { useTranslation } from "react-i18next";
 import { EmployeeModuleCard, CHBIcon } from "@djb25/digit-ui-react-components";
 import { APPLICATION_PATH } from "../utils";
 
+import { useHistory } from "react-router-dom";
+
 /**
  * `WTCitizenCard` component is a module card that displays information related to the Water Tanker (WT) service.
  * It fetches data for the general inbox, displaying the total count and nearing SLA count for water tanker requests.
@@ -11,9 +13,10 @@ import { APPLICATION_PATH } from "../utils";
  */
 const WTCitizenCard = () => {
   const { t } = useTranslation();
+  const history = useHistory();
 
   const [total, setTotal] = useState("-");
-  const tenantId = Digit.ULBService.getCitizenCurrentTenant(true) || Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.ULBService.getCurrentTenantId() || Digit.ULBService.getCitizenCurrentTenant(true);
   const { data, isLoading, isFetching, isSuccess } = Digit.Hooks.useNewInboxGeneral({
     tenantId: tenantId,
     ModuleCode: "WT",
@@ -29,6 +32,10 @@ const WTCitizenCard = () => {
   useEffect(() => {
     if (!isFetching && isSuccess) setTotal(data);
   }, [isFetching]);
+
+  const handleDetailsClick = () => {
+    history.push(`${APPLICATION_PATH}/citizen/wt/inbox`);
+  };
 
   const links = [
     {
@@ -47,10 +54,11 @@ const WTCitizenCard = () => {
       {
         count: total?.totalCount,
         label: t("ES_TITLE_INBOX"),
-        link: `${APPLICATION_PATH}/employee/wt/inbox`,
+        link: `${APPLICATION_PATH}/citizen/wt/inbox`,
       },
     ],
     links,
+    onDetailsClick: handleDetailsClick,
   };
 
   return <EmployeeModuleCard {...propsForModuleCard} />;
