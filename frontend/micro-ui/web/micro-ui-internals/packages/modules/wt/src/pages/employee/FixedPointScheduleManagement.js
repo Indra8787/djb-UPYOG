@@ -17,10 +17,37 @@ const FixedPointScheduleManagement = ({ ...props }) => {
   const [status, setStatus] = useState({ label: "All Status", value: "all" });
   const [vehicle, setVehicle] = useState({ label: "All Vehicles", value: "all" });
   const [editingRowIndex, setEditingRowIndex] = useState(null);
+  const [pageOffset, setPageOffset] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState({ limit: 10, offset: 0 });
 
   const { isLoading, data: scheduleData, refetch: reSearch } = Digit.Hooks.wt.useFixedPointScheduleSearch(tenantId, filters);
+
+  const { data: fixedPointData, isLoading: isFpLoading } = Digit.Hooks.wt.useFixedPointSearchAPI({ tenantId, filters: { offset: 0, limit: 100 } });
+
+  // Also fetch all unique fixed points from the schedules to ensure they are available in the dropdown
+  const { data: allSchedulesData } = Digit.Hooks.wt.useFixedPointScheduleSearch(tenantId, { limit: 1000, offset: 0 });
+
+  const fixedPoints = React.useMemo(() => {
+    const fromFpApi = fixedPointData?.fixedPointTimeTableDetails || fixedPointData?.waterTankerBookingDetail || fixedPointData?.fixedPoints || [];
+    const fromScheduleApi = allSchedulesData?.fixedPointTimeTableDetails || [];
+
+    // Merge both sources
+    const combinedData = [...fromFpApi, ...fromScheduleApi];
+
+    const points = combinedData
+      .map((fp) => ({
+        label: fp.fixedPointCode || fp.name || fp.applicantDetail?.name || fp.bookingId,
+        value: fp.fixedPointCode || fp.bookingId,
+      }))
+      .filter((p) => p.label && p.value);
+
+    // Remove duplicates
+    const uniquePoints = points.filter((v, i, a) => a.findIndex((t) => t.value === v.value) === i);
+
+    return [{ label: t("WT_ALL_FIXED_POINTS") !== "WT_ALL_FIXED_POINTS" ? t("WT_ALL_FIXED_POINTS") : "All Fixed Points", value: "all" }, ...uniquePoints];
+  }, [fixedPointData, allSchedulesData, t]);
 
   const { mutate: createSchedule } = Digit.Hooks.wt.useCreateFixedPointSchedule(tenantId);
 
@@ -80,21 +107,41 @@ const FixedPointScheduleManagement = ({ ...props }) => {
         volume: item.volumeWaterTobeDelivery,
         vehicle: item.vehicleId,
         active: item.isEnable ? "Y" : "N",
+        totalCount: item.totalCount,
       }));
       setData(mappedData);
     }
   }, [scheduleData]);
 
-  const handleSearch = (customFilters = null) => {
-    setFilters(
-      customFilters || {
-        fixedPointCode: fixedPoint?.value === "all" ? "" : fixedPoint?.value,
-        day: day?.value === "all" ? "" : day?.value?.toUpperCase(),
-        status: status?.value === "all" ? "" : status?.value,
-        vehicleId: vehicle?.value === "all" ? "" : vehicle?.value,
-      }
-    );
+  const fetchNextPage = () => {
+    setPageOffset((prevState) => prevState + pageSize);
   };
+
+  const fetchPrevPage = () => {
+    setPageOffset((prevState) => prevState - pageSize);
+  };
+
+  const handlePageSizeChange = (e) => {
+    setPageSize(Number(e.target.value));
+  };
+
+  const handleSearch = (customFilters = null, offset = null) => {
+    const searchFilters = customFilters || {
+      fixedPointCode: fixedPoint?.value === "all" ? "" : fixedPoint?.value,
+      day: day?.value === "all" ? "" : day?.value?.toUpperCase(),
+      status: status?.value === "all" ? "" : status?.value,
+      vehicleId: vehicle?.value === "all" ? "" : vehicle?.value,
+    };
+    const newOffset = offset !== null ? offset : 0;
+    if (offset === null) setPageOffset(0);
+    setFilters({ ...searchFilters, limit: pageSize, offset: newOffset });
+  };
+
+  React.useEffect(() => {
+    if (pageOffset !== 0) {
+      handleSearch(null, pageOffset);
+    }
+  }, [pageOffset, pageSize]);
 
   const columns = React.useMemo(
     () => [
@@ -157,7 +204,7 @@ const FixedPointScheduleManagement = ({ ...props }) => {
       <Card style={{ padding: "20px" }}>
         <div className="finance-mainlayout" style={{ marginBottom: "20px" }}>
           <div className="finance-mainlayout-col1">
-            <CardLabel>{t("WT_FIXED_POINT")}</CardLabel>
+            <CardLabel>{t("WT_EXPORT")}</CardLabel>
             <Dropdown
               option={[
                 { label: t("WT_EXCEL_WEEKWISE"), value: "Weekwise" },
@@ -194,25 +241,14 @@ const FixedPointScheduleManagement = ({ ...props }) => {
           <div className="finance-mainlayout-col1">
             <CardLabel>{t("WT_FIXED_POINT")}</CardLabel>
             <Dropdown
-              option={[
-                { label: "All Fixed Points", value: "all" },
-                { label: "FP01", value: "FP01" },
-                { label: "FP02", value: "FP02" },
-                { label: "FP03", value: "FP03" },
-              ]}
+              option={fixedPoints}
               optionKey="label"
               selected={fixedPoint}
               t={t}
               select={(val) => {
                 setFixedPoint(val);
-                handleSearch({
-                  fixedPointCode: val?.value === "all" ? "" : val?.value,
-                  day: day?.value === "all" ? "" : day?.value?.toUpperCase(),
-                  status: status?.value === "all" ? "" : status?.value,
-                  vehicleId: vehicle?.value === "all" ? "" : vehicle?.value,
-                });
               }}
-              placeholder="All Fixed Points"
+              placeholder={t("WT_ALL_FIXED_POINTS")}
             />
           </div>
           <div className="finance-mainlayout-col1">
@@ -267,49 +303,7 @@ const FixedPointScheduleManagement = ({ ...props }) => {
               placeholder="All Status"
             />
           </div>
-        </div>
-        <div className="finance-mainlayout" style={{ marginBottom: "20px" }}>
-          <div className="finance-mainlayout-col1"></div>
-          {/* <div className="finance-mainlayout-col1">
-            <CardLabel>{t("WT_VEHICLE")}</CardLabel>
-            <Dropdown
-              option={[
-                { label: "All Vehicles", value: "all" },
-                { label: "DL1LAG7729", value: "DL1LAG7729" },
-                { label: "DL1LAG7730", value: "DL1LAG7730" },
-                { label: "DL1LAG7731", value: "DL1LAG7731" },
-              ]}
-              optionKey="label"
-              selected={vehicle}
-              t={t}
-              select={(val) => {
-                setVehicle(val);
-                handleSearch({
-                  fixedPointCode: fixedPoint?.value === "all" ? "" : fixedPoint?.value,
-                  day: day?.value === "all" ? "" : day?.value?.toUpperCase(),
-                  status: status?.value === "all" ? "" : status?.value,
-                  vehicleId: val?.value === "all" ? "" : val?.value,
-                });
-              }}
-              placeholder="All Vehicles"
-            />
-          </div> */}
-          <div className="finance-mainlayout-col1">{/* <DatePicker date={fromDate} onChange={setFromDate} placeholder="dd/mm/yyyy" /> */}</div>
-          <div className="finance-mainlayout-col1">
-            {/* <DatePicker date={toDate} onChange={setToDate} placeholder="dd/mm/yyyy" /> */}
-            <Dropdown
-              option={[
-                { label: t("WT_EXCEL_WEEKWISE"), value: "Weekwise" },
-                { label: t("WT_EXCEL_MONTHWISE"), value: "Monthwise" },
-                { label: t("WT_EXCEL_YEARWISE"), value: "Yearwise" },
-              ]}
-              optionKey="label"
-              placeholder={t("WT_EXPORT")}
-              t={t}
-              select={handleDownload}
-            />
-          </div>
-          <div className="finance-mainlayout-col1">
+          <div className="finance-mainlayout-col1" style={{ alignSelf: "flex-end" }}>
             <SubmitBar label={t("ES_COMMON_SEARCH")} onSubmit={() => handleSearch()} />
           </div>
         </div>
@@ -351,15 +345,15 @@ const FixedPointScheduleManagement = ({ ...props }) => {
             styles={{ minWidth: "1200px" }}
             inboxStyles={{ overflowX: "auto" }}
             isLoading={isLoading}
-            onPageSizeChange={props.onPageSizeChange}
-            currentPage={props.currentPage}
-            onNextPage={props.onNextPage}
-            onPrevPage={props.onPrevPage}
-            pageSizeLimit={props.pageSizeLimit}
+            onPageSizeChange={handlePageSizeChange}
+            currentPage={Math.floor(pageOffset / pageSize)}
+            onNextPage={fetchNextPage}
+            onPrevPage={fetchPrevPage}
+            pageSizeLimit={pageSize}
             onSort={props.onSort}
             disableSort={props.disableSort}
             sortParams={props.sortParams}
-            totalRecords={props.totalRecords}
+            totalRecords={scheduleData?.count || scheduleData?.totalCount || data?.[0]?.totalCount}
           />
         </div>
         <span>
@@ -433,11 +427,11 @@ const FixedPointScheduleManagement = ({ ...props }) => {
               if (dayVal && dayVal !== "WT_SELECT_ALL") daysArr = [dayVal];
             }
 
-            const fixedPointTimeTableDetails = {
+            const fixedPointDetails = {
               tenantId,
               system_assigned_schedule_id: formData.scheduleId,
               fixed_point_code: formData.fixedPointCode,
-              days: daysArr.map((d) => d.toUpperCase()),
+              day: daysArr.map((d) => d.toUpperCase()),
               trip_no: formData.frequencyNo,
               arrival_time_to_fpl: formData.arrivalTimeFpl,
               departure_time_from_fpl: formData.departureTimeFpl,
@@ -452,7 +446,7 @@ const FixedPointScheduleManagement = ({ ...props }) => {
             };
 
             const payload = {
-              fixedPointTimeTableDetails,
+              fixedPointDetails,
             };
 
             createSchedule(payload, {
