@@ -513,14 +513,21 @@ const getIconColorClass = (moduleName, kpis, links) => {
 };
 
 
-const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], className, styles }) => {
+const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], className, styles, onDetailsClick }) => {
   const { t } = useTranslation();
   const history = useHistory();
-  const { isExpandedView, isModuleSidebar } = useContext(ExpandedViewContext) || {};
+  const { isExpandedView, isModuleSidebar = false } = useContext(ExpandedViewContext) || {};
 
   const handleDetailsClick = useCallback(() => {
-    history.push("/digit-ui/employee/module/details", { moduleName, links });
-  }, [history, moduleName, links]);
+    if (onDetailsClick) {
+      onDetailsClick();
+      return;
+    }
+    history.push("/digit-ui/employee/module/details", {
+      moduleName,
+      links,
+    });
+  }, [history, moduleName, links, onDetailsClick]);
 
   if (isExpandedView) {
     return <ModuleLinksView links={links} moduleName={moduleName} />;
@@ -604,14 +611,26 @@ const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], className
           <div className="footer-links">
             <span className="pill-link" style={{ cursor: "pointer" }}>
               {t("View Reports")}
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: "4px" }}>
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ marginLeft: "4px" }}
+              >
                 <line x1="5" y1="12" x2="19" y2="12"></line>
                 <polyline points="12 5 19 12 12 19"></polyline>
               </svg>
             </span>
             <span className="pill-link" style={{ cursor: "pointer" }}>+</span>
           </div>
-          <button className="details-btn" onClick={handleDetailsClick}>{t("Details")}</button>
+          <button className="details-btn" onClick={handleDetailsClick}>
+            {t("Details")}
+          </button>
         </div>
       </div>
     </Fragment>
@@ -687,7 +706,17 @@ const ModuleCardFullWidth = ({ Icon, moduleName, kpis = [], links = [], classNam
         <div className="footer-links">
           <span className="pill-link" style={{ cursor: "pointer" }}>
             {t("View Reports")}
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: "4px" }}>
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{ marginLeft: "4px" }}
+            >
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
@@ -696,7 +725,9 @@ const ModuleCardFullWidth = ({ Icon, moduleName, kpis = [], links = [], classNam
             + {getNewButtonText(moduleName, kpis, links)}
           </span>
         </div>
-        <button className="details-btn" onClick={handleDetailsClick}>{t("Details")}</button>
+        <button className="details-btn" onClick={handleDetailsClick}>
+          {t("Details")}
+        </button>
       </div>
     </div>
   );

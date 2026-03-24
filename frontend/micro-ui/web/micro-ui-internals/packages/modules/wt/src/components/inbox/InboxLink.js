@@ -36,7 +36,7 @@ const InboxLinks = ({ parentRoute, businessService }) => {
     // <Card style={{ paddingRight: 0, marginTop: 0 }} className="employeeCard filter inboxLinks">
     <Card className="filter inboxLinks">
       <div className="complaint-links-container">
-        {GetLogo()}
+        {Digit.UserService.getUser().info.type !== "CITIZEN" && GetLogo()}
         {/* <div style={{ marginLeft: "unset", paddingLeft: "0px" }} className="body"> */}
         <div className="body">
           {links.map(({ link, text, hyperlink = false, roles = [] }, index) => {

@@ -73,11 +73,15 @@ export const WTLinks = ({ matchPath, userType }) => {
 
     {
       link: `${matchPath}/wt`,
-      i18nKey: t("WT_REAQUEST_TANKER"),
+      i18nKey: t("WT_REQUEST_TANKER"),
     },
     {
       link: `${matchPath}/wt/status`,
       i18nKey: t("WT_VIEW_APPLICATIONS"),
+    },
+    {
+      link: `${matchPath}/wt/wt-Vendor`,
+      i18nKey: t("WT_VENDOR_LOGIN"),
     },
   ];
 
@@ -112,6 +116,7 @@ const componentsToRegister = {
   WFCaption,
   WTEmpInbox: Inbox,
   WTCitizenCard: WTCitizenCard,
+  WTCard: WTCard,
   ServiceTypes,
   ToiletRequestDetails,
   TreePruningRequestDetails,

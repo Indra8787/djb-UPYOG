@@ -62,6 +62,40 @@ export const processLinkData = (newData, code, t) => {
         });
     });
   }
+  if (code === "WT" || code === "MT") {
+    const fallbackLinks =
+      code === "WT"
+        ? [
+            { link: "/digit-ui/citizen/wt/request-service", i18nKey: t("WT_REQUEST_TANKER") },
+            { link: "/digit-ui/citizen/wt/status", i18nKey: t("WT_VIEW_APPLICATIONS") },
+          ]
+        : [
+            { link: "/digit-ui/citizen/wt/request-service", i18nKey: t("MT_REQUEST_TANKER") },
+            { link: "/digit-ui/citizen/wt/status", i18nKey: t("MT_VIEW_APPLICATIONS") },
+          ];
+
+    const role = code === "WT" ? "WT_VENDOR" : "MT_VENDOR";
+    const from = code === "WT" ? "/digit-ui/citizen/wt/wt-Vendor" : "/digit-ui/citizen/wt/mt-Vendor";
+    const loginLink = code === "WT" ? "WT_VENDOR_LOGIN" : "MT_VENDOR_LOGIN";
+
+    if (Digit.UserService.hasAccess(role))
+      fallbackLinks.push({
+        link: from,
+        i18nKey: t(loginLink),
+      });
+    else
+      fallbackLinks.push({
+        link: `/digit-ui/citizen/login`,
+        state: { role: role, from },
+        i18nKey: t(loginLink),
+      });
+
+    return {
+      links: fallbackLinks,
+      header: t(Digit.Utils.locale.getTransformedLocale(`ACTION_TEST_${code}`)),
+      iconName: `CITIZEN_${code}_ICON`,
+    };
+  }
 
   return newObj;
 };
@@ -90,6 +124,10 @@ const iconSelector = (code) => {
       return <CHBIcon className="fill-path-primary-main" />;
     case "ADS":
       return <CHBIcon className="fill-path-primary-main" />;
+    case "WT":
+    //   return <CHBIcon className="fill-path-primary-main" />;
+    // case "MT":
+      return <CHBIcon className="fill-path-primary-main" />;
     default:
       return <PTIcon className="fill-path-primary-main" />;
   }
@@ -112,6 +150,17 @@ const CitizenHome = ({ modules, getCitizenMenu, fetchedCitizen, isLoading }) => 
           {moduleArray
             .filter((mod) => mod)
             .map(({ code }, index) => {
+              const isAuthWT = code === "WT" && Digit.Utils.wtAccess();
+              // const isAuthMT = code === "MT" && Digit.Utils.mtAccess();
+              // const isAuthTP = code === "TP" && Digit.Utils.tpAccess();
+              const Card =
+                (code === "WT" && !isAuthWT)
+                  ? null
+                  : Digit.ComponentRegistryService.getComponent(
+                      code === "WT" ? "WTCitizenCard" : code === "MT" ? "MTCitizenCard" : code === "TP" ? "TPCitizenCard" : `${code}Card`
+                    );
+              if (Card) return <Card key={index} />;
+
               let mdmsDataObj;
               if (fetchedCitizen) mdmsDataObj = fetchedCitizen ? processLinkData(getCitizenMenu, code, t) : undefined;
               if (mdmsDataObj?.links?.length > 0) {
