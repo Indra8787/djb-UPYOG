@@ -252,7 +252,7 @@ const RouteLayer = ({ start, end, color = "#2196f3", weight = 6 }) => {
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-            <h4 style={{ margin: 0, color: "#1a237e" }}>Route Information</h4>
+            <h4 style={{ margin: 0, color: "#667eea" }}>Route Information</h4>
             <button
               onClick={() => setShowSteps(false)}
               style={{
@@ -323,7 +323,7 @@ const RouteLayer = ({ start, end, color = "#2196f3", weight = 6 }) => {
                         width: "20px",
                         height: "20px",
                         borderRadius: "50%",
-                        background: "#1a237e",
+                        background: "#667eea",
                         color: "white",
                         display: "flex",
                         alignItems: "center",
@@ -371,12 +371,12 @@ const RouteMarkers = ({ coordinates, totalDistance }) => {
             className: "distance-marker",
             html: `<div style="
               background: white;
-              border: 2px solid #2196f3;
+              border: 2px solid #667eea;
               border-radius: 12px;
               padding: 2px 6px;
               font-size: 10px;
               font-weight: bold;
-              color: #1a237e;
+              color: #667eea;
               white-space: nowrap;
             ">${(i / 1000).toFixed(0)} km</div>`,
             iconSize: [40, 20],
@@ -479,7 +479,7 @@ const DriverCard = ({ driver, isSelected, onClick }) => {
             style={{
               fontWeight: "600",
               fontSize: "16px",
-              color: "#1a237e",
+              color: "#667eea",
               marginBottom: "4px",
               overflow: "hidden",
               textOverflow: "ellipsis",
@@ -546,7 +546,7 @@ const DriverCard = ({ driver, isSelected, onClick }) => {
         >
           <div>
             <div style={{ fontSize: "11px", color: "#666" }}>Est. Arrival</div>
-            <div style={{ fontSize: "14px", fontWeight: "600", color: "#1a237e" }}>{eta} min</div>
+            <div style={{ fontSize: "14px", fontWeight: "600", color: "#667eea" }}>{eta} min</div>
           </div>
           {driver.speed && (
             <div>
@@ -753,7 +753,7 @@ export default function LiveTrackingSystem() {
             top: "10px",
             left: "10px",
             zIndex: 2000,
-            background: "#1a237e",
+            background: "#667eea",
             color: "white",
             border: "none",
             borderRadius: "8px",
@@ -801,7 +801,7 @@ export default function LiveTrackingSystem() {
             <div
               style={{
                 padding: isMobile ? "16px" : "24px",
-                background: "linear-gradient(135deg, #1a237e, #0d47a1)",
+                background: "linear-gradient(135deg, #667eea, #0d47a1)",
                 color: "white",
               }}
             >
@@ -874,7 +874,7 @@ export default function LiveTrackingSystem() {
             >
               <div style={{ textAlign: "center" }}>
                 <div style={{ fontSize: isMobile ? "10px" : "11px", color: "#666" }}>Total</div>
-                <div style={{ fontSize: isMobile ? "16px" : "20px", fontWeight: "bold", color: "#1a237e" }}>{Object.keys(drivers).length}</div>
+                <div style={{ fontSize: isMobile ? "16px" : "20px", fontWeight: "bold", color: "#667eea" }}>{Object.keys(drivers).length}</div>
               </div>
               <div style={{ textAlign: "center" }}>
                 <div style={{ fontSize: isMobile ? "10px" : "11px", color: "#666" }}>Online</div>
@@ -913,7 +913,7 @@ export default function LiveTrackingSystem() {
                   transition: "border-color 0.2s",
                   boxSizing: "border-box",
                 }}
-                onFocus={(e) => (e.target.style.borderColor = "#1a237e")}
+                onFocus={(e) => (e.target.style.borderColor = "#667eea")}
                 onBlur={(e) => (e.target.style.borderColor = "#e0e0e0")}
               />
 
@@ -927,7 +927,7 @@ export default function LiveTrackingSystem() {
                       padding: isMobile ? "6px" : "8px",
                       border: "1px solid #e0e0e0",
                       borderRadius: "6px",
-                      background: filterOnline === filter ? "#1a237e" : "white",
+                      background: filterOnline === filter ? "#667eea" : "white",
                       color: filterOnline === filter ? "white" : "#333",
                       cursor: "pointer",
                       fontSize: isMobile ? "11px" : "12px",
@@ -1040,7 +1040,7 @@ export default function LiveTrackingSystem() {
                     style={{
                       fontWeight: "bold",
                       fontSize: isMobile ? "14px" : "16px",
-                      color: "#1a237e",
+                      color: "#667eea",
                       marginBottom: "8px",
                       borderBottom: "1px solid #eee",
                       paddingBottom: "4px",
@@ -1164,7 +1164,7 @@ export default function LiveTrackingSystem() {
                 }}
                 style={{
                   padding: isMobile ? "10px 12px" : "8px 16px",
-                  background: "#1a237e",
+                  background: "#667eea",
                   color: "white",
                   border: "none",
                   borderRadius: "4px",
@@ -1227,7 +1227,7 @@ export default function LiveTrackingSystem() {
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-              <h4 style={{ margin: 0, color: "#1a237e", fontSize: isMobile ? "14px" : "16px" }}>Selected Driver</h4>
+              <h4 style={{ margin: 0, color: "#667eea", fontSize: isMobile ? "14px" : "16px" }}>Selected Driver</h4>
               <span
                 style={{
                   background: selectedDriver.isOnline ? "#4caf50" : "#f44336",

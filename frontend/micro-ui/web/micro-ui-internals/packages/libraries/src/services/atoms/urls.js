@@ -260,7 +260,10 @@ const Urls = {
     createfixedpointschedule: "/request-service/water-tanked/fixed/time/v1/_create",
     searchfixedpointschedule: "/request-service/water-tanked/fixed/time/v1/_search",
     createfillpoint: "/request-service/wt/filling-point/_create",
+    updatefillpoint: "/request-service/wt/filling-point/_update",
     searchfillpoint: "/request-service/wt/filling-point/_search",
+    mapping: "/request-service/water-tanker/fixed-filling/v1/_mapping",
+    workOrderCreate: "/vendor-management/api/v1/work-order/_create",
   },
   mt: {
     create: "/request-service/mobile-toilet/v1/_create",
