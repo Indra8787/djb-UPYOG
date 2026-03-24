@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { CardLabel, LabelFieldPair } from "@djb25/digit-ui-react-components";
 const HRBanner = ({ t, config }) => {
   return (
     <LabelFieldPair>
-      {config?.texts?.nosideText!==true && <CardLabel className="card-label-smaller" style={{ color: "white" }}>
-        .
-      </CardLabel>}
-      <span className="form-field" style={config?.texts?.nosideText!==true ? { color: "gray" }:{ color: "gray" ,  width:"100%" ,marginTop: "-20px"}}>
+      {config?.texts?.nosideText !== true && (
+        <CardLabel className="card-label-smaller" style={{ color: "white" }}>
+          .
+        </CardLabel>
+      )}
+      <span className="form-field" style={config?.texts?.nosideText !== true ? { color: "gray" } : { color: "gray", width: "100%" }}>
         {t(config?.texts?.header)}
       </span>
     </LabelFieldPair>

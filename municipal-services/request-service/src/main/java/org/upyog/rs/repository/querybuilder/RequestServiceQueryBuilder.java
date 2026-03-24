@@ -4,10 +4,12 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.upyog.rs.config.RequestServiceConfiguration;
 import org.upyog.rs.web.models.mobileToilet.MobileToiletBookingSearchCriteria;
+import org.upyog.rs.web.models.waterTanker.FixedFillingPointMapping;
 import org.upyog.rs.web.models.waterTanker.WaterTankerBookingSearchCriteria;
 
 import lombok.extern.slf4j.Slf4j;

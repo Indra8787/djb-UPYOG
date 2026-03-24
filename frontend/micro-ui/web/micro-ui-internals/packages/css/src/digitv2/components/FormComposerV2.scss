@@ -48,8 +48,8 @@
 }
 
 .employee-card-input {
-  @apply pl-sm outline-none block border w-full h-10 border-input-border border-solid bg-white leading-10 text-form-field text-text-primary;
-  @extend .light-input-border;
+  border: 2px solid #e5e5e7;
+  @apply pl-sm outline-none block w-full h-10 bg-white leading-10 text-form-field text-text-primary;
 }
 .employee-card-input:disabled {
   @apply border-grey-dark text-grey-dark !important;
@@ -61,6 +61,7 @@
   width: fit-content !important;
   display: flex;
   align-items: center;
+  color: #98989c;
   /* background: theme(colors.grey.mid); */
   @extend .light-background;
   border-right: 0;
@@ -74,11 +75,8 @@
 
 .card-textarea,
 .employee-card-textarea {
-  @apply block outline-none mt-md mb-lg border w-full border-input-border border-solid bg-white h-24 text-form-field text-text-primary p-sm;
+  @apply block outline-none border w-full border-input-border border-solid bg-white h-24 text-form-field text-text-primary p-sm;
   @extend .light-input-border;
-}
-.employee-card-textarea {
-  @apply w-full;
 }
 
 .citizen-card-input {
@@ -114,6 +112,6 @@
   width: fit-content;
 }
 
-.digit-form-composer-header{
-   font-size:theme(digitv2.fontSize.heading-l-dt);
+.digit-form-composer-header {
+  font-size: theme(digitv2.fontSize.heading-l-dt);
 }

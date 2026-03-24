@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import cleanup from "../Utils/cleanup";
 // import MultiSelectDropdown from "./Multiselect";
 
-const Jurisdictions = ({ t, config, onSelect, userType, formData }) => {
+const Jurisdictions = ({ t, config, onSelect, userType, formData, style }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [inactiveJurisdictions, setInactiveJurisdictions] = useState([]);
   const { data: data = {}, isLoading } = Digit.Hooks.hrms.useHrmsMDMS(tenantId, "egov-hrms", "HRMSRolesandDesignation") || {};
@@ -110,8 +110,9 @@ const Jurisdictions = ({ t, config, onSelect, userType, formData }) => {
   if (isLoading) {
     return <Loader />;
   }
+  console.log("//////////////////////////////", style);
   return (
-    <div className="juridictions-wrapper">
+    <div className="juridictions-wrapper" style={style}>
       {jurisdictions?.map((jurisdiction, index) => (
         <Jurisdiction
           t={t}
@@ -231,10 +232,7 @@ function Jurisdiction({
           </h2>
         </div>
         {jurisdictions.length > 1 ? (
-          <div
-            onClick={() => handleRemoveUnit(jurisdiction)}
-            style={{ padding: "5px", cursor: "pointer", textAlign: "right" }}
-          >
+          <div onClick={() => handleRemoveUnit(jurisdiction)} style={{ padding: "5px", cursor: "pointer", textAlign: "right" }}>
             <CloseSvg />
           </div>
         ) : null}

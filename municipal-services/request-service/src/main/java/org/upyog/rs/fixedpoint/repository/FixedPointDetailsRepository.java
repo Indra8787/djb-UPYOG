@@ -1,9 +1,18 @@
 package org.upyog.rs.fixedpoint.repository;
 
-import org.upyog.rs.fixedpoint.web.model.FixedPointDetailsRequest;
+import org.egov.common.contract.request.RequestInfo;
+import org.springframework.stereotype.Repository;
+import org.upyog.rs.fixedpoint.web.model.FixedPointDetails;
+import org.upyog.rs.fixedpoint.web.model.FixedPointSearchCriteria;
+import org.upyog.rs.fixedpoint.web.model.FixedPointTimeTableDetail;
 
-public interface FixedPointDetailsRepository {
+import java.util.List;
 
-    public void saveFixedPointDetails(FixedPointDetailsRequest fixedPointDetailsRequest);
+@Repository
+public interface FixedPointDetailsRepository  {
 
+    void saveFixedPointDetails(List<FixedPointDetails> fixedPointDetailsList, RequestInfo requestInfo);
+
+     Integer getCount(FixedPointSearchCriteria criteria);
+     List<FixedPointTimeTableDetail> getDetails(FixedPointSearchCriteria criteria);
 }

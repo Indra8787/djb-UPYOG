@@ -9,6 +9,7 @@ import org.upyog.rs.web.models.AuditDetails;
 @Getter
 @Setter
 @Builder
+
 public class FixedPointDetails {
 
     @JsonProperty("system_assigned_schedule_id")
@@ -41,6 +42,8 @@ public class FixedPointDetails {
     @JsonProperty("vehicle_id")
     private String vehicleId;
 
+    @JsonProperty("tenant_id")
+    private String tenantId;
     @JsonProperty("audit_details")
     private AuditDetails auditDetails;
 

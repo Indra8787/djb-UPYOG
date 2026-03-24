@@ -321,13 +321,13 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
           <CollapsibleCardPage
             title={t("WS_SEARCH_FILTERS_LABEL") || "Search Filters"}
             defaultOpen={true}
-            tabs={[t("WT_SMART_SEARCH"), t("WT_ADVANCED_SEARCH")]} // Define tab names
-            defaultTab={t("WT_SMART_SEARCH")}
+            tabs={[t("WS_SMART_SEARCH"), t("WS_ADVANCED_SEARCH")]} // Define tab names
+            defaultTab={t("WS_SMART_SEARCH")}
           >
             {(activeTab) => (
               <form className="ws-search-form" onSubmit={handleSubmit(onSubmit)}>
                 {/* --- SMART SEARCH --- */}
-                {activeTab === t("WT_SMART_SEARCH") && (
+                {activeTab === t("WS_SMART_SEARCH") && (
                   <div className="wt-search-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
                     <div className="search-field-wrapper">
                       <label>{t("WS_MOBILE_NUMBER")}</label>
@@ -345,13 +345,13 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
                     </div>
 
                     {/* <div className="search-field-wrapper">
-                    <label>{t("WT_APPLICANT_NAME")}</label>
+                    <label>{t("WS_APPLICANT_NAME")}</label>
                     <TextInput name="applicantName" inputRef={register({})} />
                   </div> */}
                   </div>
                 )}
                 {/* --- ADVANCED SEARCH --- */}
-                {activeTab === t("WT_ADVANCED_SEARCH") && (
+                {activeTab === t("WS_ADVANCED_SEARCH") && (
                   <SearchForm className="ws-search-form-wrapper formcomposer-section-grid" onSubmit={onSubmit} handleSubmit={handleSubmit}>
                     <SearchFields {...{ register, control, reset, tenantId, t }} hideSubmitButton={true} />
                   </SearchForm>

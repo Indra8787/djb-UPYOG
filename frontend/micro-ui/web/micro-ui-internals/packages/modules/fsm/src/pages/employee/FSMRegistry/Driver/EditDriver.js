@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FormComposer, Loader, Toast, Header } from "@djb25/digit-ui-react-components";
+import { FormComposer, Loader, Toast } from "@djb25/digit-ui-react-components";
 import { useHistory, useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import DriverConfig from "../../configs/DriverConfig";
@@ -105,7 +105,6 @@ const EditDriver = ({ parentUrl, heading }) => {
       },
     });
   };
-  const isMobile = window.Digit.Utils.browser.isMobile();
 
   if (daoDataLoading || Object.keys(defaultValues).length == 0) {
     return <Loader />;
@@ -113,10 +112,7 @@ const EditDriver = ({ parentUrl, heading }) => {
 
   return (
     <React.Fragment>
-      <div>
-        <Header>{t("ES_FSM_REGISTRY_TITLE_EDIT_DRIVER")}</Header>
-      </div>
-      <div style={!isMobile ? { marginLeft: "-15px" } : {}}>
+      <div className="employee-form-content">
         <FormComposer
           isDisabled={!canSubmit}
           label={t("ES_COMMON_APPLICATION_SUBMIT")}

@@ -18,6 +18,8 @@ import org.upyog.rs.util.UserUtil;
 import org.upyog.rs.web.models.Address;
 import org.upyog.rs.web.models.ApplicantDetail;
 import org.upyog.rs.web.models.AuditDetails;
+import org.upyog.rs.web.models.fillingpoint.FillingPoint;
+import org.upyog.rs.web.models.fillingpoint.FillingPointRequest;
 import org.upyog.rs.web.models.mobileToilet.MobileToiletBookingDetail;
 import org.upyog.rs.web.models.mobileToilet.MobileToiletBookingRequest;
 import org.upyog.rs.web.models.user.AddressV2;
@@ -119,7 +121,7 @@ public class EnrichmentService {
                 .map(Role::getName)
                 .collect(Collectors.joining(", "));
 		waterTankerDetail.setBookingCreatedBy(roles);
-		
+
 		waterTankerDetail.getApplicantDetail().setBookingId(bookingId);
 		waterTankerDetail.getApplicantDetail().setApplicantId(RequestServiceUtil.getRandonUUID());
 		waterTankerDetail.getAddress().setAddressId(RequestServiceUtil.getRandonUUID());
@@ -158,6 +160,7 @@ public class EnrichmentService {
 //		waterTankerFixedPointDetail.setLatitude(address.getLatitude());
 //		waterTankerFixedPointDetail.setLongitude(address.getLongitude());
 
+		waterTankerFixedPointDetail.getApplicantDetail().setType("FIXED-POINT");
 		waterTankerFixedPointDetail.getApplicantDetail().setApplicantId(RequestServiceUtil.getRandonUUID());
 		waterTankerFixedPointDetail.getAddress().setAddressId(RequestServiceUtil.getRandonUUID());
 		waterTankerFixedPointDetail.getApplicantDetail().setAuditDetails(auditDetails);
@@ -165,6 +168,34 @@ public class EnrichmentService {
 
 		log.info("Enriched application request data :" + waterTankerFixedPointDetail);
 
+	}
+
+	public void enrichUpdateFixedPointWaterTankerRequest(
+			WaterTankerFixedPointRequest waterTankerFixedPointRequest) {
+
+		log.info("Enriching update for fixed point water tanker booking id: "
+				+ waterTankerFixedPointRequest.getWaterTankerFixedPointDetail().getBookingId());
+
+		RequestInfo requestInfo = waterTankerFixedPointRequest.getRequestInfo();
+		WaterTankerFixedPointDetail detail = waterTankerFixedPointRequest.getWaterTankerFixedPointDetail();
+
+		// For update: preserve createdBy/createdTime, only refresh lastModified fields
+		AuditDetails existingAudit = detail.getAuditDetails();
+		AuditDetails updatedAudit = AuditDetails.builder()
+				.createdBy(existingAudit != null ? existingAudit.getCreatedBy() : null)
+				.createdTime(existingAudit != null ? existingAudit.getCreatedTime() : null)
+				.lastModifiedBy(requestInfo.getUserInfo().getUuid())
+				.lastModifiedTime(System.currentTimeMillis())
+				.build();
+
+		detail.setAuditDetails(updatedAudit);
+
+		// Propagate audit to child objects if present
+		if (detail.getApplicantDetail() != null) {
+			detail.getApplicantDetail().setAuditDetails(updatedAudit);
+		}
+
+		log.info("Enriched update request: " + detail);
 	}
 
 	/**
@@ -430,7 +461,42 @@ public class EnrichmentService {
 
 	}
 
-	
 
+	public void enrichCreateFillingPointRequest(FillingPointRequest request) {
+		String userId = request.getRequestInfo().getUserInfo().getUuid();
+		Long now = System.currentTimeMillis();
 
+		for (FillingPoint fp : request.getFillingPoints()) {
+			fp.setId(RequestServiceUtil.getRandonUUID());
+			fp.setCreatedBy(userId);
+			fp.setLastModifiedBy(userId);
+			fp.setCreatedTime(now);
+			fp.setLastModifiedTime(now);
+
+			if (fp.getAddress() != null) {
+				fp.getAddress().setAddressId(RequestServiceUtil.getRandonUUID());
+				fp.getAddress().setApplicantId(fp.getId());
+				// ← ADD THIS
+				if (fp.getAddress().getType() == null) {
+					fp.getAddress().setType("FILLING-POINT");
+				}
+			}
+		}
+	}
+
+	public void enrichUpdateFillingPointRequest(FillingPointRequest request) {
+
+		String userId = request.getRequestInfo().getUserInfo().getUuid();
+		Long now = System.currentTimeMillis();
+
+		for (FillingPoint fp : request.getFillingPoints()) {
+			fp.setLastModifiedBy(userId);
+			fp.setLastModifiedTime(now);
+
+			// address audit not needed — just ensure type is set
+			if (fp.getAddress() != null && fp.getAddress().getType() == null) {
+				fp.getAddress().setType("FILLING-POINT");
+			}
+		}
+	}
 }

@@ -83,7 +83,7 @@ const ApplicationDetails = () => {
   const [showTimeline, setShowTimeline] = useState(true);
   let dowloadOptions = [];
   return (
-    <div style={{ padding: user?.type === "CITIZEN" ? "0 15px" : "" }}>
+    <div className="employee-form-content-with-action-bar" style={{ padding: user?.type === "CITIZEN" ? "0 15px" : "" }}>
       {/* <div className={"employee-application-details"} style={{ marginBottom: "15px" }}>
         <Header styles={{ marginLeft: "0px", paddingTop: "10px", fontSize: "32px" }}>{t("BOOKING_DETAILS")}</Header>
         <div style={{ zIndex: "10", display: "flex", flexDirection: "row-reverse", alignItems: "center", marginTop: "-25px" }}>

@@ -6,6 +6,8 @@ import { getI18n } from "react-i18next";
 import { Body, Loader } from "@djb25/digit-ui-react-components";
 import { DigitApp } from "./App";
 import SelectOtp from "./pages/citizen/Login/SelectOtp";
+import SelectMobileNumber from "./pages/citizen/Login/SelectMobileNumber";
+import SelectName from "./pages/citizen/Login/SelectName";
 import AcknowledgementCF from "./components/AcknowledgementCF";
 import CitizenFeedback from "./components/CitizenFeedback";
 
@@ -122,6 +124,8 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
 
 const componentsToRegister = {
   SelectOtp,
+  SelectMobileNumber,
+  SelectName,
   AcknowledgementCF,
   CitizenFeedback,
   EmployeeDashboard,

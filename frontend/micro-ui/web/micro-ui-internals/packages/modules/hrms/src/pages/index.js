@@ -6,7 +6,7 @@ import { Switch, useLocation } from "react-router-dom";
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
   const location = useLocation();
-  const mobileView = window.innerWidth <= 640;
+  // const mobileView = window.innerWidth <= 640;
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
   const inboxInitialState = {
@@ -99,8 +99,10 @@ const EmployeeApp = ({ path, url, userType }) => {
               />
               <PrivateRoute path={`${path}/create`} component={() => <CreateEmployee />} />
               <PrivateRoute path={`${path}/response`} component={(props) => <HRMSResponse {...props} parentRoute={path} />} />
-              <PrivateRoute path={`${path}/details/:tenantId/:id`} component={() => <HRMSDetails />} />
-              <PrivateRoute path={`${path}/edit/:tenantId/:id`} component={() => <EditEmpolyee />} />
+              <div className="employee-form-content-with-action-bar employee-form-content">
+                <PrivateRoute path={`${path}/details/:tenantId/:id`} component={() => <HRMSDetails />} />
+                <PrivateRoute path={`${path}/edit/:tenantId/:id`} component={() => <EditEmpolyee />} />
+              </div>
             </div>
           </div>
         </div>

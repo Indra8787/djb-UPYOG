@@ -14,6 +14,7 @@ import org.upyog.rs.validator.CreateApplicationGroup;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,11 @@ import org.upyog.rs.web.models.Address;
 import org.upyog.rs.web.models.ApplicantDetail;
 import org.upyog.rs.web.models.AuditDetails;
 import org.upyog.rs.web.models.Workflow;
+import org.upyog.rs.web.models.fillingpoint.*;
+import org.upyog.rs.web.models.fillingpoint.FillingPointMetadata;
+
+
+
 
 /**
  * Details for new booking of advertisement
@@ -128,5 +134,7 @@ public class WaterTankerBookingDetail {
 	private Workflow workflow;
 
 	private AuditDetails auditDetails;
+
+	private FillingPointMetadata fillingpointmetadata;
 
 }

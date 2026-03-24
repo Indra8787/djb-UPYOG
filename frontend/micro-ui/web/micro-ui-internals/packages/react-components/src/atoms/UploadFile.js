@@ -9,14 +9,13 @@ const getRandomId = () => {
 
 const getCitizenStyles = (value) => {
   let citizenStyles = {};
-  if (value == "propertyCreate") {
+  if (value === "propertyCreate") {
     citizenStyles = {
       textStyles: {
         whiteSpace: "nowrap",
         width: "100%",
         overflow: "hidden",
         textOverflow: "ellipsis",
-        width: "80%",
       },
       tagStyles: {
         width: "90%",
@@ -47,7 +46,7 @@ const getCitizenStyles = (value) => {
         marginTop: "0px",
       },
     };
-  } else if (value == "IP") {
+  } else if (value === "IP") {
     citizenStyles = {
       textStyles: {
         whiteSpace: "nowrap",
@@ -66,7 +65,7 @@ const getCitizenStyles = (value) => {
       buttonStyles: {},
       tagContainerStyles: {},
     };
-  } else if (value == "OBPS") {
+  } else if (value === "OBPS") {
     citizenStyles = {
       containerStyles: {
         display: "flex",
@@ -86,7 +85,6 @@ const getCitizenStyles = (value) => {
         padding: "5px",
         margin: 0,
         width: "100%",
-        margin: "5px",
       },
       textStyles: {
         wordBreak: "break-word",
@@ -215,7 +213,7 @@ const UploadFile = (props) => {
               </span>
             </div>
             <input
-              className={props.disabled ? "disabled" : "" + "input-mirror-selector-button"}
+              className={props.disabled ? "disabled" : "input-mirror-selector-button"}
               // style={extraStyles ? { ...extraStyles?.inputStyles, ...props?.inputStyles } : { ...props?.inputStyles }}
               ref={inpRef}
               type="file"
@@ -225,21 +223,18 @@ const UploadFile = (props) => {
               accept={props.accept}
               disabled={props.disabled}
               // onChange={(e) => props.onUpload(e)}
-              onChange={(e) => {
-                props.onUpload(e);
+              onChange={async (e) => {
+                await props.onUpload(e);
 
                 setProgress(0);
-
                 let value = 0;
-
                 const interval = setInterval(() => {
                   value += 5;
                   setProgress(value);
-
                   if (value >= 100) {
                     clearInterval(interval);
                   }
-                }, 100);
+                }, 30);
               }}
               onClick={(event) => {
                 const { target = {} } = event || {};

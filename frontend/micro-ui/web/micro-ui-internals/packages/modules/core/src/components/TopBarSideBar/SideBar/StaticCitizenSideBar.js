@@ -19,7 +19,7 @@ import {
   DeathIcon,
   FirenocIcon,
   LoginIcon,
-  CHBIcon
+  CHBIcon,
 } from "@djb25/digit-ui-react-components";
 import { Link, useLocation } from "react-router-dom";
 import SideBarMenu from "../../../config/sidebar-menu";
@@ -105,6 +105,7 @@ const IconsObject = {
   LogoutIcon: <LogoutIcon className="icon" />,
   Phone: <Phone className="icon" />,
   LoginIcon: <LoginIcon className="icon" />,
+  AddressBookIcon: <AddressBookIcon className="icon" />,
 };
 const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
   const { t } = useTranslation();
@@ -148,13 +149,18 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
     // sessionStorage.clear();
     history.push(`${APPLICATION_PATH}/citizen/core/edcr/scrutiny`);
   };
+  const redirectToRegisterPage = () => {
+    history.push(`${APPLICATION_PATH}/citizen/register/mobile-number`);
+  };
   const showProfilePage = () => {
     history.push(`${APPLICATION_PATH}/citizen/user/profile`);
   };
   const tenantId = Digit.ULBService.getCitizenCurrentTenant();
-  const filteredTenantContact = storeData?.tenants.filter((e) => e.code === tenantId)[0]?.contactNumber || storeData?.tenants[0]?.contactNumber;
+  const filteredTenantContact = storeData?.tenants?.filter((e) => e.code === tenantId)[0]?.contactNumber || storeData?.tenants?.[0]?.contactNumber;
 
-  let menuItems = [...SideBarMenu(t, showProfilePage, redirectToLoginPage, redirectToScrutinyPage, isEmployee, storeData, tenantId)];
+  let menuItems = [
+    ...SideBarMenu(t, showProfilePage, redirectToLoginPage, redirectToRegisterPage, redirectToScrutinyPage, isEmployee, storeData, tenantId),
+  ];
 
   menuItems = menuItems.filter((item) => item.element !== "LANGUAGE");
 
@@ -194,7 +200,7 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
 
   if (isFetched && user && user.access_token) {
     profileItem = <Profile info={user?.info} stateName={stateInfo?.name} t={t} />;
-    menuItems = menuItems.filter((item) => item?.id !== "login-btn" && item?.id !== "help-line");
+    menuItems = menuItems.filter((item) => item?.id !== "login-btn" && item?.id !== "register-btn" && item?.id !== "help-line");
     menuItems = [
       ...menuItems,
       {
@@ -256,7 +262,16 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
             aria-label="Toggle sidebar"
             title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               {isCollapsed ? <path d="M13 17l5-5-5-5M6 17l5-5-5-5" /> : <path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" />}
             </svg>
           </button>

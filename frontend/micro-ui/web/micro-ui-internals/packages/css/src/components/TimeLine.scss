@@ -33,7 +33,7 @@
   .circle {
     width: 24px;
     height: 24px;
-    background-color: #B1B4B6;
+    background-color: #b1b4b6;
     border-radius: 50%;
     text-align: center;
   }
@@ -42,38 +42,38 @@
     background-color: theme(colors.primary.main);
     border-color: theme(colors.primary.main);
   }
-} 
+}
 
-.TLComments{
+.TLComments {
   max-width: 360px;
   @apply mb-sm p-sm bg-grey-light;
-  h3{
+  h3 {
     @apply font-bold text-caption-m;
   }
-  p{
+  p {
     @apply text-body-l;
   }
 }
 
-@screen dt{
-  .TLComments{
+@screen dt {
+  .TLComments {
     width: 360px;
-    h3{
+    h3 {
       @apply text-caption-m-dt;
     }
-    p{
+    p {
       @apply text-body-l-dt;
     }
   }
 }
-
 
 .stepper-container {
   width: 240px;
   background: #fff;
   padding: 24px 0;
   border-radius: 8px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  overflow-y: scroll;
 }
 
 .stepper-item {
@@ -135,11 +135,7 @@
   background: #667eea;
 }
 
-
-
-
 @media (max-width: 768px) {
-
   .stepper-container {
     width: 100%;
     display: flex;

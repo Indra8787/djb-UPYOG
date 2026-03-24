@@ -1,11 +1,12 @@
 package org.upyog.rs.web.controllers;
 
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.upyog.rs.constant.RequestServiceConstants;
 import org.upyog.rs.service.MobileToiletService;
 import org.upyog.rs.service.WaterTankerService;
@@ -147,6 +147,33 @@ public class RequestServiceController {
 		return new ResponseEntity<WaterTankerBookingResponse>(response, HttpStatus.OK);
 	}
 
+
+	@PostMapping("/water-tanker/fixed-point/v1/_update")
+	public ResponseEntity<WaterTankerFixedPointResponse> updateWaterTankerFixedPointBooking(
+			@RequestBody WaterTankerFixedPointRequest waterTankerFixedPointRequest) {
+
+		log.info("updateWaterTankerFixedPointRequest : {}", waterTankerFixedPointRequest);
+
+		if (waterTankerFixedPointRequest.getWaterTankerFixedPointDetail() == null
+				|| waterTankerFixedPointRequest.getWaterTankerFixedPointDetail().getBookingId() == null) {
+			throw new CustomException("INVALID_REQUEST", "bookingId is mandatory for update");
+		}
+
+		WaterTankerFixedPointDetail updated =
+				waterTankerService.updateFixedPointWaterTankerBookingRequest(waterTankerFixedPointRequest);
+
+		ResponseInfo info = RequestServiceUtil.createReponseInfo(
+				waterTankerFixedPointRequest.getRequestInfo(),
+				RequestServiceConstants.APPLICATION_UPDATED,
+				StatusEnum.SUCCESSFUL);
+
+		WaterTankerFixedPointResponse response = WaterTankerFixedPointResponse.builder()
+				.waterTankerFixedPointDetail(updated)
+				.responseInfo(info).build();
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
 	@PostMapping("/mobile-toilet/v1/_create")
 	public ResponseEntity<MobileToiletBookingResponse> createMobileToiletBooking(
 			@ApiParam(value = "Details for the mobile Toilet booking time, payment and documents", required = true)
@@ -255,4 +282,22 @@ public class RequestServiceController {
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+
+	@PostMapping("/water-tanker/fixed-filling/v1/_mapping")
+	public ResponseEntity<FixedFillingPointMappingResponse> create(
+			@Valid @RequestBody FixedFillingPointMappingRequest request) {
+
+		log.info("Received request to create FixedFillingPointMapping");
+		FixedFillingPointMapping mapping = waterTankerService.createMapping(request);
+
+		FixedFillingPointMappingResponse response = FixedFillingPointMappingResponse.builder()
+				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(
+						request.getRequestInfo(), true))
+				.fixedFillingPointMappings(Collections.singletonList(mapping))
+				.message("Mapping created successfully")
+				.build();
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	}
+
 }

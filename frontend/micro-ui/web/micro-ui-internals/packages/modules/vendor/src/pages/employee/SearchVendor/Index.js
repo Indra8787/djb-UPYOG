@@ -22,17 +22,18 @@ const SearchVendor = () => {
 
   const { data: dsoData, isLoading: isLoading, isSuccess: isDsoSuccess, error: dsoError, refetch } =
     tab === "VEHICLE"
-      ? Digit.Hooks.fsm.useVehiclesSearch({    //
-        tenantId,
-        filters: {
-          ...paginationParms,
-          registrationNumber: searchParams?.registrationNumber,
-          status: "ACTIVE,DISABLED",
-        },
-        config: { enabled: false },
-      })
+      ? Digit.Hooks.fsm.useVehiclesSearch({
+          //
+          tenantId,
+          filters: {
+            ...paginationParms,
+            registrationNumber: searchParams?.registrationNumber,
+            status: "ACTIVE,DISABLED",
+          },
+          config: { enabled: false },
+        })
       : tab === "DRIVER"
-        ? Digit.Hooks.fsm.useDriverSearch({
+      ? Digit.Hooks.fsm.useDriverSearch({
           tenantId,
           filters: {
             ...paginationParms,
@@ -41,7 +42,7 @@ const SearchVendor = () => {
           },
           config: { enabled: false },
         })
-        : Digit.Hooks.fsm.useVendorSearch({
+      : Digit.Hooks.fsm.useVendorSearch({
           tenantId,
           filters: {
             ...paginationParms,
@@ -50,11 +51,6 @@ const SearchVendor = () => {
           },
           config: { enabled: false },
         });
-
-  //this is for specially vendor search
-  //const { data: dsoData, isLoading, isSuccess: isDsoSuccess, error: dsoError, refetch } =
-  // console.log("ddaaddaatttaaaa", data);
-  // console.log("issucceesssss", isSuccess);
 
   Digit.Hooks.fsm.useVendorSearch({
     tenantId,
@@ -81,9 +77,6 @@ const SearchVendor = () => {
     },
     { enabled: false }
   );
-
-
-
 
   const inboxTotalCount = dsoData?.totalCount || 50;
 
@@ -191,26 +184,26 @@ const SearchVendor = () => {
     setPageSize(Number(e.target.value));
   };
 
-  const handleFilterChange = () => { };
+  const handleFilterChange = () => {};
 
   const searchFields =
     tab === "VEHICLE"
       ? [
-        {
-          label: t("ES_VEHICLE_SEARCH_VEHICLE_NUMBER"),
-          name: "registrationNumber",
-          pattern: `[A-Z]{2}\\s{1}[0-9]{2}\\s{0,1}[A-Z]{1,2}\\s{1}[0-9]{4}`,
-          title: t("ES_FSM_VEHICLE_FORMAT_TIP"),
-        },
-      ]
+          {
+            label: t("ES_VEHICLE_SEARCH_VEHICLE_NUMBER"),
+            name: "registrationNumber",
+            pattern: `[A-Z]{2}\\s{1}[0-9]{2}\\s{0,1}[A-Z]{1,2}\\s{1}[0-9]{4}`,
+            title: t("ES_FSM_VEHICLE_FORMAT_TIP"),
+          },
+        ]
       : tab === "DRIVER"
-        ? [
+      ? [
           {
             label: t("ES_DRIVER_SEARCH_DRIVER_NAME"),
             name: "name",
           },
         ]
-        : [
+      : [
           {
             label: t("ES_VENDOR_SEARCH_VENDOR_NAME"),
             name: "name",
@@ -270,7 +263,8 @@ const SearchVendor = () => {
           selectedTab={tab}
           refetchData={refetchData}
           refetchVendor={refetchVendorData}
-        /></div>
+        />
+      </div>
     </React.Fragment>
   );
 };

@@ -124,6 +124,22 @@ public class WaterTankerServiceImpl implements WaterTankerService {
 	}
 
 	@Override
+	public WaterTankerFixedPointDetail updateFixedPointWaterTankerBookingRequest(
+			WaterTankerFixedPointRequest waterTankerFixedPointRequest) {
+
+		log.info("Update fixed point water tanker booking for user: "
+				+ waterTankerFixedPointRequest.getRequestInfo().getUserInfo().getUuid()
+				+ " for bookingId: "
+				+ waterTankerFixedPointRequest.getWaterTankerFixedPointDetail().getBookingId());
+
+		enrichmentService.enrichUpdateFixedPointWaterTankerRequest(waterTankerFixedPointRequest);
+
+		requestServiceRepository.updateFixedPointWaterTanker(waterTankerFixedPointRequest);
+
+		return waterTankerFixedPointRequest.getWaterTankerFixedPointDetail();
+	}
+
+	@Override
 	public List<WaterTankerBookingDetail> getWaterTankerBookingDetails(RequestInfo requestInfo,
 			WaterTankerBookingSearchCriteria waterTankerBookingSearchCriteria) {
 		/*
@@ -159,11 +175,6 @@ public class WaterTankerServiceImpl implements WaterTankerService {
 		if (CollectionUtils.isEmpty(applications)) {
 			return new ArrayList<>();
 		}
-//		if (config.getIsUserProfileEnabled()) {
-//			for (WaterTankerFixedPointDetail booking : applications) {
-//				userService.enrichBookingWithUserDetails(booking, waterTankerFixedPointBookingSearchCriteria);
-//			}
-//		}
 		return applications;
 	}
 
@@ -355,5 +366,12 @@ public class WaterTankerServiceImpl implements WaterTankerService {
 		requestServiceRepository.updateWaterTankerBooking(waterTankerRequest);
 
 		return waterTankerRequest.getWaterTankerBookingDetail();
+	}
+
+	public FixedFillingPointMapping createMapping(FixedFillingPointMappingRequest request) {
+		log.info("Creating FixedFillingPointMapping");
+		FixedFillingPointMapping mapping = request.getFixedFillingPointMapping();
+		requestServiceRepository.save(mapping);
+		return mapping;
 	}
 }

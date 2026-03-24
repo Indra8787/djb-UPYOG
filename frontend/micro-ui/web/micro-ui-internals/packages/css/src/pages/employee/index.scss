@@ -97,6 +97,7 @@
 .employee-main-application-details {
   width: 100%;
   overflow-y: scroll;
+  margin-bottom: 62px;
 }
 
 .employee-form-content {
@@ -106,6 +107,10 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.employee-form-content-with-action-bar {
+  margin-bottom: 62px;
 }
 
 .citizen {
@@ -1042,7 +1047,7 @@
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
-  z-index: 100000;
+  z-index: 9999999;
   display: flex;
   justify-content: center;
   align-items: center;

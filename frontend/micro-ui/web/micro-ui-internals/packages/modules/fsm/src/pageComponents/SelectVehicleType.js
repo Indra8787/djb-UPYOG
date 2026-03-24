@@ -57,9 +57,9 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData, setValue }
   };
 
   return (
-    <div>
+    <React.Fragment>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">
+        <CardLabel>
           {t("ES_FSM_REGISTRY_VEHICLE_MODEL")}
           {config.isMandatory ? " * " : null}
         </CardLabel>
@@ -75,7 +75,7 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData, setValue }
         />
       </LabelFieldPair>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">
+        <CardLabel>
           {t("ES_FSM_REGISTRY_VEHICLE_TYPE")}
           {config.isMandatory ? " * " : null}
         </CardLabel>
@@ -90,13 +90,13 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData, setValue }
         />
       </LabelFieldPair>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">
+        <CardLabel>
           {t("ES_FSM_REGISTRY_VEHICLE_CAPACITY")}
           {config.isMandatory ? " * " : null}
         </CardLabel>
-        <TextInput className="" textInputStyle={{ width: "50%" }} value={selectedCapacity} onChange={() => {}} disable={true} />
+        <TextInput className="" value={selectedCapacity} onChange={() => {}} disable={true} />
       </LabelFieldPair>
-    </div>
+    </React.Fragment>
   );
 };
 

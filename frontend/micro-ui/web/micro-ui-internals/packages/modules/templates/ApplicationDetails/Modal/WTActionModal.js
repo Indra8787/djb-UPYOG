@@ -69,7 +69,7 @@ const ActionModal = ({
 
   const { data: dsoData, isLoading: isLoading, isSuccess: isDsoSuccess, error: dsoError, refetch } = Digit.Hooks.fsm.useVendorSearch({
     tenantId,
-    config: { enabled: action?.state === "PENDING_FOR_VEHICLE_DRIVER_ASSIGN" },
+    config: { enabled: action?.state === "PENDING_FOR_VEHICLE_DRIVER_ASSIGN" || action?.action === "ASSIGN_VEHICLE_DRIVER" },
   });
 
   /* This is used to filter vendors from `dsoData` that have an additional 
@@ -97,22 +97,25 @@ const ActionModal = ({
 
   const { data: vehicleData, isSuccess } = Digit.Hooks.fsm.useVehiclesSearch({
     tenantId,
-    config: { enabled: action?.state === "DELIVERY_PENDING" },
+    config: { enabled: action?.state === "DELIVERY_PENDING" || action?.action === "ASSIGN_VEHICLE_DRIVER" },
   });
 
   /* This is used to extract vehicle details from `vehicleData` and store them in the `vehicleDescription` array. 
      Each entry contains the vehicle's registration number and tanker capacity.  */
 
   let vehicleDescription = [];
-  vehicleData?.vehicle?.map((item) => {
-    vehicleDescription.push({
-      code: item?.registrationNumber,
-      name: item?.registrationNumber,
-      i18nKey: item?.registrationNumber,
-      tankerCapacity: item?.tankCapacity,
-      vehicleId: item?.id,
+  vehicleData?.vehicle
+    ?.filter((item) => item?.driverData?.id || item?.driver?.id)
+    ?.map((item) => {
+      vehicleDescription.push({
+        code: item?.registrationNumber,
+        name: item?.registrationNumber,
+        i18nKey: item?.registrationNumber,
+        tankerCapacity: item?.tankCapacity,
+        vehicleId: item?.id,
+        driverId: item?.driverData?.ownerId || item?.driver?.ownerId,
+      });
     });
-  });
 
   const [config, setConfig] = useState({});
   const [defaultValues, setDefaultValues] = useState({});
@@ -170,6 +173,11 @@ const ActionModal = ({
     if (action?.state === "DELIVERY_PENDING") {
       applicationData.vehicleId = selectVehicle?.vehicleId;
     }
+
+    if (action?.action === "ASSIGN_VEHICLE_DRIVER") {
+      applicationData.vehicleId = selectVehicle?.vehicleId;
+      applicationData.driverId = selectVehicle?.driverId;
+    }
     /* * Constructs the request payload based on the business service type.
      * If `businessService` is "watertanker", wraps `applicationData` in `waterTankerBookingDetail`.
      * Otherwise, wraps it in `mobileToiletBookingDetail`.
@@ -194,7 +202,7 @@ const ActionModal = ({
           selectedVendor,
           setSelectedVendor,
           vendorDescription: dsoData ? vendorDescription : undefined,
-          vehicleDescription: vehicleData ? vehicleDescription : undefined,
+          vehicleDescription: (vehicleData || action?.action === "ASSIGN_VEHICLE_DRIVER") ? vehicleDescription : undefined,
           selectVehicle,
           setSelectVehicle,
         })

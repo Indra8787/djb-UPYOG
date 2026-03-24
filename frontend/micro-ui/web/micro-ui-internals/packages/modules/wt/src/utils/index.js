@@ -168,3 +168,84 @@ export const treePruningPayload = (data) => {
   };
   return formdata;
 };
+
+export const fillingPointPayload = (data) => {
+  return {
+    RequestInfo: {
+      userInfo: {
+        uuid: Digit.UserService.getUser()?.info?.uuid || "user-123",
+      },
+    },
+    fillingPoints: [
+      {
+        id: data?.id,
+        bookingId: data?.bookingId,
+        tenantId: data?.tenantId,
+        fillingPointName: data?.owner?.fillingPointName,
+        emergencyName: data?.owner?.emergencyName,
+        eeName: data?.owner?.eeName,
+        eeEmail: data?.owner?.eeEmail,
+        eeMobile: data?.owner?.eeMobile,
+        aeName: data?.owner?.aeName,
+        aeEmail: data?.owner?.aeEmail,
+        aeMobile: data?.owner?.aeMobile,
+        jeName: data?.owner?.jeName,
+        jeEmail: data?.owner?.jeEmail,
+        jeMobile: data?.owner?.jeMobile,
+        address: {
+          houseNo: data?.address?.houseNo,
+          streetName: data?.address?.streetName,
+          addressLine1: data?.address?.addressLine1,
+          addressLine2: data?.address?.addressLine2,
+          landmark: data?.address?.landmark,
+          city: data?.address?.city?.name || data?.address?.city || "",
+          cityCode: data?.address?.cityCode || data?.address?.city?.code || "",
+          locality: data?.address?.localityCode || data?.address?.locality?.code || "",
+          localityCode: data?.address?.localityCode || data?.address?.locality?.code || "",
+          pincode: data?.address?.pincode,
+          latitude: data?.address?.latitude,
+          longitude: data?.address?.longitude,
+          type: "FILLING-POINT",
+        },
+      },
+    ],
+  };
+};
+
+export const fixedPointPayload = (data) => {
+  return {
+    waterTankerBookingDetail: {
+      bookingId: data?.bookingId || "",
+      bookingNo: data?.bookingNo || null,
+      tenantId: data?.tenantId,
+      mobileNumber: data?.owner?.mobileNumber || "",
+      applicantDetail: {
+        applicantId: data?.owner?.applicantId || null,
+        bookingId: data?.bookingId || "",
+        name: data?.owner?.name || data?.owner?.applicantName || "",
+        mobileNumber: data?.owner?.mobileNumber || "",
+        alternateNumber: data?.owner?.alternateNumber || "",
+        emailId: data?.owner?.emailId || "",
+        type: "FIXED-POINT",
+      },
+
+      address: {
+        addressId: data?.address?.addressId || null,
+        applicantId: data?.address?.applicantId || null,
+        houseNo: data?.address?.houseNo || "",
+        streetName: data?.address?.streetName || "",
+        addressLine1: data?.address?.addressLine1 || "",
+        addressLine2: data?.address?.addressLine2 || "",
+        landmark: data?.address?.landmark || "",
+        city: data?.address?.city?.name || data?.address?.city || "",
+        cityCode: data?.address?.cityCode || data?.address?.city?.code || "DJB",
+        locality: data?.address?.locality?.label || data?.address?.locality?.name || data?.address?.locality || "",
+        localityCode: data?.address?.locality?.code || data?.address?.localityCode || "",
+        latitude: data?.address?.latitude || "",
+        longitude: data?.address?.longitude || "",
+        pincode: data?.address?.pincode || "",
+        type: "FIXED-POINT",
+      },
+    },
+  };
+};

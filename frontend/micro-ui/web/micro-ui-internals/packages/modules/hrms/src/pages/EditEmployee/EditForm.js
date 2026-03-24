@@ -207,6 +207,7 @@ const EditForm = ({ tenantId, data }) => {
   }
 
   const config = mdmsData?.config ? mdmsData.config : newConfig;
+
   return (
     <React.Fragment>
       <FormComposer

@@ -115,7 +115,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
   if (window.location.href.includes("/ws/")) clns = ":";
 
   return (
-    <Card>
+    <Card className="no-shadow">
       {(window.location.href.includes("/tl/")
         ? !(formData?.tradedetils?.[0]?.structureType?.code === "MOVABLE") && (isEmpNewApplication || isEmpRenewLicense)
         : true) && (

@@ -339,7 +339,6 @@ const ApplicationDetails = () => {
       const warningCountDetails = JSON.parse(warningCount);
       if (warningCountDetails == 0) {
         const filters = { applicationNumber };
-        console.log(filters, "filters");
         const response = await Digit.WSService.search({
           tenantId: applicationDetails?.tenantId,
           filters: { ...filters },
@@ -447,7 +446,7 @@ const ApplicationDetails = () => {
 
   return (
     <React.Fragment>
-      <div style={{ padding: "0px" }} className={"employee-main-application-details"}>
+      <div className={"employee-main-application-details"}>
         <ApplicationDetailsTemplate
           applicationDetails={applicationDetails}
           isLoading={isLoading || isBillingServiceLoading || isCommonmastersLoading || isServicesMasterLoading}

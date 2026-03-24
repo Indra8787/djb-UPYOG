@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown, Loader } from "@djb25/digit-ui-react-components";
+import { CardLabel, Dropdown, Loader } from "@djb25/digit-ui-react-components";
 
 const SelectServiceType = ({ config, onSelect, t, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -55,6 +55,7 @@ const SelectServiceType = ({ config, onSelect, t, userType, formData }) => {
   if (userType === "employee") {
     return (
       <div>
+        <CardLabel>{config.label}</CardLabel>
         <Dropdown
           className="payment-form-text-input-correction"
           isMandatory={config.isMandatory}

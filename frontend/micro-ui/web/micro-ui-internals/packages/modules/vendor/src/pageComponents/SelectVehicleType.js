@@ -8,10 +8,6 @@ const SelectVehicleType = ({ t, config, onSelect, formData, setValue }) => {
   // Fetch Vehicle Data
   const { data: vehicleData, isLoading: vehicleLoading } = Digit.Hooks.wt.useWTMDMS(stateId, "Vehicle", "VehicleMakeModel");
 
-
-  console.log("vehicleData", vehicleData);
-
-
   // const { data: vehicleData, isLoading: vehicleLoading } = Digit.Hooks.useCustomMDMS(tenantId, "tenant", "VehicleMakeModel");
 
   // Fetch Service Type Data
@@ -34,31 +30,17 @@ const SelectVehicleType = ({ t, config, onSelect, formData, setValue }) => {
 
     const filters = {};
 
-    serviceTypeData.forEach(service => {
-
+    serviceTypeData.forEach((service) => {
       if (service.code === "WT") {
-
         filters[service.code] = vehicleData
-          .filter(vehicle =>
-            ["MAHINDRA", "TATA", "TRACTOR", "TAFE", "SONALIKA"].includes(vehicle.code)
-          )
-          .map(vehicle => vehicle.code);
-
+          .filter((vehicle) => ["MAHINDRA", "TATA", "TRACTOR", "TAFE", "SONALIKA"].includes(vehicle.code))
+          .map((vehicle) => vehicle.code);
+      } else if (service.code === "CND") {
+        filters[service.code] = vehicleData.filter((vehicle) => ["MAHINDRA", "TATA"].includes(vehicle.code)).map((vehicle) => vehicle.code);
       }
-      else if (service.code === "CND") {
-
-        filters[service.code] = vehicleData
-          .filter(vehicle =>
-            ["MAHINDRA", "TATA"].includes(vehicle.code)
-          )
-          .map(vehicle => vehicle.code);
-
-      }
-
     });
 
     return filters;
-
   }, [serviceTypeData, vehicleData]);
 
   // Update service type filters
@@ -72,9 +54,7 @@ const SelectVehicleType = ({ t, config, onSelect, formData, setValue }) => {
 
     const allowedModels = serviceTypeFilters[selectedServiceType];
 
-    const filteredModals = allowedModels
-      ? vehicleData.filter(vehicle => allowedModels.includes(vehicle.code))
-      : vehicleData;
+    const filteredModals = allowedModels ? vehicleData.filter((vehicle) => allowedModels.includes(vehicle.code)) : vehicleData;
 
     setModals(filteredModals);
     setSelectedModal({});
@@ -87,7 +67,7 @@ const SelectVehicleType = ({ t, config, onSelect, formData, setValue }) => {
   useEffect(() => {
     if (!vehicleData || !selectedModal?.code) return;
 
-    const filteredTypes = vehicleData.filter(vehicle => vehicle.make === selectedModal.code);
+    const filteredTypes = vehicleData.filter((vehicle) => vehicle.make === selectedModal.code);
     setTypes(filteredTypes);
     setSelectedType({});
     setSelectedCapacity("");
@@ -103,7 +83,7 @@ const SelectVehicleType = ({ t, config, onSelect, formData, setValue }) => {
   // Handler for selecting a Model
   const selectModal = (modal) => {
     setSelectedModal(modal);
-    onSelect(config.key, { ...formData?.[config.key] || {}, modal: modal, type: "" });
+    onSelect(config.key, { ...(formData?.[config.key] || {}), modal: modal, type: "" });
   };
 
   // Handler for selecting a Vehicle Type
@@ -122,47 +102,22 @@ const SelectVehicleType = ({ t, config, onSelect, formData, setValue }) => {
   }
 
   return (
-    <div>
+    <React.Fragment>
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">
-          {t("ES_FSM_REGISTRY_VEHICLE_MODEL")}
-        </CardLabel>
-        <Dropdown
-          className="form-field"
-          selected={selectedModal}
-          option={modals}
-          select={selectModal}
-          optionKey="name"
-          t={t}
-        />
+        <CardLabel className="card-label-smaller">{t("ES_FSM_REGISTRY_VEHICLE_MODEL")}</CardLabel>
+        <Dropdown className="form-field" selected={selectedModal} option={modals} select={selectModal} optionKey="name" t={t} />
       </LabelFieldPair>
       {/* Vehicle Type Dropdown (Filtered based on Model) */}
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">
-          {t("ES_FSM_REGISTRY_VEHICLE_TYPE")}
-        </CardLabel>
-        <Dropdown
-          className="form-field"
-          selected={selectedType}
-          option={types}
-          select={selectType}
-          optionKey="name"
-          t={t}
-        />
+        <CardLabel className="card-label-smaller">{t("ES_FSM_REGISTRY_VEHICLE_TYPE")}</CardLabel>
+        <Dropdown className="form-field" selected={selectedType} option={types} select={selectType} optionKey="name" t={t} />
       </LabelFieldPair>
       {/* Vehicle Capacity Input (Set Automatically Based on Type) */}
       <LabelFieldPair>
-        <CardLabel className="card-label-smaller">
-          {t("ES_FSM_REGISTRY_VEHICLE_CAPACITY")}
-        </CardLabel>
-        <TextInput
-          className=""
-          textInputStyle={{ width: "50%" }}
-          value={selectedCapacity}
-          disable={true}
-        />
+        <CardLabel className="card-label-smaller">{t("ES_FSM_REGISTRY_VEHICLE_CAPACITY")}</CardLabel>
+        <TextInput className="" textInputStyle={{ width: "50%" }} value={selectedCapacity} disable={true} />
       </LabelFieldPair>
-    </div>
+    </React.Fragment>
   );
 };
 

@@ -1,12 +1,12 @@
 import React from 'react'
 
-export default function Stepper({
+const Stepper = ({
     steps = [],
     currentStep = 0,
     onStepClick = () => { },
     t = (v) => v,
     allowNavigation = true,
-}) {
+}) => {
     return (
         <div className="stepper-container">
             {steps.map((stepObj, index) => {
@@ -54,3 +54,5 @@ export default function Stepper({
         </div>
     )
 }
+
+export default Stepper;

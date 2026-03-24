@@ -1,7 +1,17 @@
 import React from "react";
-import { Card, CardHeader, SubmitBar, CitizenInfoLabel, CardText, Loader, CardSubHeader, PrintBtnCommon, ActionBar } from "@djb25/digit-ui-react-components";
+import {
+  Card,
+  CardHeader,
+  SubmitBar,
+  CitizenInfoLabel,
+  CardText,
+  Loader,
+  CardSubHeader,
+  PrintBtnCommon,
+  ActionBar,
+} from "@djb25/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { useHistory,useRouteMatch } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
 
 const WSDocsRequired = ({ onSelect, userType, onSkip, config }) => {
   const history = useHistory();
@@ -65,7 +75,7 @@ const WSDocsRequired = ({ onSelect, userType, onSkip, config }) => {
   }
 
   return (
-    <div>
+    <div className="employee-form-content-with-action-bar">
       <Card>
         {wsDocsLoading ? (
           <Loader />
@@ -107,7 +117,8 @@ const WSDocsRequired = ({ onSelect, userType, onSkip, config }) => {
               }}
               style={{ margin: "10px 10px 0px 0px" }}
               disabled={wsDocsLoading ? true : false}
-            />}
+            />
+          }
         </ActionBar>
       </Card>
     </div>

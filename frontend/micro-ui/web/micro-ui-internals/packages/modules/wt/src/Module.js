@@ -29,6 +29,13 @@ import TPAcknowledgement from "./pages/citizen/Create/TPAcknowledgement";
 import MTApplicationDetails from "./pages/citizen/MTApplicationDetails";
 import TPApplicationDetails from "./pages/citizen/TPApplicationDetails";
 import MTCitizenCard from "./components/MTCitizenCard";
+import FixedPointScheduleManagement from "./pages/employee/FixedPointScheduleManagement";
+import LiveTrackingSystem from "./components/LiveTrackingSystem";
+import AddFillingPointAddress from "./components/AddFillingPointAddress";
+import AddFixPointAddress from "./components/AddFixPointAddress";
+import AddFillingPointMetaData from "./components/AddFillingPointMetaData";
+import WTSearchPointAddress from "./components/SearchFillingPointAddress";
+import VendorAssign from "./components/VendorAssign";
 
 // Parent component of module
 export const WTModule = ({ stateCode, userType, tenants }) => {
@@ -66,11 +73,15 @@ export const WTLinks = ({ matchPath, userType }) => {
 
     {
       link: `${matchPath}/wt`,
-      i18nKey: t("WT_REAQUEST_TANKER"),
+      i18nKey: t("WT_REQUEST_TANKER"),
     },
     {
       link: `${matchPath}/wt/status`,
       i18nKey: t("WT_VIEW_APPLICATIONS"),
+    },
+    {
+      link: `${matchPath}/wt/wt-Vendor`,
+      i18nKey: t("WT_VENDOR_LOGIN"),
     },
   ];
 
@@ -105,12 +116,20 @@ const componentsToRegister = {
   WFCaption,
   WTEmpInbox: Inbox,
   WTCitizenCard: WTCitizenCard,
+  WTCard: WTCard,
   ServiceTypes,
   ToiletRequestDetails,
   TreePruningRequestDetails,
   MTAcknowledgement,
   TPAcknowledgement,
   MTCitizenCard: MTCitizenCard,
+  FixedPointScheduleManagement,
+  LiveTrackingSystem,
+  AddFillingPointAddress,
+  AddFixPointAddress,
+  AddFillingPointMetaData,
+  WTSearchPointAddress,
+  VendorAssign,
 };
 
 export const initWTComponents = () => {

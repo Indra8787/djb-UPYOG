@@ -71,10 +71,12 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
 
   const sidebarContent = renderSidebar();
 
+  const appWrapperClass = `app-wrapper${sidebarContent ? " emtb-page-push" : ""}`;
+
   return (
     <div style={{ display: "flex", width: "100vw", height: "100%" }}>
       {sidebarContent}
-      <div className="app-wrapper">
+      <div className={appWrapperClass}>
         <Switch>
           {appRoutes}
           <Route path={`${path}/login`}>

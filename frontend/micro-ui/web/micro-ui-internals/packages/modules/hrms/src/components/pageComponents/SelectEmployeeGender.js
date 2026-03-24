@@ -1,5 +1,5 @@
 import React from "react";
-import { LabelFieldPair, CardLabel, TextInput, CardLabelError, RadioButtons, Tooltip } from "@djb25/digit-ui-react-components";
+import { LabelFieldPair, CardLabel, CardLabelError, RadioButtons, Tooltip } from "@djb25/digit-ui-react-components";
 // import { useLocation } from "react-router-dom";
 
 const SelectEmployeeGender = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
@@ -18,17 +18,17 @@ const SelectEmployeeGender = ({ t, config, onSelect, formData = {}, userType, re
     },
   ];
 
-  const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
 
   const { data: Menu } = Digit.Hooks.hrms.useHRMSGenderMDMS(stateId, "common-masters", "GenderType");
-
-  let HRMenu = [];
-
-  Menu &&
-    Menu.map((comGender) => {
-      HRMenu.push({ name: `COMMON_GENDER_${comGender.code}`, code: `${comGender.code}` })
-    });
+  const HRMenu = React.useMemo(() => {
+    return Menu
+      ? Menu.map((comGender) => ({
+          name: `COMMON_GENDER_${comGender.code}`,
+          code: comGender.code,
+        }))
+      : [];
+  }, [Menu]);
 
   function setValue(value, input) {
     onSelect(config.key, { ...formData[config.key], [input]: value });
@@ -41,28 +41,11 @@ const SelectEmployeeGender = ({ t, config, onSelect, formData = {}, userType, re
           {errors[input.name] && <CardLabelError>{t(input.error)}</CardLabelError>}
           <LabelFieldPair>
             <CardLabel className="card-label-smaller">
-              <Tooltip
-                label={t(input.label)}
-                isMandatory={input.isMandatory}
-              />
+              <Tooltip label={t(input.label)} isMandatory={input.isMandatory} />
             </CardLabel>
             <div className="field">
               <RadioButtons
                 style={{ display: "flex", gap: "24px" }}
-                /*options={[
-                  {
-                    code: "MALE",
-                    name: "COMMON_GENDER_MALE",
-                  },
-                  {
-                    code: "FEMALE",
-                    name: "COMMON_GENDER_FEMALE",
-                  },
-                  {
-                    code: "TRANSGENDER",
-                    name: "COMMON_GENDER_TRANSGENDER",
-                  },
-                ]}*/
                 options={HRMenu}
                 key={input.name}
                 optionsKey="name"
@@ -82,3 +65,18 @@ const SelectEmployeeGender = ({ t, config, onSelect, formData = {}, userType, re
 };
 
 export default SelectEmployeeGender;
+
+/*options={[
+                  {
+                    code: "MALE",
+                    name: "COMMON_GENDER_MALE",
+                  },
+                  {
+                    code: "FEMALE",
+                    name: "COMMON_GENDER_FEMALE",
+                  },
+                  {
+                    code: "TRANSGENDER",
+                    name: "COMMON_GENDER_TRANSGENDER",
+                  },
+                ]}*/

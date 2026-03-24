@@ -1,4 +1,3 @@
-import { Header, CitizenHomeCard, PTIcon } from "@djb25/digit-ui-react-components";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
@@ -29,12 +28,6 @@ import VehicleDetails from "./pages/employee/RegisterVehicle/VehicleDetails";
 import SelectVehicleType from "./pageComponents/SelectVehicleType";
 import BankDetailsComponent from "./components/BankDetailsComponent";
 
-
-
-
-
-
-
 const componentsToRegister = {
   VendorDetails,
   //VENDOREMPCreate,
@@ -59,9 +52,6 @@ const componentsToRegister = {
   DriverDetails,
   VehicleDetails,
 };
-
-
-
 
 const addComponentsToRegistry = () => {
   Object.entries(componentsToRegister).forEach(([key, value]) => {
@@ -106,9 +96,6 @@ export const VENDORLinks = ({ matchPath, userType }) => {
 
   return null;
 };
-
-
-
 
 export const VENDORComponents = {
   VENDORCard,

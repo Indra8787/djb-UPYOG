@@ -1,16 +1,21 @@
 package org.upyog.rs.fixedpoint.web.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.upyog.rs.web.models.ResponseInfo;
-
+import lombok.*;
 import javax.validation.Valid;
+import java.util.List;
+import org.egov.common.contract.response.ResponseInfo;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class FixedPointDetailsResponse {
 
     @JsonProperty("responseInfo")
     private ResponseInfo responseInfo;
 
-    @JsonProperty("fixedPointDetails")
+    @JsonProperty("fixedPointDetailsList")
     @Valid
-    private FixedPointDetails fixedPointDetails;
+    private List<FixedPointDetails> fixedPointDetailsList;
 }

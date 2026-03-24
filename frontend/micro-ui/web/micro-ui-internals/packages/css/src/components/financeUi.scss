@@ -920,7 +920,8 @@
   font-size: 14px;
   color: #4b5563;
   font-weight: 500;
-  margin-top: 8px;
+  word-break: break-word;
+  white-space: normal;
 }
 
 .step-label.active-text {
@@ -940,7 +941,6 @@
   background: #fafafa;
   border-radius: 6px;
 }
-
 
 .additional-grid {
   display: grid;

@@ -6,21 +6,22 @@ import {
   CardSubHeader,
   RadioButtons,
   TextArea,
-  TextInput
+  TextInput,
 } from "@djb25/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { stringReplaceAll } from "../utils";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import * as func from "../utils/"
+import * as func from "../utils/";
 
-const createDisConnectionAppDetails = () => ([{
-  consumerNumber: "",
-  disConnectionType: "",
-  disConnectionProposeDate: "",
-  disConnectionReason: "",
-}]);
-
+const createDisConnectionAppDetails = () => [
+  {
+    consumerNumber: "",
+    disConnectionType: "",
+    disConnectionProposeDate: "",
+    disConnectionReason: "",
+  },
+];
 
 const WSDisconnectionAppDetails = ({ config, onSelect, userType, formData, setError, formState, clearErrors }) => {
   const { t } = useTranslation();
@@ -36,7 +37,7 @@ const WSDisconnectionAppDetails = ({ config, onSelect, userType, formData, setEr
 
   useEffect(() => {
     const disconnectionTypes = mdmsData?.["ws-services-masters"]?.disconnectionType || [];
-    disconnectionTypes?.forEach(data => {
+    disconnectionTypes?.forEach((data) => {
       data.code = data?.code?.toUpperCase();
       data.i18nKey = `WS_DISCONNECTIONTYPE_${data?.code?.toUpperCase()}`;
       data.value = data?.code?.toUpperCase();
@@ -52,7 +53,6 @@ const WSDisconnectionAppDetails = ({ config, onSelect, userType, formData, setEr
     onSelect(config?.key, data);
   }, [disConnectionDetails]);
 
-
   const commonProps = {
     focusIndex,
     setFocusIndex,
@@ -64,13 +64,13 @@ const WSDisconnectionAppDetails = ({ config, onSelect, userType, formData, setEr
     disConnectionDetails,
     setIsErrors,
     setDisConnectionDetails,
-    disconnectionTypeList
+    disconnectionTypeList,
   };
 
   return (
     <React.Fragment>
       {disConnectionDetails.map((disConnectionDetail, index) => (
-        <PlumberDetails key={disConnectionDetail.key} index={index} disConnectionDetail={disConnectionDetail} {...commonProps} />
+        <PlumberDetails key={disConnectionDetail.key || index} index={index} disConnectionDetail={disConnectionDetail} {...commonProps} />
       ))}
     </React.Fragment>
   );
@@ -90,14 +90,23 @@ const PlumberDetails = (_props) => {
     setIsErrors,
     options,
     setDisConnectionDetails,
-    disconnectionTypeList
+    disconnectionTypeList,
   } = _props;
 
-  const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger, getValues } = useForm();
+  const {
+    control,
+    formState: localFormState,
+    watch,
+    setError: setLocalError,
+    clearErrors: clearLocalErrors,
+    setValue,
+    trigger,
+    getValues,
+  } = useForm();
   const formValue = watch();
   const { errors } = localFormState;
   const isMobile = window.Digit.Utils.browser.isMobile();
-  const isEmployee = window.location.href.includes("/employee")
+  const isEmployee = window.location.href.includes("/employee");
 
   useEffect(() => {
     trigger();
@@ -110,7 +119,7 @@ const PlumberDetails = (_props) => {
       keys.forEach((key) => (part[key] = disConnectionDetail[key]));
       if (!_.isEqual(formValue, part)) {
         let isErrorsFound = true;
-        Object.keys(formValue).map(data => {
+        Object.keys(formValue).map((data) => {
           if (!formValue[data] && isErrorsFound) {
             isErrorsFound = false;
             setIsErrors(false);
@@ -124,23 +133,24 @@ const PlumberDetails = (_props) => {
     }
   }, [formValue, disConnectionDetails]);
 
-
   useEffect(() => {
     if (Object.keys(errors).length && !_.isEqual(formState.errors[config.key]?.type || {}, errors)) {
       setError(config.key, { type: errors });
-    }
-    else if (!Object.keys(errors).length && formState.errors[config.key]) {
+    } else if (!Object.keys(errors).length && formState.errors[config.key]) {
       clearErrors(config.key);
     }
   }, [errors]);
 
   const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
   return (
-    <div >
+    <div>
       <div style={{ marginBottom: "16px" }}>
-        <CardSubHeader style={{ marginBottom: "40px", "fontSize": "24px", "lineHeight": "32px" }}>{t("WS_APPLICATION_DETAILS")}</CardSubHeader>
+        <CardSubHeader style={{ marginBottom: "40px", fontSize: "24px", lineHeight: "32px" }}>{t("WS_APPLICATION_DETAILS")}</CardSubHeader>
         <LabelFieldPair>
-          <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_ACK_COMMON_APP_NO_LABEL")}*`}</CardLabel>
+          <CardLabel
+            style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
+            className="card-label-smaller"
+          >{`${t("WS_ACK_COMMON_APP_NO_LABEL")}*`}</CardLabel>
           <div className="field">
             <Controller
               control={control}
@@ -152,20 +162,23 @@ const PlumberDetails = (_props) => {
                 <TextInput
                   value={props.value}
                   autoFocus={focusIndex.index === disConnectionDetail?.key && focusIndex.type === "consumerNumber"}
-                  errorStyle={(localFormState.touched.consumerNumber && errors?.consumerNumber?.message) ? true : false}
+                  errorStyle={localFormState.touched.consumerNumber && errors?.consumerNumber?.message ? true : false}
                   onChange={(e) => {
                     props.onChange(e.target.value);
                     setFocusIndex({ index: disConnectionDetail?.key, type: "consumerNumber" });
                   }}
                   labelStyle={{ marginTop: "unset" }}
                   onBlur={props.onBlur}
-                  style={{ border: "none", color: "#0b0c0c !important", "pointerEvents": "none" }}
+                  style={{ border: "none", color: "#0b0c0c !important", pointerEvents: "none" }}
                 />
               )}
             />
           </div>
         </LabelFieldPair>
-        <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_DISCONNECTION_TYPE")}`}</CardLabel>
+        <CardLabel
+          style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
+          className="card-label-smaller"
+        >{`${t("WS_DISCONNECTION_TYPE")}`}</CardLabel>
         <Controller
           control={control}
           name="disConnectionType"
@@ -181,17 +194,17 @@ const PlumberDetails = (_props) => {
                 name: disConnectionDetail?.disConnectionType,
                 value: disConnectionDetail?.disConnectionType,
                 code: disConnectionDetail?.disConnectionType,
-                i18nKey: `WS_DISCONNECTIONTYPE_${stringReplaceAll(disConnectionDetail?.disConnectionType, " ", "_")}`
+                i18nKey: `WS_DISCONNECTIONTYPE_${stringReplaceAll(disConnectionDetail?.disConnectionType, " ", "_")}`,
               }}
               selectedOption={{
                 name: disConnectionDetail?.disConnectionType,
                 value: disConnectionDetail?.disConnectionType,
                 code: disConnectionDetail?.disConnectionType,
-                i18nKey: `WS_DISCONNECTIONTYPE_${stringReplaceAll(disConnectionDetail?.disConnectionType, " ", "_")}`
+                i18nKey: `WS_DISCONNECTIONTYPE_${stringReplaceAll(disConnectionDetail?.disConnectionType, " ", "_")}`,
               }}
               // onSelect={(e) => onDisconnectionChange(e)}
               onSelect={(e) => {
-                props.onChange(e.code)
+                props.onChange(e.code);
               }}
               labelKey="WS_DISCONNECTIONTYPE"
               errorStyle={localFormState.touched.disConnectionType && errors?.disConnectionType?.message ? true : false}
@@ -202,7 +215,10 @@ const PlumberDetails = (_props) => {
           )}
         />
         <LabelFieldPair>
-          <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_DISCONNECTION_PROPOSED_DATE")}*`}</CardLabel>
+          <CardLabel
+            style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
+            className="card-label-smaller"
+          >{`${t("WS_DISCONNECTION_PROPOSED_DATE")}*`}</CardLabel>
           <div className="field">
             <Controller
               name="disConnectionProposeDate"
@@ -210,19 +226,18 @@ const PlumberDetails = (_props) => {
               // isMandatory={true}
               defaultValue={disConnectionDetail?.disConnectionProposeDate}
               control={control}
-              render={(props) => (
-                <DatePicker
-                  date={props.value}
-                  name="disConnectionProposeDate"
-                  onChange={props.onChange}
-                />
-              )}
+              render={(props) => <DatePicker date={props.value} name="disConnectionProposeDate" onChange={props.onChange} />}
             />
           </div>
         </LabelFieldPair>
-        <CardLabelError style={errorStyle}>{localFormState.touched.disConnectionProposeDate ? errors?.disConnectionProposeDate?.message : ""}</CardLabelError>
+        <CardLabelError style={errorStyle}>
+          {localFormState.touched.disConnectionProposeDate ? errors?.disConnectionProposeDate?.message : ""}
+        </CardLabelError>
         <LabelFieldPair>
-          <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_DISCONNECTION_REASON")}*`}</CardLabel>
+          <CardLabel
+            style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
+            className="card-label-smaller"
+          >{`${t("WS_DISCONNECTION_REASON")}*`}</CardLabel>
           <div className="field">
             <Controller
               control={control}
@@ -253,6 +268,5 @@ const PlumberDetails = (_props) => {
     </div>
   );
 };
-
 
 export default WSDisconnectionAppDetails;

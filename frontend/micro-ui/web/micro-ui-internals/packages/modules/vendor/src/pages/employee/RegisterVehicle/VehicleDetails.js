@@ -131,7 +131,7 @@ const VehicleDetails = (props) => {
 
   const closeModal = () => {
     setSelectedAction(null);
-    setSelectedOption({})
+    setSelectedOption({});
     setShowModal(false);
   };
 
@@ -300,8 +300,6 @@ const VehicleDetails = (props) => {
     }
   };
 
-  const isMobile = window.Digit.Utils.browser.isMobile();
-
   const modalHeading = () => {
     switch (selectedAction) {
       case "DELETE":
@@ -324,55 +322,52 @@ const VehicleDetails = (props) => {
     <React.Fragment>
       {!isLoading ? (
         <React.Fragment>
-          <Header style={{ marginBottom: "16px" }}>{t("ES_FSM_REGISTRY_VEHICLE_DETAILS")}</Header>
-          <div style={!isMobile ? { marginLeft: "-15px" } : {}}>
-            <Card style={{ position: "relative" }}>
-              {vehicleData?.[0]?.employeeResponse?.map((detail, index) => (
-                <React.Fragment key={index}>
-                  {index > 0 && <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t(detail.title)}</CardSectionHeader>}
-                  <StatusTable>
-                    {detail?.values?.map((value, index) => {
-                      return value?.type === "custom" ? (
-                        <>
-                          <div className={`${index === detail?.values?.length - 1 ? "row last" : "row"} border-none`}>
-                            <h2>{t(value.title)}</h2>
-                            <div className="value" style={{ color: "#a82227", display: "flex" }}>
-                              {t(value.value) || "N/A"}
-                              {value.value === "ES_FSM_REGISTRY_DETAILS_ADD_VENDOR" && (
-                                <span onClick={() => onActionSelect("ADD_VENDOR")}>
-                                  <AddIcon className="" fill="#a82227" styles={{ cursor: "pointer", marginLeft: "20px", height: "24px" }} />
-                                </span>
-                              )}
-                              {value.value != "ES_FSM_REGISTRY_DETAILS_ADD_VENDOR" && (
-                                <span onClick={() => onActionSelect("EDIT_VENDOR")}>
-                                  <EditIcon style={{ cursor: "pointer", marginLeft: "20px" }} />
-                                </span>
-                              )}
-                              {value.value != "ES_FSM_REGISTRY_DETAILS_ADD_VENDOR" && (
-                                <span onClick={() => onActionSelect("DELETE_VENDOR")}>
-                                  <DeleteIcon className="delete" fill="#a82227" style={{ cursor: "pointer", marginLeft: "20px" }} />
-                                </span>
-                              )}
-                            </div>
+          <Card className="vehicle-details-card" style={{ position: "relative" }}>
+            {vehicleData?.[0]?.employeeResponse?.map((detail, index) => (
+              <React.Fragment key={index}>
+                {index > 0 && <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t(detail.title)}</CardSectionHeader>}
+                <StatusTable>
+                  {detail?.values?.map((value, index) => {
+                    return value?.type === "custom" ? (
+                      <>
+                        <div className={`${index === detail?.values?.length - 1 ? "row last" : "row"} border-none`}>
+                          <h2>{t(value.title)}</h2>
+                          <div className="value" style={{ color: "#a82227", display: "flex" }}>
+                            {t(value.value) || "N/A"}
+                            {value.value === "ES_FSM_REGISTRY_DETAILS_ADD_VENDOR" && (
+                              <span onClick={() => onActionSelect("ADD_VENDOR")}>
+                                <AddIcon className="" fill="#a82227" styles={{ cursor: "pointer", marginLeft: "20px", height: "24px" }} />
+                              </span>
+                            )}
+                            {value.value != "ES_FSM_REGISTRY_DETAILS_ADD_VENDOR" && (
+                              <span onClick={() => onActionSelect("EDIT_VENDOR")}>
+                                <EditIcon style={{ cursor: "pointer", marginLeft: "20px" }} />
+                              </span>
+                            )}
+                            {value.value != "ES_FSM_REGISTRY_DETAILS_ADD_VENDOR" && (
+                              <span onClick={() => onActionSelect("DELETE_VENDOR")}>
+                                <DeleteIcon className="delete" fill="#a82227" style={{ cursor: "pointer", marginLeft: "20px" }} />
+                              </span>
+                            )}
                           </div>
-                        </>
-                      ) : (
-                        <Row
-                          key={t(value.title)}
-                          label={t(value.title)}
-                          text={t(value.value) || "N/A"}
-                          last={index === detail?.values?.length - 1}
-                          caption={value.caption}
-                          className="border-none"
-                          textStyle={value.value === "ACTIVE" ? { color: "green" } : {}}
-                        />
-                      );
-                    })}
-                  </StatusTable>
-                </React.Fragment>
-              ))}
-            </Card>
-          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <Row
+                        key={t(value.title)}
+                        label={t(value.title)}
+                        text={t(value.value) || "N/A"}
+                        last={index === detail?.values?.length - 1}
+                        caption={value.caption}
+                        className="border-none"
+                        textStyle={value.value === "ACTIVE" ? { color: "green" } : {}}
+                      />
+                    );
+                  })}
+                </StatusTable>
+              </React.Fragment>
+            ))}
+          </Card>
 
           {showModal && (
             <Modal

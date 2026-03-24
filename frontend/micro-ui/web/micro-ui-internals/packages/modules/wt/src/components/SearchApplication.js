@@ -93,11 +93,11 @@ const WTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
           { i18nKey: "TP_TREE_PRUNING_SERVICE_COMPLETED", code: "TREE_PRUNING_SERVICE_COMPLETED", value: t("TP_TREE_PRUNING_SERVICE_COMPLETED") },
         ]
       : [
-          { i18nKey: "Booking Created", code: "BOOKING_CREATED", value: t("WT_BOOKING_CREATED") },
-          { i18nKey: "Booking Approved", code: "APPROVED", value: t("WT_BOOKING_APPROVED") },
-          { i18nKey: "Tanker Delivered", code: "TANKER_DELIVERED", value: t("WT_TANKER_DELIVERED") },
-          { i18nKey: "Vendor Assigned", code: "ASSIGN_VENDOR", value: t("WT_ASSIGN_VENDOR") },
-          { i18nKey: "Rejected", code: "REJECT", value: t("WT_BOOKING_REJECTED") },
+          { i18nKey: "WT_BOOKING_CREATED", code: "BOOKING_CREATED", value: t("WT_BOOKING_CREATED") },
+          { i18nKey: "WT_VENDOR_ASSIGNED", code: "VENDOR_ASSIGNED", value: t("WT_VENDOR_ASSIGNED") },
+          { i18nKey: "WT_DELIVERY_PENDING", code: "DELIVERY_PENDING", value: t("WT_DELIVERY_PENDING") },
+          { i18nKey: "WT_DELIVERED", code: "DELIVERED", value: t("WT_DELIVERED") },
+          { i18nKey: "WT_REQUEST_REJECTED", code: "REQUEST_REJECTED", value: t("WT_REQUEST_REJECTED") },
         ];
 
   const onSort = useCallback(
@@ -150,7 +150,7 @@ const WTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
             <form onSubmit={handleSubmit(onSubmit)}>
               {/* --- SMART SEARCH --- */}
               {activeTab === t("WT_SMART_SEARCH") && (
-                <div className="wt-search-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+                <div className="wt-search-grid" style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: "24px" }}>
                   <div className="search-field-wrapper">
                     <label>{t("WT_MOBILE_NUMBER")}</label>
                     <MobileNumber
@@ -240,7 +240,7 @@ const WTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
               )}
 
               {/* ACTIONS */}
-              <div className="wt-search-actions" style={{ display: "flex", justifyContent: "flex-end", gap: "24px", marginTop: "16px" }}>
+              <div className="wt-search-actions" style={{ display: "flex", justifyContent: isMobile ? "center" : "flex-end", flexDirection: isMobile ? "column-reverse" : "row", gap: "24px", marginTop: "16px" }}>
                 <span
                   className="clear-search-link"
                   onClick={handleClearSearch}
@@ -248,7 +248,7 @@ const WTSearchApplication = ({ tenantId, isLoading, t, onSubmit, data, count, se
                 >
                   {t("ES_COMMON_CLEAR_ALL")}
                 </span>
-                <div style={{ minWidth: "160px" }}>
+                <div style={{ minWidth: isMobile ? "100%" : "160px" }}>
                   <SubmitBar label={t("ES_COMMON_SEARCH")} submit />
                 </div>
               </div>

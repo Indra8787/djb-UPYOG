@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, CardLabel, Dropdown, RadioButtons, LabelFieldPair, RadioOrSelect,TextInput } from "@djb25/digit-ui-react-components";
+import { FormStep, CardLabel, Dropdown, RadioButtons, LabelFieldPair, RadioOrSelect, TextInput } from "@djb25/digit-ui-react-components";
 import Timeline from "../components/TLTimelineInFSM";
 import { useLocation } from "react-router-dom";
 
@@ -167,7 +167,7 @@ const FSMSelectAddress = ({ t, config, onSelect, userType, formData }) => {
 
   if (userType === "employee") {
     return (
-      <div>
+      <React.Fragment>
         <LabelFieldPair>
           <CardLabel className="card-label-smaller">
             {t("MYCITY_CODE_LABEL")}
@@ -185,7 +185,7 @@ const FSMSelectAddress = ({ t, config, onSelect, userType, formData }) => {
           />
         </LabelFieldPair>
         {!isUrcEnable || isNewVendor || isEditVendor ? (
-          <div>
+          <React.Fragment>
             <LabelFieldPair>
               <CardLabel className="card-label-smaller">
                 {t("ES_NEW_APPLICATION_LOCATION_MOHALLA")}
@@ -209,7 +209,7 @@ const FSMSelectAddress = ({ t, config, onSelect, userType, formData }) => {
                 </div>
               </LabelFieldPair>
             )}
-          </div>
+          </React.Fragment>
         ) : (
           <LabelFieldPair>
             <CardLabel>{`${t("CS_PROPERTY_LOCATION")} *`}</CardLabel>
@@ -226,7 +226,7 @@ const FSMSelectAddress = ({ t, config, onSelect, userType, formData }) => {
             </div>
           </LabelFieldPair>
         )}
-      </div>
+      </React.Fragment>
     );
   }
   return (
@@ -246,6 +246,7 @@ const FSMSelectAddress = ({ t, config, onSelect, userType, formData }) => {
             />
           </React.Fragment>
         )}
+
         <CardLabel>{`${t("MYCITY_CODE_LABEL")} *`}</CardLabel>
         <RadioOrSelect options={cities} selectedOption={selectedCity} optionKey="i18nKey" onSelect={selectCity} t={t} />
       </FormStep>

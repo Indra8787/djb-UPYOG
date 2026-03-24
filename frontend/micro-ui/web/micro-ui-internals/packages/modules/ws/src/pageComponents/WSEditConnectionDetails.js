@@ -217,7 +217,7 @@ const ConnectionDetails = (_props) => {
         <div className="formcomposer-section-grid" style={{ marginBottom: "16px" }}>
           <LabelFieldPair>
             <CardLabel
-              style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
+              style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { fontWeight: "700" }}
               className="card-label-smaller"
             >{`${t("PDF_STATIC_LABEL_APPLICATION_NUMBER_LABEL")}`}</CardLabel>
             <div className="field">
@@ -246,7 +246,7 @@ const ConnectionDetails = (_props) => {
           </LabelFieldPair>
           <LabelFieldPair>
             <CardLabel
-              style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
+              style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { fontWeight: "700" }}
               className="card-label-smaller"
             >{`${t("WS_SERVICE_NAME_LABEL")}`}</CardLabel>
             <div className="field">
@@ -278,7 +278,7 @@ const ConnectionDetails = (_props) => {
               <div>
                 <LabelFieldPair>
                   <CardLabel
-                    style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
+                    style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { fontWeight: "700" }}
                     className="card-label-smaller"
                   >{`${t("WS_NO_OF_PROPOSED_TAPS_LABEL")}*`}</CardLabel>
                   <div className="field">
@@ -314,7 +314,7 @@ const ConnectionDetails = (_props) => {
               <div>
                 <LabelFieldPair>
                   <CardLabel
-                    style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
+                    style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { fontWeight: "700" }}
                     className="card-label-smaller"
                   >{`${t("WS_PROPOSED_PIPE_SIZE_IN_INCHES_LABEL")}*`}</CardLabel>
                   <Controller
@@ -349,7 +349,7 @@ const ConnectionDetails = (_props) => {
               <div>
                 <LabelFieldPair>
                   <CardLabel
-                    style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
+                    style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { fontWeight: "700" }}
                     className="card-label-smaller"
                   >{`${t("WS_PROPOSED_WATER_CLOSETS_LABEL")}*`}</CardLabel>
                   <div className="field">
@@ -387,7 +387,7 @@ const ConnectionDetails = (_props) => {
               <div>
                 <LabelFieldPair>
                   <CardLabel
-                    style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { marginTop: "-5px", fontWeight: "700" }}
+                    style={isMobile && isEmployee ? { fontWeight: "700", width: "100%" } : { fontWeight: "700" }}
                     className="card-label-smaller"
                   >{`${t("WS_PROPOSED_WATER_TOILETS_LABEL")}*`}</CardLabel>
                   <div className="field">

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -11,7 +11,6 @@ import {
   ActionBar,
   Menu,
   Toast,
-  Header,
   EditIcon,
   DeleteIcon,
   Modal,
@@ -45,14 +44,15 @@ const CloseBtn = (props) => {
 
 const DriverDetails = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const state = Digit.ULBService.getStateId();
+  // const state = Digit.ULBService.getStateId();
   const { t } = useTranslation();
   const history = useHistory();
   const queryClient = useQueryClient();
-  let { id: dsoId } = useParams();
+  const { id: dsoId } = useParams();
+
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
-  const [config, setCurrentConfig] = useState({});
+  // const [config, setCurrentConfig] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showToast, setShowToast] = useState(null);
   const [vendors, setVendors] = useState([]);
@@ -266,7 +266,7 @@ const DriverDetails = (props) => {
 
   const closeModal = () => {
     setSelectedAction(null);
-    setSelectedOption({})
+    setSelectedOption({});
     setShowModal(false);
   };
 
@@ -316,91 +316,86 @@ const DriverDetails = (props) => {
     return <Loader />;
   }
 
-  return (
+  return !isLoading ? (
     <React.Fragment>
-      {!isLoading ? (
-        <React.Fragment>
-          <Header style={{ marginBottom: "16px" }}>{t("ES_FSM_REGISTRY_DRIVER_DETAILS")}</Header>
-          <div style={!isMobile ? { marginLeft: "-15px" } : {}}>
-            <Card style={{ position: "relative" }}>
-              {driverData?.[0]?.employeeResponse?.map((detail, index) => (
-                <React.Fragment key={index}>
-                  {index > 0 && <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t(detail.title)}</CardSectionHeader>}
-                  <StatusTable>
-                    {detail?.values?.map((value, index) =>
-                      value?.type === "custom" ? (
-                        <>
-                          <div className={`${index === detail?.values?.length - 1 ? "row last" : "row"} border-none`}>
-                            <h2>{t(value.title)}</h2>
-                            <div className="value" style={{ color: "#a82227", display: "flex" }}>
-                              {t(value.value) || "N/A"}
-                              {value.value === "ES_FSM_REGISTRY_DETAILS_ADD_VENDOR" && (
-                                <span onClick={() => onActionSelect("ADD_VENDOR")}>
-                                  <AddIcon className="" fill="#a82227" styles={{ cursor: "pointer", marginLeft: "20px", height: "24px" }} />
-                                </span>
-                              )}
-                              {value.value != "ES_FSM_REGISTRY_DETAILS_ADD_VENDOR" && (
-                                <span onClick={() => onActionSelect("EDIT_VENDOR")}>
-                                  <EditIcon style={{ cursor: "pointer", marginLeft: "20px" }} />
-                                </span>
-                              )}
-                              {value.value != "ES_FSM_REGISTRY_DETAILS_ADD_VENDOR" && (
-                                <span onClick={() => onActionSelect("DELETE_VENDOR")}>
-                                  <DeleteIcon className="delete" fill="#a82227" style={{ cursor: "pointer", marginLeft: "20px" }} />
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </>
-                      ) : (
-                        <Row
-                          key={t(value.title)}
-                          label={t(value.title)}
-                          text={t(value.value) || "N/A"}
-                          last={index === detail?.values?.length - 1}
-                          caption={value.caption}
-                          className="border-none"
-                        />
-                      )
-                    )}
-                  </StatusTable>
-                </React.Fragment>
-              ))}
-            </Card>
-          </div>
-          {showModal && (
-            <Modal
-              headerBarMain={<Heading label={t(modalHeading())} />}
-              headerBarEnd={<CloseBtn onClick={closeModal} />}
-              actionCancelLabel={t("CS_COMMON_CANCEL")}
-              actionCancelOnSubmit={closeModal}
-              actionSaveLabel={t(selectedAction === "DELETE" || selectedAction === "DELETE_VENDOR" ? "ES_EVENT_DELETE" : "CS_COMMON_SUBMIT")}
-              actionSaveOnSubmit={handleModalAction}
-              formId="modal-action"
-            >
-              {selectedAction === "DELETE" || selectedAction === "DELETE_VENDOR" ? (
-                renderModalContent()
-              ) : (
-                <Card style={{ boxShadow: "none" }}>{renderModalContent()}</Card>
-              )}
-            </Modal>
+      <div className="employee-form-content">
+        <Card style={{ position: "relative" }}>
+          {driverData?.[0]?.employeeResponse?.map((detail, index) => (
+            <React.Fragment key={index}>
+              {index > 0 && <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t(detail.title)}</CardSectionHeader>}
+              <StatusTable>
+                {detail?.values?.map((value, index) =>
+                  value?.type === "custom" ? (
+                    <React.Fragment key={index}>
+                      <div className={`${index === detail?.values?.length - 1 ? "row last" : "row"} border-none`}>
+                        <h2>{t(value.title)}</h2>
+                        <div className="value" style={{ color: "#a82227", display: "flex" }}>
+                          {t(value.value) || "N/A"}
+                          {value.value === "ES_FSM_REGISTRY_DETAILS_ADD_VENDOR" && (
+                            <span onClick={() => onActionSelect("ADD_VENDOR")}>
+                              <AddIcon className="" fill="#a82227" styles={{ cursor: "pointer", marginLeft: "20px", height: "24px" }} />
+                            </span>
+                          )}
+                          {value.value != "ES_FSM_REGISTRY_DETAILS_ADD_VENDOR" && (
+                            <span onClick={() => onActionSelect("EDIT_VENDOR")}>
+                              <EditIcon style={{ cursor: "pointer", marginLeft: "20px" }} />
+                            </span>
+                          )}
+                          {value.value != "ES_FSM_REGISTRY_DETAILS_ADD_VENDOR" && (
+                            <span onClick={() => onActionSelect("DELETE_VENDOR")}>
+                              <DeleteIcon className="delete" fill="#a82227" style={{ cursor: "pointer", marginLeft: "20px" }} />
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </React.Fragment>
+                  ) : (
+                    <Row
+                      key={t(value.title)}
+                      label={t(value.title)}
+                      text={t(value.value) || "N/A"}
+                      last={index === detail?.values?.length - 1}
+                      caption={value.caption}
+                      className="border-none"
+                    />
+                  )
+                )}
+              </StatusTable>
+            </React.Fragment>
+          ))}
+        </Card>
+      </div>
+      {showModal && (
+        <Modal
+          headerBarMain={<Heading label={t(modalHeading())} />}
+          headerBarEnd={<CloseBtn onClick={closeModal} />}
+          actionCancelLabel={t("CS_COMMON_CANCEL")}
+          actionCancelOnSubmit={closeModal}
+          actionSaveLabel={t(selectedAction === "DELETE" || selectedAction === "DELETE_VENDOR" ? "ES_EVENT_DELETE" : "CS_COMMON_SUBMIT")}
+          actionSaveOnSubmit={handleModalAction}
+          formId="modal-action"
+        >
+          {selectedAction === "DELETE" || selectedAction === "DELETE_VENDOR" ? (
+            renderModalContent()
+          ) : (
+            <Card style={{ boxShadow: "none" }}>{renderModalContent()}</Card>
           )}
-          {showToast && (
-            <Toast
-              error={showToast.key === "error" ? true : false}
-              label={t(showToast.key === "success" ? `ES_FSM_REGISTRY_${showToast.action}_SUCCESS` : showToast.action)}
-              onClose={closeToast}
-            />
-          )}
-          <ActionBar style={{ zIndex: "19" }}>
-            {displayMenu ? <Menu localeKeyPrefix={"ES_FSM_REGISTRY_ACTION"} options={["EDIT", "DELETE"]} t={t} onSelect={onActionSelect} /> : null}
-            <SubmitBar label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
-          </ActionBar>
-        </React.Fragment>
-      ) : (
-        <Loader />
+        </Modal>
       )}
+      {showToast && (
+        <Toast
+          error={showToast.key === "error" ? true : false}
+          label={t(showToast.key === "success" ? `ES_FSM_REGISTRY_${showToast.action}_SUCCESS` : showToast.action)}
+          onClose={closeToast}
+        />
+      )}
+      <ActionBar style={{ zIndex: "19" }}>
+        {displayMenu ? <Menu localeKeyPrefix={"ES_FSM_REGISTRY_ACTION"} options={["EDIT", "DELETE"]} t={t} onSelect={onActionSelect} /> : null}
+        <SubmitBar label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+      </ActionBar>
     </React.Fragment>
+  ) : (
+    <Loader />
   );
 };
 

@@ -36,7 +36,7 @@
   }
 
   .card-label-error {
-    @apply block text-body-s text-error mb-md;
+    @apply block text-body-s text-error;
   }
 
   .card-label-desc {
@@ -111,7 +111,7 @@
   }
 
   .card-label-error {
-    @apply block text-body-s text-error mb-md;
+    @apply block text-body-s text-error;
   }
 
   .card-label-desc {
@@ -131,6 +131,15 @@
   }
 }
 
+.vehicle-details-card {
+  width: 100%;
+  height: fit-content;
+}
+
+.no-shadow {
+  box-shadow: none !important;
+}
+
 .header-wrap {
   @apply flex mb-md;
 
@@ -145,6 +154,11 @@
   .header-end {
     margin-left: auto;
   }
+}
+
+.header-content {
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .card-emp {
@@ -216,6 +230,10 @@
     .card-link {
       @apply text-left;
     }
+  }
+
+  .label-field-pair {
+    align-items: center;
   }
 
   .employeeCard {
@@ -380,8 +398,6 @@
       margin-right: auto;
     }
 
-    .header-content {}
-
     .header-end {
       margin-left: auto;
     }
@@ -430,7 +446,7 @@
 }
 
 .card-label-error {
-  @apply block text-body-s text-error mb-md;
+  @apply block text-body-s text-error;
 }
 
 .employeeCard-override {
@@ -835,7 +851,6 @@
   stroke: #ffffff;
 }
 
-/* --- RIGHT CONTENT --- */
 .expanded-content {
   flex: 1;
   background-color: #ffffff;
@@ -866,7 +881,6 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  /* Items touch borders */
 }
 
 .content-link-row {
@@ -899,15 +913,31 @@
   padding: 20px 0;
 }
 
-/* --- EXPANDED VIEW OVERLAY --- */
 .expanded-page-container {
   display: flex;
+  flex-direction: column;
   width: 100%;
-
-  min-height: calc(100vh - 100px);
-  overflow: hidden;
-  gap: 20px;
   padding-bottom: 40px;
+}
+
+.mobile-sidebar-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #1a365d;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.hamburger-icon {
+  width: 22px;
+  height: 22px;
 }
 
 .expanded-overlay {
@@ -935,14 +965,36 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
-/* --- LEFT SIDEBAR --- */
 .expanded-sidebar {
-  width: 20%;
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 80%;
+  max-width: 320px;
+  height: 100vh;
   background-color: #ffffff;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  flex-shrink: 0;
+  padding: 24px 20px;
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+}
+
+.expanded-sidebar.open {
+  left: 0;
+}
+
+.sidebar-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  backdrop-filter: blur(2px);
 }
 
 .sidebar-title {
@@ -997,7 +1049,6 @@
   margin-right: 12px;
 }
 
-/* Make SVG white when active */
 .sidebar-item.active .sidebar-icon-placeholder svg {
   stroke: #ffffff !important;
   fill: none;
@@ -1017,7 +1068,6 @@
   opacity: 1;
 }
 
-/* --- RIGHT CONTENT --- */
 .expanded-content {
   flex: 1;
   background-color: #ffffff;
@@ -1138,11 +1188,9 @@
 }
 
 :root {
-  /* Dimensions */
   --sidebar-expanded: 280px;
   --sidebar-collapsed: 80px;
 
-  /* Colors */
   --bg-color: #ffffff;
   --border-color: #f1f5f9;
   --text-main: #0f172a;
@@ -1151,13 +1199,10 @@
   --active-bg: #eff6ff;
   --active-text: #1a67a3;
 
-  /* Animations */
   --transition-slow: 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-  /* Slow, elegant easing curve */
   --transition-fast: 0.3s ease;
 }
 
-/* --- Base Sidebar --- */
 .premium-sidebar {
   height: 100%;
   display: flex;
@@ -1183,12 +1228,22 @@
 /* --- Header & Brand --- */
 .sidebar-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 24px 20px;
-  margin-bottom: 12px;
-  position: relative;
-  white-space: nowrap;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.mobile-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.expanded-content-area {
+  flex: 1;
 }
 
 .brand-container {
@@ -1289,7 +1344,6 @@
   font-weight: 500;
   white-space: nowrap;
   margin-left: 16px;
-  /* Spacing applied here */
   opacity: 1;
   transition: opacity 0.2s ease, width 0.3s ease, margin 0.3s ease;
   overflow: hidden;
@@ -1314,8 +1368,6 @@
   color: #ffffff;
 }
 
-/* --- COLLAPSED STATE STYLES --- */
-
 .collapsed .brand-name,
 .collapsed .nav-text {
   opacity: 0;
@@ -1324,7 +1376,6 @@
   pointer-events: none;
 }
 
-/* Re-stack header elements to center */
 .collapsed .sidebar-header {
   padding: 24px 0;
   flex-direction: column;
@@ -1336,7 +1387,6 @@
   justify-content: center;
 }
 
-/* Re-center navigation icons */
 .collapsed .sidebar-nav {
   padding: 0 12px;
 }
@@ -1344,4 +1394,179 @@
 .collapsed .nav-item-content {
   justify-content: center;
   padding: 12px 0;
+}
+
+.module-sidebar-toggle {
+  display: none;
+}
+
+.module-sidebar-backdrop {
+  display: none;
+}
+
+@media (max-width: 768px) {
+
+  /* Wrapper becomes a sticky top bar, not a flex column member */
+  .module-sidebar-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    width: 100%;
+    height: auto;
+    flex-shrink: 0;
+  }
+
+  /* Hide desktop sidebar — zero dimensions so flex row is unaffected */
+  .premium-sidebar {
+    display: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Hide old toggle + backdrop */
+  .module-sidebar-toggle,
+  .module-sidebar-backdrop,
+  .collapse-toggle {
+    display: none !important;
+  }
+
+  /* Show the horizontal scrollable tab bar */
+  .mobile-tab-bar {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 6px;
+    padding: 8px 12px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  }
+
+  .mobile-tab-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-tab-wrapper {
+    flex-shrink: 0;
+  }
+
+  .mobile-tab-wrapper a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .mobile-tab-wrapper.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .mobile-tab-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background-color: #f9fafb;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .mobile-tab-item.active {
+    background-color: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1a67a3;
+  }
+
+  .mobile-tab-icon {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .mobile-tab-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .mobile-tab-initial {
+    font-size: 11px;
+    font-weight: 700;
+    color: #6b7280;
+  }
+
+  .mobile-tab-item.active .mobile-tab-initial {
+    color: #1a67a3;
+  }
+
+  .mobile-tab-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+    line-height: 1;
+  }
+
+  .mobile-tab-item.active .mobile-tab-label {
+    color: #1a67a3;
+    font-weight: 600;
+  }
+
+  /* expanded page container stacks vertically */
+  .expanded-page-container {
+    flex-direction: column !important;
+    gap: 0 !important;
+    width: 100% !important;
+  }
+
+
+  /* expanded sidebar NOT hidden on mobile to allow hamburger menu */
+
+  /* expanded content full width */
+  .expanded-content {
+    width: 100% !important;
+    padding: 16px !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-sidebar-toggle,
+  .mobile-close-btn,
+  .sidebar-backdrop {
+    display: none;
+  }
+
+  .expanded-page-container {
+    flex-direction: row;
+    gap: 24px;
+  }
+
+  .expanded-sidebar {
+    position: static;
+    left: 0;
+    width: 25%;
+    max-width: 300px;
+    height: auto;
+    z-index: auto;
+    box-shadow: none;
+    border-right: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    transition: none;
+  }
 }

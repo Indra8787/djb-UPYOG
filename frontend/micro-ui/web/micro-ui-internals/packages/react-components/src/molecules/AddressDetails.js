@@ -165,9 +165,7 @@ const AddressDetails = ({ t, config, onSelect, formData, isEdit, userDetails }) 
       >
         {userDetails?.addresses?.length && (
           <div style={{ gridColumn: "span 2" }}>
-            <CardLabel>
-              {`${t("COMMON_ADDRESS_TYPE")}`} <span className="check-page-link-button">*</span>
-            </CardLabel>
+            <CardLabel>{t("FORM_SELECT_ADDRESS_FROM_LIST")}</CardLabel>
             <Dropdown
               className="form-field"
               selected={selectedAddress}

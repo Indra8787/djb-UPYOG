@@ -101,6 +101,7 @@
 @import "./pages/citizen/payment/payment-type.scss";
 @import "./pages/citizen/container.scss";
 @import "./pages/citizen/HomePageWrapper.scss";
+@import "./pages/citizen/Register.scss";
 @import "./pages/citizen/CitizenEngagementNotificationWrapper.scss";
 @import "./pages/citizen/Events.scss";
 @import "./pages/citizen/DocumentList.scss";
@@ -116,6 +117,7 @@
 @import "./components/VerticalTimeline.scss";
 @import "./components/juridictions.scss";
 @import "./pages/employee/hrms.scss";
+@import "./pages/employee/userProfile.scss";
 
 .display-none {
   display: none;
@@ -474,12 +476,13 @@ input[type="number"] {
 }
 .phone-input-wrapper:hover {
   .employee-card-input--front {
-    border: 1px solid #667eea;
+    border: 2px solid #a1a1aa;
     border-right: 0;
+    color: #a1a1aa;
   }
 
   input {
-    border: 1px solid #667eea;
+    border: 1px solid #e5e5e7;
   }
 }
 
@@ -488,8 +491,7 @@ input[type="number"] {
 
   input {
     &:hover {
-      --border-opacity: 1;
-      border: 1px solid #667eea;
+      border: 2px solid #a1a1aa;
     }
   }
 }
@@ -729,7 +731,7 @@ input[type="number"] {
   width: 100%;
   flex: 1;
   min-width: 0;
-  margin-bottom: 68px;
+  
 }
 
 .employee-app-wrapper {

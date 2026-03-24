@@ -299,7 +299,7 @@ const NewApplication = () => {
   }
 
   return (
-    <React.Fragment>
+    <div className="employee-form-content-with-action-bar">
       <FormComposer
         config={config.body}
         userType={"employee"}
@@ -321,7 +321,7 @@ const NewApplication = () => {
         />
       )}
       {/* {showToast && <Toast error={showToast.key} label={t(showToast?.message)} onClose={closeToast} />} */}
-    </React.Fragment>
+    </div>
   );
 };
 

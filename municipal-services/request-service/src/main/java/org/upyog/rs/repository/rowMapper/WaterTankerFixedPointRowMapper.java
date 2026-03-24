@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.upyog.rs.web.models.fillingpoint.FillingPoint;
 
 @Component
 public class WaterTankerFixedPointRowMapper
@@ -53,11 +54,19 @@ public class WaterTankerFixedPointRowMapper
                     throw new RuntimeException("Error mapping Address", e);
                 }
             }
+
+            if (detail.getFillingPoint() == null) {
+                try {
+                    FillingPoint fp = buildFillingPoint(rs);
+                    detail.setFillingPoint(fp);
+                } catch (SQLException e) {
+                    throw new RuntimeException("Error mapping FillingPoint", e);
+                }
+            }
         }
 
         return new ArrayList<>(bookingMap.values());
     }
-
 
     private WaterTankerFixedPointDetail buildFixedPointDetail(ResultSet rs) throws SQLException {
 
@@ -74,6 +83,7 @@ public class WaterTankerFixedPointRowMapper
                 .auditDetails(auditDetails)
                 .applicantDetail(buildApplicantDetail(rs))
                 .address(buildAddress(rs))
+                .fillingPoint(buildFillingPoint(rs))
                 .build();
     }
 
@@ -117,6 +127,57 @@ public class WaterTankerFixedPointRowMapper
                 .longitude(rs.getString("addr_longitude"))
                 .type(rs.getString("addr_type"))
                 .build();
+    }
+
+    private FillingPoint buildFillingPoint(ResultSet rs) throws SQLException {
+        String fpId = rs.getString("fp_id");
+
+        if (fpId == null) {
+            return null;
+        }
+
+        Address fpAddress = null;
+        String fpAddressId = rs.getString("fp_address_id");
+        if (fpAddressId != null) {
+            fpAddress = Address.builder()
+                    .addressId(fpAddressId)
+                    .applicantId(rs.getString("fp_address_applicant_id"))
+                    .houseNo(rs.getString("fp_house_no"))
+                    .addressLine1(rs.getString("fp_address_line_1"))
+                    .addressLine2(rs.getString("fp_address_line_2"))
+                    .streetName(rs.getString("fp_street_name"))
+                    .landmark(rs.getString("fp_landmark"))
+                    .city(rs.getString("fp_city"))
+                    .cityCode(rs.getString("fp_city_code"))
+                    .locality(rs.getString("fp_locality"))
+                    .localityCode(rs.getString("fp_locality_code"))
+                    .pincode(rs.getString("fp_pincode"))
+                    .latitude(rs.getString("fp_addr_latitude"))
+                    .longitude(rs.getString("fp_addr_longitude"))
+                    .type(rs.getString("fp_addr_type"))
+                    .build();
+        }
+
+        FillingPoint fp = new FillingPoint();
+        fp.setId(fpId);
+        fp.setTenantId(rs.getString("fp_tenant_id"));
+        fp.setFillingPointName(rs.getString("fp_filling_point_name"));
+        fp.setEmergencyName(rs.getString("fp_emergency_name"));
+        fp.setEeName(rs.getString("fp_ee_name"));
+        fp.setEeEmail(rs.getString("fp_ee_email"));
+        fp.setEeMobile(rs.getString("fp_ee_mobile"));
+        fp.setAeName(rs.getString("fp_ae_name"));
+        fp.setAeEmail(rs.getString("fp_ae_email"));
+        fp.setAeMobile(rs.getString("fp_ae_mobile"));
+        fp.setJeName(rs.getString("fp_je_name"));
+        fp.setJeEmail(rs.getString("fp_je_email"));
+        fp.setJeMobile(rs.getString("fp_je_mobile"));
+        fp.setCreatedBy(rs.getString("fp_createdby"));
+        fp.setLastModifiedBy(rs.getString("fp_lastmodifiedby"));
+        fp.setCreatedTime(getLongValue(rs, "fp_createdtime"));
+        fp.setLastModifiedTime(getLongValue(rs, "fp_lastmodifiedtime"));
+        fp.setAddress(fpAddress);
+        return fp;
     }
 
     private Long getLongValue(ResultSet rs, String column) throws SQLException {

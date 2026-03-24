@@ -61,6 +61,16 @@ public class RequestServiceConfiguration {
 	@Value("${persister.create.water-tanker.topic}")
 	private String waterTankerApplicationSaveTopic;
 
+
+//	save fixed point time table
+	@Value("${kafka.topics.save.fixed.point.time.table}")
+	private String saveFixedPointTimeTable;
+
+//	 update Fixed Point Time Table
+	@Value("${kafka.topics.update.fixed.point.time.table}")
+	private String updateFixedPointTimeTable;
+
+
 	@Value("${persister.create.fixed-point.water-tanker.topic}")
 	private String fixedPointWaterTankerApplicationSaveTopic;
 
@@ -74,9 +84,23 @@ public class RequestServiceConfiguration {
 	@Value("${persister.create.mobile-toilet.with.profile.topic}")
 	private String mobileToiletApplicationWithProfileSaveTopic;
 
+
+
+	@Value("${kafka.topics.save.fillingpoint}")
+	private String saveFillingPointTopic;
+
+	@Value("${kafka.topics.update.fillingpoint}")
+	private String updateFillingPointTopic;
+
 	// Kafka topics for saving Mobile Toilet data
 	@Value("${persister.create.mobile-toilet.topic}")
 	private String mobileToiletApplicationSaveTopic;
+
+	@Value("${persister.update.fixed-point.water-tanker.topic}")
+	private String fixedPointWaterTankerApplicationUpdateTopic;
+
+	@Value("${persister.update.fixed-point.water-tanker.with.profile.topic}")
+	private String fixedPointWaterTankerApplicationWithProfileUpdateTopic;
 
 	@Value("${persister.update.water-tanker.topic}")
 	private String waterTankerApplicationUpdateTopic;

@@ -97,26 +97,29 @@ const VendorSelectAddress = ({ t, config, onSelect, userType, formData }) => {
   if (userType === "employee") {
     return (
       <React.Fragment>
-        <CardLabel className="card-label-smaller">
-          {t("MYCITY_CODE_LABEL")}
-          {config.isMandatory ? " * " : null}
-        </CardLabel>
-        <Dropdown
-          className=""
-          isMandatory
-          selected={cities?.length === 1 ? cities[0] : selectedCity}
-          disable={cities?.length === 1}
-          option={cities}
-          select={selectCity}
-          optionKey="code"
-          t={t}
-        />
-
-        <CardLabel className="card-label-smaller">
-          {t("ES_NEW_APPLICATION_LOCATION_MOHALLA")}
-          {config.isMandatory ? " * " : null}
-        </CardLabel>
-        <Dropdown className="" isMandatory selected={selectedLocality} option={localities} select={selectLocality} optionKey="name" t={t} />
+        <LabelFieldPair>
+          <CardLabel>
+            {t("MYCITY_CODE_LABEL")}
+            {config.isMandatory ? " * " : null}
+          </CardLabel>
+          <Dropdown
+            className=""
+            isMandatory
+            selected={cities?.length === 1 ? cities[0] : selectedCity}
+            disable={cities?.length === 1}
+            option={cities}
+            select={selectCity}
+            optionKey="code"
+            t={t}
+          />
+        </LabelFieldPair>
+        <LabelFieldPair>
+          <CardLabel>
+            {t("ES_NEW_APPLICATION_LOCATION_MOHALLA")}
+            {config.isMandatory ? " * " : null}
+          </CardLabel>
+          <Dropdown className="" isMandatory selected={selectedLocality} option={localities} select={selectLocality} optionKey="name" t={t} />
+        </LabelFieldPair>
       </React.Fragment>
     );
   }

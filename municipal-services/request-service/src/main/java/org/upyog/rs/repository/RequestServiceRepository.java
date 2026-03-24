@@ -15,6 +15,8 @@ public interface RequestServiceRepository {
 
 	void saveFixedPointWaterTanker(WaterTankerFixedPointRequest waterTankerFixedPointRequest);
 
+	void updateFixedPointWaterTanker(WaterTankerFixedPointRequest waterTankerFixedPointRequest);
+
 	List<WaterTankerBookingDetail> getWaterTankerBookingDetails(WaterTankerBookingSearchCriteria waterTankerBookingSearchCriteria);
 
 	List<WaterTankerFixedPointDetail> getWaterTankerFixedPointBookingDetails(WaterTankerFixedPointBookingSearchCriteria waterTankerFixedPointBookingSearchCriteria);
@@ -32,4 +34,6 @@ public interface RequestServiceRepository {
 	void updateMobileToiletBooking(MobileToiletBookingRequest mobileToiletRequest);
 
 	public List<RequestDetailsByDriverId.RequestDetailsInfo> getFullBookingDetailsByDriver(String driverId);
+
+	public void save(FixedFillingPointMapping mapping);
 }

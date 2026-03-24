@@ -106,6 +106,28 @@ public class RequestServieRepositoryImpl implements RequestServiceRepository {
 	}
 
 	@Override
+	public void updateFixedPointWaterTanker(WaterTankerFixedPointRequest waterTankerFixedPointRequest) {
+		WaterTankerFixedPointDetail waterTankerFixedPointDetail =
+				waterTankerFixedPointRequest.getWaterTankerFixedPointDetail();
+		// Wrap for audit trail (mirrors create pattern)
+		PersisterWrapper<WaterTankerFixedPointDetail> persisterWrapper =
+				new PersisterWrapper<>(waterTankerFixedPointDetail);
+		pushFixedPointWaterTankerUpdateToKafka(waterTankerFixedPointRequest);
+	}
+
+	private void pushFixedPointWaterTankerUpdateToKafka(WaterTankerFixedPointRequest waterTankerRequest) {
+		if (requestServiceConfiguration.getIsUserProfileEnabled()) {
+			producer.push(
+					requestServiceConfiguration.getFixedPointWaterTankerApplicationWithProfileUpdateTopic(),
+					waterTankerRequest);
+		} else {
+			producer.push(
+					requestServiceConfiguration.getFixedPointWaterTankerApplicationUpdateTopic(),
+					waterTankerRequest);
+		}
+	}
+
+	@Override
 	public List<WaterTankerFixedPointDetail> getWaterTankerFixedPointBookingDetails(
 			WaterTankerFixedPointBookingSearchCriteria criteria) {
 
@@ -203,6 +225,20 @@ public class RequestServieRepositoryImpl implements RequestServiceRepository {
 		return jdbcTemplate.query(DriverDetailsQueryBuilder.DRIVER_QUERY,
 				new Object[]{driverId},
 				new DriverDetailsRowMapper());
+	}
+
+	private static final String INSERT_QUERY =
+			"INSERT INTO upyog_rs_water_tanker_filling_point_fixed_point_mapping " +
+					"(fixed_pt_name, filling_pt_name) VALUES (?, ?)";
+
+
+	@Override
+	public void save(FixedFillingPointMapping mapping) {
+		log.info("Saving FixedFillingPointMapping: {}", mapping);
+		jdbcTemplate.update(INSERT_QUERY,
+				mapping.getFixed_pt_name(),
+				mapping.getFilling_pt_name()
+		);
 	}
 
 

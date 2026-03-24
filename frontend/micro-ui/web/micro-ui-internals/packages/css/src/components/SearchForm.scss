@@ -68,11 +68,25 @@
 .formcomposer-section-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 8px;
+  column-gap: 24px;
   width: 100%;
   .grid-title {
     grid-column: span 2;
   }
+}
+
+.formcomposer-grid-container-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.no-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  grid-template-columns: unset !important;
 }
 
 @media (max-width: 768px) {

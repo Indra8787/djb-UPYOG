@@ -18,6 +18,7 @@ import CitizenHome from "./Home";
 import LanguageSelection from "./Home/LanguageSelection";
 import LocationSelection from "./Home/LocationSelection";
 import Login from "./Login";
+import Register from "./Login/Register";
 import UserProfile from "./Home/UserProfile";
 import ErrorComponent from "../../components/ErrorComponent";
 import FAQsSection from "./FAQs/FAQs";
@@ -36,6 +37,7 @@ import CreateAnonymousEDCR from "./Home/EDCR";
 import EDCRAcknowledgement from "./Home/EDCR/EDCRAcknowledgement";
 import { APPLICATION_PATH } from "./Home/EDCR/utils";
 const sidebarHiddenFor = [
+  "digit-ui/citizen/register",
   "digit-ui/citizen/register/name",
   "/digit-ui/citizen/select-language",
   "/digit-ui/citizen/select-location",
@@ -237,7 +239,7 @@ const Home = ({
         islinkDataLoading={islinkDataLoading}
       />
 
-      <div className={`main center-container citizen-home-container mb-25`}>
+      <div className={`main ${hideSidebar ? "fullWidth" : "center-container"} citizen-home-container mb-25`}>
         {hideSidebar ? null : (
           <div className="SideBarStatic">
             <StaticCitizenSideBar linkData={linkData} islinkDataLoading={islinkDataLoading} />
@@ -282,7 +284,7 @@ const Home = ({
           </Route>
 
           <Route path={`${path}/register`}>
-            <Login stateCode={stateCode} isUserRegistered={false} />
+            <Register stateCode={stateCode} />
           </Route>
 
           <PrivateRoute path={`${path}/user/profile`}>

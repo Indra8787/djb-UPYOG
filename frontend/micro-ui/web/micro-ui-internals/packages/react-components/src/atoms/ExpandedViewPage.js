@@ -15,8 +15,9 @@ const ExpandedViewPage = ({ modules = [] }) => {
   const { moduleName, links = [] } = locationState;
 
   const [activeModuleCode, setActiveModuleCode] = useState(null);
+  
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // 🔹 Initial Load Logic
   useEffect(() => {
     if (!location.state) {
       history.push("/digit-ui/employee");
@@ -39,12 +40,10 @@ const ExpandedViewPage = ({ modules = [] }) => {
     }
   }, [location.state, history, modules, moduleName, t]);
 
-  // 🔹 Sidebar Module List
   const sidebarList = modules.filter((m) =>
     Digit.ComponentRegistryService.getComponent(`${m.code}Card`)
   );
 
-  // 🔹 Dynamic Breadcrumb Label
   const activeModuleLabel = useMemo(() => {
     if (!activeModuleCode) return "";
 
@@ -62,7 +61,6 @@ const ExpandedViewPage = ({ modules = [] }) => {
     { label: activeModuleLabel },
   ];
 
-  // 🔹 Render Right Side Content
   const renderContent = () => {
     if (!activeModuleCode) return null;
 
@@ -116,10 +114,23 @@ const ExpandedViewPage = ({ modules = [] }) => {
         />
 
         <div className="expanded-page-container">
-          {/* 🔹 LEFT SIDEBAR */}
-          <div className="expanded-sidebar">
+          
+          <div className="mobile-sidebar-toggle" onClick={() => setIsMobileMenuOpen(true)}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="hamburger-icon">
+              <path d="M4 6h16M4 12h16M4 18h16" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span>{activeModuleLabel || "Select Module"}</span>
+          </div>
+
+          {isMobileMenuOpen && (
+            <div className="sidebar-backdrop" onClick={() => setIsMobileMenuOpen(false)}></div>
+          )}
+
+          <div className={`expanded-sidebar ${isMobileMenuOpen ? "open" : ""}`}>
             <div className="sidebar-header">
               <span className="sidebar-title">ALL MODULES</span>
+              {/* Close button for mobile */}
+              <button className="mobile-close-btn" onClick={() => setIsMobileMenuOpen(false)}>✕</button>
             </div>
 
             <div className="sidebar-menu">
@@ -131,7 +142,10 @@ const ExpandedViewPage = ({ modules = [] }) => {
                   <div
                     key={idx}
                     className={`sidebar-item ${isActive ? "active" : ""}`}
-                    onClick={() => setActiveModuleCode(mod.code)}
+                    onClick={() => {
+                      setActiveModuleCode(mod.code);
+                      setIsMobileMenuOpen(false); 
+                    }}
                   >
                     <div className="sidebar-icon-placeholder">
                       <svg
@@ -155,7 +169,10 @@ const ExpandedViewPage = ({ modules = [] }) => {
           </div>
 
           {/* 🔹 RIGHT CONTENT */}
-          <div style={{ flex: 1 }}>{renderContent()}</div>
+          <div className="expanded-content-area" style={{ flex: 1 }}>
+            {renderContent()}
+          </div>
+          
         </div>
       </div>
     </Fragment>

@@ -46,7 +46,7 @@ export const configWTApproverApplication = ({
             },
           },
 
-          action?.state === "PENDING_FOR_VEHICLE_DRIVER_ASSIGN" ? (
+          action?.state === "PENDING_FOR_VEHICLE_DRIVER_ASSIGN" && action?.action !== "ASSIGN_VEHICLE_DRIVER" ? (
           {
             label: t("RS_ASSIGN"),
             type: "dropdown",
@@ -62,7 +62,7 @@ export const configWTApproverApplication = ({
           }
         ) : "null",
 
-          action?.state === "DELIVERY_PENDING" ? (
+          (action?.state === "DELIVERY_PENDING" || action?.action === "ASSIGN_VEHICLE_DRIVER") ? (
           {
             label: t("RS_REGISTRATION_NUMBER"),
             type: "dropdown",

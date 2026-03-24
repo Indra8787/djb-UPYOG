@@ -148,7 +148,6 @@ const EditVehicle = ({ parentUrl, heading }) => {
       },
     });
   };
-  const isMobile = window.Digit.Utils.browser.isMobile();
 
   if (vehicleDataLoading || Object.keys(defaultValues).length == 0) {
     return <Loader />;
@@ -156,33 +155,29 @@ const EditVehicle = ({ parentUrl, heading }) => {
 
   return (
     <React.Fragment>
-      <div>
-        <Header>{t("ES_FSM_REGISTRY_TITLE_EDIT_VEHICLE")}</Header>
-      </div>
-      <div style={!isMobile ? { marginLeft: "-15px" } : {}}>
-        <FormComposer
-          isDisabled={!canSubmit}
-          label={t("ES_COMMON_APPLICATION_SUBMIT")}
-          config={Config.filter((i) => !i.hideInEmployee).map((config) => {
-            return {
-              ...config,
-              body: config.body.filter((a) => !a.hideInEmployee),
-            };
-          })}
-          fieldStyle={{ marginRight: 0 }}
-          onSubmit={onSubmit}
-          defaultValues={defaultValues}
-          onFormValueChange={onFormValueChange}
-          noBreakLine={true}
+      <FormComposer
+        isDisabled={!canSubmit}
+        label={t("ES_COMMON_APPLICATION_SUBMIT")}
+        config={Config.filter((i) => !i.hideInEmployee).map((config) => {
+          return {
+            ...config,
+            body: config.body.filter((a) => !a.hideInEmployee),
+          };
+        })}
+        fieldStyle={{ marginRight: 0 }}
+        onSubmit={onSubmit}
+        defaultValues={defaultValues}
+        onFormValueChange={onFormValueChange}
+        noBreakLine={true}
+        formClassName="vehicle-details-card"
+      />
+      {showToast && (
+        <Toast
+          error={showToast.key === "error" ? true : false}
+          label={t(showToast.key === "success" ? `ES_FSM_REGISTRY_${showToast.action}_SUCCESS` : showToast.action)}
+          onClose={closeToast}
         />
-        {showToast && (
-          <Toast
-            error={showToast.key === "error" ? true : false}
-            label={t(showToast.key === "success" ? `ES_FSM_REGISTRY_${showToast.action}_SUCCESS` : showToast.action)}
-            onClose={closeToast}
-          />
-        )}
-      </div>
+      )}
     </React.Fragment>
   );
 };

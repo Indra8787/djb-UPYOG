@@ -20,7 +20,8 @@ public interface WaterTankerService {
 
 	public List<WaterTankerFixedPointDetail> getWaterTankerFixedPointBookingDetails(RequestInfo requestInfo, WaterTankerFixedPointBookingSearchCriteria waterTankerFixedPointBookingSearchCriteria);
 
-
+	WaterTankerFixedPointDetail updateFixedPointWaterTankerBookingRequest(
+			WaterTankerFixedPointRequest waterTankerFixedPointRequest);
 	public Integer getApplicationsCount(WaterTankerBookingSearchCriteria waterTankerBookingSearchCriteria, RequestInfo requestInfo);
 
 	public void updateWaterTankerBooking(PaymentRequest paymentRequest, String applicationStatus);
@@ -30,4 +31,6 @@ public interface WaterTankerService {
 
 	List<WaterTankerBookingDetail> getDriverAssignedBookings(CriteriyaSearchDto criteriyaSearchDto);
 	WaterTankerBookingDetail updateBookingLifecycle(WaterTankerBookingRequest request);
+
+	FixedFillingPointMapping createMapping(FixedFillingPointMappingRequest request);
 }

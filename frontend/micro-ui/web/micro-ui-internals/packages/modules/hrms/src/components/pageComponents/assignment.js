@@ -3,21 +3,23 @@ import React, { useEffect, useState } from "react";
 import cleanup from "../Utils/cleanup";
 import { convertEpochToDate } from "../Utils/index";
 
-const Assignments = ({ t, config, onSelect, userType, formData }) => {
+const Assignments = ({ t, config, onSelect, userType, formData, style }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { data: data = {}, isLoading } = Digit.Hooks.hrms.useHrmsMDMS(tenantId, "egov-hrms", "HRMSRolesandDesignation") || {};
   const [currentassignemtDate, setCurrentAssiginmentDate] = useState(null);
   const [assignments, setassignments] = useState(
-    formData?.Assignments || [
-      {
-        key: 1,
-        fromDate: undefined,
-        toDate: undefined,
-        isCurrentAssignment: false,
-        department: null,
-        designation: null,
-      },
-    ]
+    Array.isArray(formData?.Assignments)
+      ? formData.Assignments
+      : [
+          {
+            key: 1,
+            fromDate: undefined,
+            toDate: undefined,
+            isCurrentAssignment: false,
+            department: null,
+            designation: null,
+          },
+        ]
   );
   const reviseIndexKeys = () => {
     setassignments((prev) => prev.map((unit, index) => ({ ...unit, key: index })));
@@ -49,17 +51,17 @@ const Assignments = ({ t, config, onSelect, userType, formData }) => {
     var promises = assignments?.map((assignment) => {
       return assignment
         ? cleanup({
-          id: assignment?.id,
-          position: assignment?.position,
-          govtOrderNumber: assignment?.govtOrderNumber,
-          tenantid: assignment?.tenantid,
-          auditDetails: assignment?.auditDetails,
-          fromDate: assignment?.fromDate ? new Date(assignment?.fromDate).getTime() : undefined,
-          toDate: assignment?.toDate ? new Date(assignment?.toDate).getTime() : undefined,
-          isCurrentAssignment: assignment?.isCurrentAssignment,
-          department: assignment?.department?.code,
-          designation: assignment?.designation?.code,
-        })
+            id: assignment?.id,
+            position: assignment?.position,
+            govtOrderNumber: assignment?.govtOrderNumber,
+            tenantid: assignment?.tenantid,
+            auditDetails: assignment?.auditDetails,
+            fromDate: assignment?.fromDate ? new Date(assignment?.fromDate).getTime() : undefined,
+            toDate: assignment?.toDate ? new Date(assignment?.toDate).getTime() : undefined,
+            isCurrentAssignment: assignment?.isCurrentAssignment,
+            department: assignment?.department?.code,
+            designation: assignment?.designation?.code,
+          })
         : [];
     });
 
@@ -97,7 +99,7 @@ const Assignments = ({ t, config, onSelect, userType, formData }) => {
     return <Loader />;
   }
   return (
-    <div className="juridictions-wrapper">
+    <div className="juridictions-wrapper" style={style}>
       {assignments?.map((assignment, index) => (
         <Assignment
           t={t}
@@ -158,9 +160,9 @@ function Assignment({
         pre.map((item) =>
           item.key === assignment.key
             ? {
-              ...item,
-              toDate: null,
-            }
+                ...item,
+                toDate: null,
+              }
             : item
         )
       );
@@ -189,10 +191,7 @@ function Assignment({
           </h2>
         </div>
         {assignments.length > 1 ? (
-          <div
-            onClick={() => handleRemoveUnit(assignment)}
-            style={{ cursor: "pointer", textAlign: "right" }}
-          >
+          <div onClick={() => handleRemoveUnit(assignment)} style={{ cursor: "pointer", textAlign: "right" }}>
             <CloseSvg />
           </div>
         ) : null}
@@ -241,7 +240,6 @@ function Assignment({
         </LabelFieldPair>
 
         <LabelFieldPair>
-
           <div className="field">
             <CheckBox
               onChange={(e) => onAssignmentChange(e.target.checked)}

@@ -21,9 +21,6 @@ const EmployeeApp = ({ path, url, userType }) => {
   //   },
   // };
 
-
-
-
   // const AssetBreadCrumbs = ({ location }) => {
   //   const { t } = useTranslation();
   //   const search = useLocation().search;
@@ -54,7 +51,6 @@ const EmployeeApp = ({ path, url, userType }) => {
   const VendorCreate = Digit.ComponentRegistryService.getComponent("VENDORCreate");
   const DriverDetails = Digit.ComponentRegistryService.getComponent("DriverDetails");
   const VehicleDetails = Digit.ComponentRegistryService.getComponent("VehicleDetails");
-
 
   const getDynamicBreadcrumbs = () => {
     const pathname = location.pathname;
@@ -100,8 +96,7 @@ const EmployeeApp = ({ path, url, userType }) => {
               onLeftClick={() => window.history.back()}
               breadcrumbs={getDynamicBreadcrumbs()}
             />
-            <div className="employee-form">
-              {/* {!isRes ?
+            {/* {!isRes ?
                 <div style={isNewRegistration ? { marginLeft: "12px", display: "flex", alignItems: "center" } : { marginLeft: "-4px", display: "flex", alignItems: "center" }}>
                   <BackButton location={location} />
                   <span style={{ margin: "0 5px 16px", display: "inline-block" }}>|</span>
@@ -110,18 +105,99 @@ const EmployeeApp = ({ path, url, userType }) => {
                 : null}
               <PrivateRoute exact path={`${path}/`} component={() => <ASSETLinks matchPath={path} userType={userType} />} /> */}
 
-              {/* <PrivateRoute path={`${path}/additional`} component={Create} /> */}
-              <PrivateRoute path={`${path}/registry/new-vendor`} component={() => <AddVendor parentRoute={path} />} />
-              <PrivateRoute path={`${path}/search-vendor`} component={() => <SearchVendor parentRoute={path} />} />
-              <PrivateRoute path={`${path}/registry/new-driver`} component={() => <AddDriver parentRoute={path} />} />
-              <PrivateRoute path={`${path}/registry/vendor-details/:id`} component={() => <EditVendorDetails parentRoute={path} />} />
-              <PrivateRoute path={`${path}/registry/vehicle-details/:id`} component={() => <VehicleDetails parentRoute={path} />} />
-              <PrivateRoute path={`${path}/registry/new-vehicle`} component={() => <AddVehicle parentRoute={path} />} />
-              <PrivateRoute path={`${path}/registry/additionaldetails`} component={() => <VendorCreate parentRoute={path} />} />
-              <PrivateRoute path={`${path}/registry/driver-details`} component={() => <DriverDetails parentRoute={path} />} />
-              <PrivateRoute path={`${path}/common-search/:id`} component={(props) => <SearchApp {...props} parentRoute={path} />} />
-              {/* <PrivateRoute path={`${path}/new-application`} component={(props) => <Create {...props} parentRoute={path} />} /> */}
-            </div>
+            {/* <PrivateRoute path={`${path}/additional`} component={Create} /> */}
+            {/* <PrivateRoute path={`${path}/new-application`} component={(props) => <Create {...props} parentRoute={path} />} /> */}
+
+            <PrivateRoute
+              path={`${path}/search-vendor`}
+              component={renderWithLayout(
+                (props) => (
+                  <SearchVendor {...props} parentRoute={path} />
+                ),
+                layouts.normal
+              )}
+            />
+
+            <PrivateRoute
+              path={`${path}/registry/new-driver`}
+              component={renderWithLayout(
+                (props) => (
+                  <AddDriver {...props} parentRoute={path} />
+                ),
+                layouts.normal
+              )}
+            />
+
+            <PrivateRoute
+              path={`${path}/registry/new-vehicle`}
+              component={renderWithLayout(
+                (props) => (
+                  <AddVehicle {...props} parentRoute={path} />
+                ),
+                layouts.normal
+              )}
+            />
+
+            <PrivateRoute
+              path={`${path}/registry/additionaldetails`}
+              component={renderWithLayout(
+                (props) => (
+                  <VendorCreate {...props} parentRoute={path} />
+                ),
+                layouts.normal
+              )}
+            />
+
+            <PrivateRoute
+              path={`${path}/registry/driver-details/:id`}
+              component={renderWithLayout(
+                (props) => (
+                  <DriverDetails {...props} parentRoute={path} />
+                ),
+                layouts.action
+              )}
+            />
+
+            <PrivateRoute
+              path={`${path}/common-search/:id`}
+              component={renderWithLayout(
+                (props) => (
+                  <SearchApp {...props} parentRoute={path} />
+                ),
+                layouts.normal
+              )}
+            />
+
+            {/* ACTION BAR LAYOUT */}
+            <PrivateRoute
+              path={`${path}/registry/new-vendor`}
+              component={renderWithLayout(
+                (props) => (
+                  <AddVendor {...props} parentRoute={path} />
+                ),
+                layouts.action
+              )}
+            />
+
+            <PrivateRoute
+              path={`${path}/registry/vendor-details/:id`}
+              component={renderWithLayout(
+                (props) => (
+                  <EditVendorDetails {...props} parentRoute={path} />
+                ),
+                layouts.action
+              )}
+            />
+
+            <PrivateRoute
+              path={`${path}/registry/vehicle-details/:id`}
+              component={renderWithLayout(
+                (props) => (
+                  <VehicleDetails {...props} parentRoute={path} />
+                ),
+                layouts.action
+              )}
+            />
           </div>
         </React.Fragment>
       </AppContainer>
@@ -130,3 +206,14 @@ const EmployeeApp = ({ path, url, userType }) => {
 };
 
 export default EmployeeApp;
+
+const renderWithLayout = (Component, layoutClass) => (routeProps) => (
+  <div className={layoutClass}>
+    <Component {...routeProps} />
+  </div>
+);
+
+const layouts = {
+  normal: "employee-form",
+  action: "employee-form employee-form-content-with-action-bar",
+};

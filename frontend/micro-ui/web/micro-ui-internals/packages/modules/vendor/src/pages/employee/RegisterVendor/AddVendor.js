@@ -277,7 +277,7 @@ const AddVendor = ({ parentUrl, heading }) => {
   const steps = [{ label: "ES_VRNDOR_NEW_VENDOR_DETAILS" }, { label: "ES_FSM_REGISTRY_NEW_ADDRESS_DETAILS" }];
 
   const onFormValueChange = (setValue, formData) => {
-    if (formData?.vendorName && formData?.phone  && formData?.serviceType?.code) {
+    if (formData?.vendorName && formData?.phone && formData?.serviceType?.code) {
       setCanSubmit(true);
     } else {
       setCanSubmit(false);

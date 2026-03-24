@@ -4,6 +4,12 @@ import { useTranslation } from "react-i18next";
 import { Switch, useLocation } from "react-router-dom";
 import Inbox from "./Inbox";
 import SearchApp from "./SearchApp";
+import FixedPointScheduleManagement from "./FixedPointScheduleManagement";
+import LiveTrackingSystem from "../../components/LiveTrackingSystem";
+import AddFillingPointAddress from "../../components/AddFillingPointAddress";
+import AddFixPointAddress from "../../components/AddFixPointAddress";
+import WTSearchPointAddress from "../../components/SearchFillingPointAddress";
+import VendorAssign from "../../components/VendorAssign";
 
 const EmployeeApp = ({ path }) => {
   const { t } = useTranslation();
@@ -46,6 +52,18 @@ const EmployeeApp = ({ path }) => {
         crumbs.push({ label: t("ES_COMMON_INBOX"), path: `${path}/inbox` });
       }
       crumbs.push({ label: t("WT_BOOKING_DETAILS") });
+    } else if (pathname.includes("/fixed-point-schedule")) {
+      crumbs.push({ label: t("WT_FIXED_POINT_SCHEDULE_MANAGEMENT") });
+    } else if (pathname.includes("/live-tracking")) {
+      crumbs.push({ label: t("WT_LIVE_TRACKING_SYSTEM") });
+    } else if (pathname.includes("/add-filling-point-address")) {
+      crumbs.push({ label: t("WT_ADD_FILLING_POINT_ADDRESS") });
+    } else if (pathname.includes("/add-fix-point-address")) {
+      crumbs.push({ label: t("WT_ADD_FIX_POINT_ADDRESS") });
+    } else if (pathname.includes("/search-filling-fix-point")) {
+      crumbs.push({ label: t("WT_SEARCH_FIX_POINT") });
+    }else if (pathname.includes("/vendor-assign")) {
+      crumbs.push({ label: t("WT_VENDOR_ASSIGN") });
     }
 
     return crumbs;
@@ -111,8 +129,9 @@ const EmployeeApp = ({ path }) => {
               {/* WT Inbox */}
               <PrivateRoute
                 path={`${path}/inbox`}
-                component={() => (
+                component={(props) => (
                   <Inbox
+                    {...props}
                     useNewInboxAPI={true}
                     parentRoute={path}
                     businessService="watertanker"
@@ -126,8 +145,9 @@ const EmployeeApp = ({ path }) => {
               {/* MT Inbox */}
               <PrivateRoute
                 path={`${path}/mt/inbox`}
-                component={() => (
+                component={(props) => (
                   <Inbox
+                    {...props}
                     useNewInboxAPI={true}
                     parentRoute={path}
                     moduleCode="MT"
@@ -141,8 +161,9 @@ const EmployeeApp = ({ path }) => {
               {/* TP Inbox */}
               <PrivateRoute
                 path={`${path}/tp/inbox`}
-                component={() => (
+                component={(props) => (
                   <Inbox
+                    {...props}
                     useNewInboxAPI={true}
                     parentRoute={path}
                     moduleCode="TP"
@@ -158,12 +179,19 @@ const EmployeeApp = ({ path }) => {
               <PrivateRoute path={`${path}/mt/request-service`} component={WTCreate} />
               <PrivateRoute path={`${path}/tp/request-service`} component={WTCreate} />
               {/* Booking Details */}
-              <PrivateRoute path={`${path}/booking-details/:id`} component={() => <ApplicationDetails parentRoute={path} />} />
-              <PrivateRoute path={`${path}/bookingsearch/booking-details/:id`} component={() => <ApplicationDetails parentRoute={path} />} />
+              <PrivateRoute path={`${path}/booking-details/:id`} component={(props) => <ApplicationDetails {...props} parentRoute={path} />} />
+              <PrivateRoute path={`${path}/bookingsearch/booking-details/:id`} component={(props) => <ApplicationDetails {...props} parentRoute={path} />} />
               {/* My Bookings */}
               <PrivateRoute path={`${path}/my-bookings`} component={(props) => <SearchApp {...props} parentRoute={path} moduleCode="WT" />} />
               <PrivateRoute path={`${path}/mt/my-bookings`} component={(props) => <SearchApp {...props} parentRoute={path} moduleCode="MT" />} />
               <PrivateRoute path={`${path}/tp/my-bookings`} component={(props) => <SearchApp {...props} parentRoute={path} moduleCode="TP" />} />
+              {/* Fixed Point Schedule Management */}
+              <PrivateRoute path={`${path}/fixed-point-schedule`} component={FixedPointScheduleManagement} />
+              <PrivateRoute path={`${path}/live-tracking`} component={LiveTrackingSystem} />
+              <PrivateRoute path={`${path}/add-filling-point-address`} component={AddFillingPointAddress} />
+              <PrivateRoute path={`${path}/add-fix-point-address`} component={AddFixPointAddress} />
+              <PrivateRoute path={`${path}/search-filling-fix-point`} component={WTSearchPointAddress} />
+              <PrivateRoute path={`${path}/vendor-assignment`} component={VendorAssign} />
             </div>
           </div>
         </div>

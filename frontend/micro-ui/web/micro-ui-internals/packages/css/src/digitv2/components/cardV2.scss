@@ -131,7 +131,7 @@
 
   .card-label-error {
     @extend .alert-error;
-    @apply block text-body-s text-error mb-md;
+    @apply block text-body-s text-error;
   }
 
   .card-label-desc {
