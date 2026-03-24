@@ -120,7 +120,24 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
   const [isEmployee, setisEmployee] = useState(false);
   const [isSidebarOpen, toggleSidebar] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
+
+  useEffect(() => {
+    setIsMobileOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const sidebar = document.getElementById("citizen-static-sidebar-id");
+      const toggleBtn = document.getElementById("citizen-mobile-toggle");
+      if (isMobileOpen && sidebar && !sidebar.contains(event.target) && toggleBtn && !toggleBtn.contains(event.target)) {
+        setIsMobileOpen(false);
+      }
+    };
+    if (isMobileOpen) document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMobileOpen]);
 
   const handleLogout = () => {
     toggleSidebar(false);
@@ -249,7 +266,26 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
 
   return (
     <React.Fragment>
-      <div className={`citizen-static-sidebar ${isCollapsed ? "collapsed" : "expanded"}`}>
+      <button
+        id="citizen-mobile-toggle"
+        className={`citizen-mobile-toggle ${isMobileOpen ? 'hidden' : ''}`}
+        onClick={() => setIsMobileOpen(true)}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        <span className="toggle-label">Dash</span>
+      </button>
+
+      <div
+        className={`citizen-sidebar-backdrop ${isMobileOpen ? 'visible' : ''}`}
+        onClick={() => setIsMobileOpen(false)}
+      />
+
+      <div id="citizen-static-sidebar-id" className={`citizen-static-sidebar ${isCollapsed ? "collapsed" : "expanded"} ${isMobileOpen ? "mobile-open" : ""}`}>
         <div className="citizen-sidebar-header">
           <div className="citizen-sidebar-brand">
             <span className="citizen-sidebar-brand-dot" aria-hidden="true"></span>

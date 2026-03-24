@@ -61,7 +61,11 @@ const WTCitizenCard = () => {
     onDetailsClick: handleDetailsClick,
   };
 
-  return <EmployeeModuleCard {...propsForModuleCard} />;
+  return (
+    <div className="wt-citizen-card-premium">
+      <EmployeeModuleCard {...propsForModuleCard} />
+    </div>
+  );
 };
 
 export default WTCitizenCard;

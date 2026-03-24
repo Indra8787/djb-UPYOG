@@ -323,8 +323,17 @@
 }
 
 @media (max-width: 780px) {
+
+  /* On mobile, SideBarStatic shouldn't prevent the drawer from appearing. */
   .SideBarStatic {
-    display: none;
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 0;
+    /* No physical width so it doesn't push map content */
+    height: 100vh;
   }
 }
 
@@ -342,7 +351,6 @@
     top: -5%;
     width: 50vw;
     height: 50vw;
-    background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0) 70%);
     border-radius: 50%;
     opacity: 0.8;
     z-index: 0;
@@ -368,36 +376,71 @@
   flex: 1;
   min-width: 0;
   margin-top: -25px;
+  position: relative;
 
   img {
     height: 33vw;
-    filter: grayscale(100%);
-    @apply w-full object-cover;
+    min-height: 220px;
+    filter: brightness(0.65) contrast(1.1);
+    @apply w-full object-cover rounded-b-2xl;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    transition: filter 0.3s ease;
   }
 
   h1 {
     position: absolute;
     top: 100px;
+    /* Base position */
     left: 21px;
-    @apply text-heading-xl text-white font-bold;
+    @apply text-heading-xl;
+    /* Kept this as it's likely a custom framework class */
+    color: #ffffff;
+    /* text-white equivalent */
+    font-weight: 800;
+    /* font-extrabold equivalent */
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.5px;
   }
 
   .moduleLinkHomePageBackButton {
     border: none;
-    top: 76px;
+    position: absolute;
+    top: 80px;
+    /* Align nicer */
+    left: 16px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.2s ease;
 
-    svg {
-      fill: theme(colors.white);
+    &:hover {
+      background: rgba(255, 255, 255, 0.4);
     }
 
-    @apply absolute text-white text-heading-s ml-md;
+    svg {
+      fill: #ffffff !important;
+    }
+
+    /* remove ml-md inside so it centers */
   }
 }
 
 .moduleLinkHomePageModuleLinks {
-  @apply mt-md;
+  @apply mt-md mx-sm;
 
   .CitizenHomeCard {
+    background: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(12px);
+    border-radius: 16px !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+
     .header {
       @apply hidden;
     }
@@ -438,21 +481,26 @@
     img {
       min-width: 100vw;
       height: 20vw;
+      border-radius: 0 0 24px 24px;
+      /* Smoother curve on desktop */
     }
 
     h1 {
-      top: calc(10vw + 40px);
-      left: 15.8rem;
+      top: calc(10vw + 60px);
+      left: calc(15.8rem + 40px);
+      /* Align slightly right of back button */
+      font-size: 38px;
     }
 
     .moduleLinkHomePageBackButton {
       top: calc(10vw + 16px);
-      @apply ml-md;
+      left: 15.8rem;
     }
   }
 
   .moduleLinkHomePageModuleLinks {
     width: 100%;
+    padding: 0 2rem;
   }
 }
 
