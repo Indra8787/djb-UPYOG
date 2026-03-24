@@ -51,7 +51,7 @@ public class CorrelationIdFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
         String path = exchange.getRequest().getURI().getPath();
-        if (path.startsWith("/socket.io")) {
+        if (path.startsWith("/driver-tanker-tracker-service/socket.io")) {
             return chain.filter(exchange);
         }
 
