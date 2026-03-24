@@ -1,5 +1,5 @@
 import React from "react";
-import { TextInput, Dropdown, CardLabel } from "@djb25/digit-ui-react-components";
+import { TextInput, Dropdown, MultiSelectDropdown, CustomNameDropdown, CardLabel, Loader } from "@djb25/digit-ui-react-components";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -9,9 +9,39 @@ const AddTripModal = ({ t, closeModal, onSubmit, initialValues }) => {
     handleSubmit,
     control,
     formState: { errors },
+    watch,
+    setValue,
   } = useForm({
     defaultValues: initialValues || {},
   });
+
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const { isLoading: isFixedPointLoading, data: fixedPointsData } = Digit.Hooks.wt.useFixedPointSearchAPI({
+    tenantId,
+    filters: { limit: 1000 },
+  });
+
+  const fixedPoints = fixedPointsData?.waterTankerBookingDetail || [];
+
+  const fixedPointOptions = fixedPoints.map((fp) => ({
+    name: fp?.applicantDetail?.name || "NA",
+    mobileNumber: fp?.applicantDetail?.mobileNumber || "NA",
+    locality: fp?.address?.locality || "NA",
+    displayLabel: `${fp?.applicantDetail?.name || "NA"} | ${fp?.applicantDetail?.mobileNumber || "NA"} | ${fp?.address?.locality || "NA"}`,
+    value: fp.bookingId,
+    fullAddress: [
+      fp?.address?.houseNo && `${t("WT_HOUSE_NO")} = ${fp.address.houseNo}`,
+      fp?.address?.streetName && `${t("WT_STREET_NAME")} = ${fp.address.streetName}`,
+      fp?.address?.landmark && `${t("WT_LANDMARK")} = ${fp.address.landmark}`,
+      fp?.address?.locality && `${t("WT_LOCALITY")} = ${fp.address.locality}`,
+      // fp?.address?.city && `${t("WT_CITY")} = ${fp.address.city}`,
+    ]
+      .filter(Boolean)
+      .join(", "),
+  }));
+
+  const selectedFixedPointCode = watch("fixedPointCode");
+  const selectedFixedPoint = fixedPointOptions.find((opt) => opt.value === selectedFixedPointCode);
 
   const dayOptions = [
     { label: t("MONDAY"), value: "MONDAY" },
@@ -45,23 +75,69 @@ const AddTripModal = ({ t, closeModal, onSubmit, initialValues }) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        zIndex: 9999,
+        zIndex: 200000,
       }}
     >
-      <div
-        className="custom-modal-content"
-        style={{
-          backgroundColor: "#fff",
-          borderRadius: "8px",
-          width: "70%",
-          maxWidth: "800px",
-          maxHeight: "90vh",
-          display: "flex",
-          flexDirection: "column",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-          position: "relative",
-        }}
-      >
+      <style>
+        {`
+          .custom-modal-content {
+            background-color: #fff;
+            border-radius: 8px;
+            width: 70%;
+            max-width: 800px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            position: relative;
+          }
+          .add-trip-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+          }
+          @media (max-width: 768px) {
+            .custom-modal-content {
+              width: 90%;
+              max-height: 85vh;
+            }
+            .add-trip-form {
+              grid-template-columns: 1fr;
+              gap: 15px;
+            }
+          }
+          @media (max-width: 480px) {
+            .custom-modal-content {
+              width: 95%;
+              max-height: 95vh;
+            }
+            .custom-modal-body {
+              padding: 15px !important;
+            }
+            .custom-modal-footer {
+              padding: 12px 15px !important;
+              flex-direction: row;
+              justify-content: flex-end;
+            }
+            .custom-modal-header {
+                padding: 12px 15px !important;
+            }
+            .custom-modal-header h1 {
+                font-size: 18px !important;
+            }
+          }
+           @media (max-width: 320px) {
+             .custom-modal-footer {
+              flex-direction: column-reverse;
+              align-items: stretch;
+            }
+            .custom-modal-footer button {
+              width: 100%;
+            }
+          }
+        `}
+      </style>
+      <div className="custom-modal-content">
         {/* Header */}
         <div
           className="custom-modal-header"
@@ -96,17 +172,63 @@ const AddTripModal = ({ t, closeModal, onSubmit, initialValues }) => {
             overflowY: "auto",
           }}
         >
-          <div className="add-trip-form" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
+          <div className="add-trip-form">
             <div className="field-group">
               <CardLabel style={{ marginBottom: "8px", fontWeight: "500" }}>{t("WT_FIXED_POINT_CODE")}</CardLabel>
-              <TextInput name="fixedPointCode" inputRef={register()} />
+              {isFixedPointLoading ? (
+                <Loader />
+              ) : (
+                <Controller
+                  control={control}
+                  name="fixedPointCode"
+                  render={(props) => (
+                    <CustomNameDropdown
+                      option={fixedPointOptions}
+                      optionKey="displayLabel"
+                      selected={fixedPointOptions.find((opt) => opt.value === props.value)}
+                      select={(val) => props.onChange(val.value)}
+                      t={t}
+                      optionsHeader={{
+                        name: "WT_NAME",
+                        mobileNumber: "WT_MOBILE_NUMBER",
+                        locality: "WT_LOCALITY",
+                      }}
+                    />
+                  )}
+                />
+              )}
+              {selectedFixedPoint && (
+                <div
+                  style={{
+                    marginTop: "8px",
+                    padding: "10px",
+                    backgroundColor: "#f9f9f9",
+                    border: "1px solid #ddd",
+                    borderRadius: "4px",
+                    fontSize: "14px",
+                    color: "#555",
+                  }}
+                >
+                  <strong>{t("WT_ADDRESS")}:</strong> {selectedFixedPoint.fullAddress}
+                </div>
+              )}
             </div>
             <div className="field-group">
               <CardLabel style={{ marginBottom: "8px", fontWeight: "500" }}>{t("WT_DAY")}</CardLabel>
               <Controller
                 control={control}
                 name="day"
-                render={(props) => <Dropdown option={dayOptions} optionKey="label" selected={props.value} select={props.onChange} t={t} />}
+                render={(props) => (
+                  <MultiSelectDropdown
+                    options={dayOptions}
+                    optionsKey="label"
+                    selected={dayOptions.filter((opt) => (props.value || []).some((v) => v === opt.value || v?.value === opt.value))}
+                    onSelect={(val) => props.onChange(val.map((v) => (Array.isArray(v) ? v[1] : v?.value || v)))}
+                    t={t}
+                    defaultLabel={t("WT_SELECT_DAYS")}
+                    defaultUnit={t("WT_DAYS")}
+                  />
+                )}
               />
             </div>
             <div className="field-group">
@@ -114,10 +236,10 @@ const AddTripModal = ({ t, closeModal, onSubmit, initialValues }) => {
               <TextInput name="frequencyNo" inputRef={register()} />
             </div>
 
-            <div className="field-group">
+            {/* <div className="field-group">
               <CardLabel style={{ marginBottom: "8px", fontWeight: "500" }}>{t("WT_VEHICLE_ID")}</CardLabel>
               <TextInput name="vehicleId" inputRef={register()} />
-            </div>
+            </div> */}
             <div className="field-group">
               <CardLabel style={{ marginBottom: "8px", fontWeight: "500" }}>{t("WT_ARRIVAL_TIME_TO_FPL")}</CardLabel>
               <TextInput name="arrivalTimeFpl" inputRef={register()} type="time" />
@@ -152,7 +274,7 @@ const AddTripModal = ({ t, closeModal, onSubmit, initialValues }) => {
               />
             </div>
 
-            <div className="field-group" style={{ gridColumn: "span 2" }}>
+            <div className="field-group remarks-field-group" style={{ gridColumn: "span 2" }}>
               <CardLabel style={{ marginBottom: "8px", fontWeight: "500" }}>{t("WT_REMARKS")}</CardLabel>
               <TextInput name="remarks" inputRef={register()} />
             </div>

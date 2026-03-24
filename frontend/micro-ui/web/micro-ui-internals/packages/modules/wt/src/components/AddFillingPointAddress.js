@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { AddressDetails, SubmitBar, Toast, Loader } from "@djb25/digit-ui-react-components";
 import { fillingPointPayload } from "../utils";
 import Timeline from "../../../vendor/src/components/VENDORTimeline";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 
 import AddFillingPointMetaData from "./AddFillingPointMetaData";
 import AddFixFillAddress from "./AddFixFillAddress";
@@ -11,6 +11,7 @@ import AddFixFillAddress from "./AddFixFillAddress";
 const AddFillingPointAddress = () => {
   const { t } = useTranslation();
   const location = useLocation();
+  const history = useHistory();
   const queryParams = new URLSearchParams(location.search);
   const editId = queryParams.get("id");
 
@@ -20,8 +21,8 @@ const AddFillingPointAddress = () => {
   const addressConfig = { key: "address" };
 
   // ✅ Fetch data if editing
-  const { isLoading: isEditLoading, data: editData } = Digit.Hooks.wt.useTankerSearchAPI(
-    { tenantId, filters: { bookingId: editId } },
+  const { isLoading: isEditLoading, data: editData } = Digit.Hooks.wt.useFillPointSearch(
+    { tenantId, filters: { id: editId } },
     { enabled: !!editId }
   );
 
@@ -36,30 +37,30 @@ const AddFillingPointAddress = () => {
   };
 
   useEffect(() => {
-    if (editId && editData?.waterTankerBookingDetail) {
+    if (editId && editData?.fillingPoints) {
       // Find the specific record that matches the ID from the URL
-      const data = editData.waterTankerBookingDetail.find((item) => item.bookingId === editId);
+      const data = editData.fillingPoints.find((item) => item.id === editId);
 
       if (data) {
         setFormData({
+          id: data.id,
+          tenantId: data.tenantId,
           owner: {
-            fillingPointName: data.fillingpointmetadata?.fillingPointName || data.fillingpointmetadata?.name,
-            emergencyName: data.fillingpointmetadata?.emergencyName,
-            aeName: data.fillingpointmetadata?.aeName,
-            aeMobile: data.fillingpointmetadata?.aeMobile || data.fillingpointmetadata?.mobileNumber,
-            aeEmail: data.fillingpointmetadata?.aeEmail || data.fillingpointmetadata?.emailId,
-            jeName: data.fillingpointmetadata?.jeName,
-            jeMobile: data.fillingpointmetadata?.jeMobile || data.fillingpointmetadata?.jeMobileNumber,
-            jeEmail: data.fillingpointmetadata?.jeEmail || data.fillingpointmetadata?.jeEmailId,
-            eeName: data.fillingpointmetadata?.eeName,
-            eeMobile: data.fillingpointmetadata?.eeMobile || data.fillingpointmetadata?.eeMobileNumber,
-            eeEmail: data.fillingpointmetadata?.eeEmail || data.fillingpointmetadata?.eeEmailId,
+            fillingPointName: data.fillingPointName,
+            emergencyName: data.emergencyName,
+            aeName: data.aeName,
+            aeMobile: data.aeMobile,
+            aeEmail: data.aeEmail,
+            jeName: data.jeName,
+            jeMobile: data.jeMobile,
+            jeEmail: data.jeEmail,
+            eeName: data.eeName,
+            eeMobile: data.eeMobile,
+            eeEmail: data.eeEmail,
           },
           address: {
             ...data.address,
           },
-          bookingId: data.bookingId,
-          auditDetails: data.auditDetails,
         });
       }
     }
@@ -72,6 +73,7 @@ const AddFillingPointAddress = () => {
   const steps = ["WT_FILLING_POINT"];
 
   const { mutate: createFillingPoint } = Digit.Hooks.wt.useCreateFillPoint(tenantId);
+  const { mutate: updateFillingPoint } = Digit.Hooks.wt.useUpdateFillPoint(tenantId);
 
   const handleSubmit = (e) => {
     if (e && e.preventDefault) e.preventDefault();
@@ -80,12 +82,15 @@ const AddFillingPointAddress = () => {
       tenantId,
     });
 
-    const mutation = createFillingPoint;
+    const mutation = editId ? updateFillingPoint : createFillingPoint;
 
     mutation(payload, {
       onSuccess: () => {
         setShowToast({ label: editId ? t("WT_FILLING_POINT_UPDATED_SUCCESS") : t("WT_FILLING_POINT_CREATED_SUCCESS") });
-        setTimeout(() => setShowToast(null), 5000);
+        setTimeout(() => {
+          setShowToast(null);
+          history.push(`/digit-ui/employee/wt/search-filling-fix-point`);
+        }, 3000);
       },
       onError: (error) => {
         setShowToast({
@@ -127,7 +132,7 @@ const AddFillingPointAddress = () => {
             ]}
           />
 
-          <AddFixFillAddress t={t} config={addressConfig} onSelect={handleSelect} formData={formData} />
+          <AddFixFillAddress t={t} config={addressConfig} onSelect={handleSelect} formData={formData} isEdit={!!editId} />
           <div style={{ display: "flex", marginBottom: "24px", justifyContent: isMobile ? "center" : "flex-end" }}>
             <SubmitBar label={editId ? t("ES_COMMON_UPDATE") : t("ES_COMMON_SAVE_NEXT")} onSubmit={handleSubmit} />
           </div>

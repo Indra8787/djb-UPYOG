@@ -57,10 +57,11 @@ const AddFixFillAddress = ({ t, config, formData, onSelect, isEdit, userDetails 
 
   // ✅ Sync with formData if it changes (edit mode) - only run once or when externally changed
   useEffect(() => {
-    // Reset if bookingId changes
-    if (formData?.bookingId && lastBookingId.current !== formData.bookingId) {
+    // Reset if id/bookingId changes
+    const currentId = formData?.id || formData?.bookingId || formData?.address?.id;
+    if (currentId && lastBookingId.current !== currentId) {
       isInitialized.current = false;
-      lastBookingId.current = formData.bookingId;
+      lastBookingId.current = currentId;
     }
 
     if (formData?.address && !isInitialized.current && allCities) {

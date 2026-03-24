@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.upyog.rs.fixedpoint.repository.FixedPointDetailsRepository;
 import org.upyog.rs.fixedpoint.service.FixedPointDetailsService;
 import org.upyog.rs.fixedpoint.web.model.*;
-import org.upyog.rs.util.RequestServiceUtil;
 import org.upyog.rs.util.ResponseInfoFactory;
 
 import javax.validation.Valid;
@@ -26,9 +25,6 @@ public class FixedPointDetailsController {
 
     @Autowired
     private ResponseInfoFactory responseInfoFactory;
-
-    @Autowired
-    private FixedPointDetailsRepository fixedPointDetailsRepository;
 
     @Autowired
     private FixedPointDetailsService fixedPointDetailsService;
@@ -68,6 +64,24 @@ public class FixedPointDetailsController {
                 .count(count)
                 .responseInfo(responseInfo)
                 .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+    @PostMapping("/request-service/water-tanked/fixed/time/v1/_update")
+    public ResponseEntity<FixedPointDetailsResponse> updateFixedPointDetails(
+            @Valid @RequestBody FixedPointDetailsRequest fixedPointDetailsRequest) {
+
+        log.info("FixedPointDetailsController :: updateFixedPointDetails :: Request received");
+
+        ResponseInfo responseInfo = responseInfoFactory
+                .createResponseInfoFromRequestInfo(fixedPointDetailsRequest.getRequestInfo(), true);
+
+        FixedPointDetailsResponse response = fixedPointDetailsService
+                .updateFixedPointDetails(fixedPointDetailsRequest);
+
+        response.setResponseInfo(responseInfo);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

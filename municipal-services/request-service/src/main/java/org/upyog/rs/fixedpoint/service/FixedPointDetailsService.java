@@ -15,4 +15,5 @@ public interface FixedPointDetailsService {
     public List<FixedPointTimeTableDetail> getFixedPointDetails(RequestInfo requestInfo, FixedPointSearchCriteria criteria);
     public Integer getApplicationsCount(FixedPointSearchCriteria criteria, RequestInfo requestInfo);
 
-    }
+    FixedPointDetailsResponse updateFixedPointDetails(FixedPointDetailsRequest fixedPointDetailsRequest);
+}

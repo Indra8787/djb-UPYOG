@@ -58,22 +58,13 @@ const WTCard = () => {
     {
       label: t("WT_SEARCH_FIX_POINT"),
       link: `${APPLICATION_PATH}/employee/wt/search-filling-fix-point`,
+    },
+    {
+      label: t("Vendor_Assign"),
+      link: `${APPLICATION_PATH}/employee/wt/vendor-assignment`,
     }
   ];
   const WT_CEMP = Digit.UserService.hasAccess(["WT_CEMP"]) || false;
-
-  /**
-   * Configuration object for the Module Card component.
-   *
-   * - `Icon`: The icon to be displayed on the module card.
-   * - `moduleName`: The name of the module displayed on the card, translated using the `t` function.
-   * - `kpis`: An array of Key Performance Indicators (KPIs) to display on the card.
-   *    - Each KPI includes:
-   *      - `count`: The total count of items (e.g., applications or requests).
-   *      - `label`: The label for the KPI, translated using the `t` function.
-   *      - `link`: The URL to navigate to when the KPI is clicked.
-   * - `links`: An array of links to be displayed on the card, filtered based on roles or conditions.
-   */
 
   const propsForModuleCard = {
     Icon: <CHBIcon />,
