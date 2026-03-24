@@ -54,6 +54,8 @@ public class RbacFilterHelper implements RewriteFunction<Map, Map> {
 
     @Override
     public Publisher<Map> apply(ServerWebExchange serverWebExchange, Map map) {
+        log.info("RBAC helper invoked for URI: {}", serverWebExchange.getRequest().getURI().getPath());
+        log.debug("Incoming request body keys: {}", map != null ? map.keySet() : "NULL BODY");
 
         isIncomingURIInAuthorizedActionList(serverWebExchange,map);
         return Mono.just(map);
@@ -62,14 +64,42 @@ public class RbacFilterHelper implements RewriteFunction<Map, Map> {
     private void isIncomingURIInAuthorizedActionList(ServerWebExchange exchange, Map map) {
 
         String requestUri = exchange.getRequest().getURI().getPath();
+        log.debug("Full request map: {}", map);
+
         RequestInfo requestInfo = objectMapper.convertValue(map.get(REQUEST_INFO_FIELD_NAME_PASCAL_CASE), RequestInfo.class);
+
+        log.info("Parsed RequestInfo successfully");
+
         User user = requestInfo.getUserInfo();
+
+        log.info("RBAC parsed user: id={}, userName={}, tenantId={}, type={}",
+                user != null ? user.getId() : null,
+                user != null ? user.getUserName() : null,
+                user != null ? user.getTenantId() : null,
+                user != null ? user.getType() : null);
+
+        log.info("RBAC parsed user roles: {}",
+                user != null && user.getRoles() != null
+                        ? user.getRoles().stream().map(r -> r.getCode()).toList()
+                        : null);
 
         if (user == null) {
             throw new RuntimeException("User information not found. Can't execute RBAC filter");
         }
 
-        Set<String> tenantIds = commonUtils.validateRequestAndSetRequestTenantId(exchange,map);
+        Set<String> tenantIds;
+
+        log.info("method commonUtils.validateRequestAndSetRequestTenantId");
+        try {
+            tenantIds = commonUtils.validateRequestAndSetRequestTenantId(exchange,map);
+            log.info("after method commonUtils.validateRequestAndSetRequestTenantId");
+        } catch (Exception e) {
+            log.error("Exception in validateRequestAndSetRequestTenantId for uri={}, body={}",
+                    requestUri, map, e);
+            throw e;
+        }
+
+        log.info("RBAC resolved tenantIds: {}", tenantIds);
 
         /*
          * Adding tenantId to header for tracer logging with correlation-id
@@ -88,7 +118,13 @@ public class RbacFilterHelper implements RewriteFunction<Map, Map> {
                 .tenantIds(tenantIds)
                 .build();
 
+        log.info("RBAC authorization request: uri={}, tenantIds={}, roles={}",
+                requestUri,
+                tenantIds,
+                user.getRoles() != null ? user.getRoles().stream().map(r -> r.getCode()).toList() : null);
+
         boolean isUriAuthorised = isUriAuthorized(request , exchange);
+        log.info("isUriAuthorised after authorization: {}", isUriAuthorised);
 
         if(!isUriAuthorised) {
             throw new CustomException(HttpStatus.UNAUTHORIZED.toString(), "You are not authorized to access this resource");
@@ -98,6 +134,7 @@ public class RbacFilterHelper implements RewriteFunction<Map, Map> {
 
     private boolean isUriAuthorized(AuthorizationRequest authorizationRequest , ServerWebExchange exchange) {
 
+        log.info("In isUriAuthorized: {}", authorizationRequest);
         AuthorizationRequestWrapper authorizationRequestWrapper = new AuthorizationRequestWrapper(new RequestInfo(), authorizationRequest);
 
         final HttpHeaders headers = new HttpHeaders();
@@ -114,6 +151,8 @@ public class RbacFilterHelper implements RewriteFunction<Map, Map> {
             ResponseEntity<Void> responseEntity = restTemplate.postForEntity(applicationProperties.getAuthorizationUrl(), httpEntity, Void
                     .class);
 
+            log.info("Authorization response status: {}", responseEntity.getStatusCode());
+            log.info("In isUriAuthorized returned : {}", authorizationRequest);
             return responseEntity.getStatusCode().equals(HttpStatus.OK);
         } catch (HttpClientErrorException e) {
             log.warn("Exception while attempting to authorize via access control", e);

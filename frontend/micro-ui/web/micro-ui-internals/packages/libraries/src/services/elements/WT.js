@@ -96,6 +96,17 @@ export const WTService = {
       params: {},
       auth: true,
     }),
+  updateFillPoint: (details, tenantId) =>
+    Request({
+      url: Urls.wt.updatefillpoint,
+      data: details,
+      useCache: false,
+      setTimeParam: false,
+      userService: true,
+      method: "POST",
+      params: {},
+      auth: true,
+    }),
   SearchFillPoint: ({ tenantId, filters, auth }) =>
     Request({
       url: Urls.wt.searchfillpoint,
@@ -104,5 +115,27 @@ export const WTService = {
       auth: auth === false ? auth : true,
       userService: auth === false ? auth : true,
       data: { criteria: { tenantId, ...filters } },
+    }),
+  fixedFillingMapping: (details, tenantId) =>
+    Request({
+      url: Urls.wt.mapping,
+      data: details,
+      useCache: false,
+      setTimeParam: false,
+      userService: true,
+      method: "POST",
+      params: { tenantId },
+      auth: true,
+    }),
+  createWorkOrder: (details, tenantId) =>
+    Request({
+      url: Urls.wt.workOrderCreate,
+      data: details,
+      useCache: false,
+      setTimeParam: false,
+      userService: true,
+      method: "POST",
+      params: { tenantId },
+      auth: true,
     }),
 };

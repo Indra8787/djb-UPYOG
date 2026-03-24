@@ -8,18 +8,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.upyog.rs.fixedpoint.repository.FixedPointDetailsRepository;
 import org.upyog.rs.fixedpoint.repository.querybuilder.FixedPointTimeTableQueryBuilder;
+import org.upyog.rs.fixedpoint.service.FixedPointEnrichmentService;
 import org.upyog.rs.fixedpoint.service.FixedPointDetailsService;
 import org.upyog.rs.fixedpoint.web.model.*;
 import org.upyog.rs.web.models.AuditDetails;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
 public class FixedPointDetailsServiceImpl implements FixedPointDetailsService {
+
+    @Autowired
+    private FixedPointEnrichmentService fixedPointEnrichmentService;
 
     private static final List<String> DAYS_OF_WEEK = Arrays.asList(
             "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"
@@ -39,34 +40,38 @@ public class FixedPointDetailsServiceImpl implements FixedPointDetailsService {
         RequestInfo requestInfo = fixedPointDetailsRequest.getRequestInfo();
         FixedPointDetails inputDetail = fixedPointDetailsRequest.getFixedPointDetails();
 
-        if (existsByFixedPointCode
-                .existsByFixedPointCode(inputDetail.getFixedPointCode())) {
+        // Duplicate check
+        if (existsByFixedPointCode.existsByFixedPointCode(inputDetail.getFixedPointCode())) {
             throw new CustomException("DUPLICATE_FIXED_POINT_CODE",
                     "Timetable for fixed_point_code '" + inputDetail.getFixedPointCode() + "' already exists.");
         }
 
+        // Validate day list
         if (inputDetail.getDay() == null || inputDetail.getDay().isEmpty()) {
-            throw new CustomException("INVALID_REQUEST", "day is required");
+            throw new CustomException("INVALID_REQUEST", "At least one day is required");
         }
 
-        String requestedDay = inputDetail.getDay().toUpperCase();
+        List<String> requestedDays = inputDetail.getDay().stream()
+                .map(String::toUpperCase)
+                .collect(java.util.stream.Collectors.toList());
 
-        if (!DAYS_OF_WEEK.contains(requestedDay)) {
-            throw new CustomException("INVALID_DAY",
-                    "Invalid day: " + requestedDay + ". Must be one of: " + DAYS_OF_WEEK);
+        // Validate each day value
+        for (String day : requestedDays) {
+            if (!DAYS_OF_WEEK.contains(day)) {
+                throw new CustomException("INVALID_DAY",
+                        "Invalid day: " + day + ". Must be one of: " + DAYS_OF_WEEK);
+            }
         }
 
         AuditDetails auditDetails = buildAuditDetails(requestInfo);
-
         List<FixedPointDetails> fixedPointDetailsList = new ArrayList<>();
 
         for (String day : DAYS_OF_WEEK) {
-            String uniqueScheduleId = UUID.randomUUID().toString();
-
             FixedPointDetails detail = FixedPointDetails.builder()
-                    .systemAssignedScheduleId(uniqueScheduleId)
+                    .systemAssignedScheduleId(UUID.randomUUID().toString())
                     .fixedPointCode(inputDetail.getFixedPointCode())
-                    .day(day)
+                    .day(Collections.singletonList(day))  // keep list structure in response
+                    .dayValue(day)                         // plain String for DB persistence ✅
                     .tripNo(inputDetail.getTripNo())
                     .arrivalTimeToFpl(inputDetail.getArrivalTimeToFpl())
                     .departureTimeFromFpl(inputDetail.getDepartureTimeFromFpl())
@@ -77,16 +82,13 @@ public class FixedPointDetailsServiceImpl implements FixedPointDetailsService {
                     .vehicleId(inputDetail.getVehicleId())
                     .remarks(inputDetail.getRemarks())
                     .active(true)
-                    .isEnable(day.equals(requestedDay))
+                    .isEnable(requestedDays.contains(day))  // true if in requested list ✅
                     .tenantId("dl.djb")
                     .auditDetails(auditDetails)
                     .build();
 
             fixedPointDetailsList.add(detail);
         }
-
-        log.info("FixedPointDetailsServiceImpl :: saveFixedPointDetails :: Generated {} rows for scheduleId: {}",
-                fixedPointDetailsList.size(), inputDetail.getSystemAssignedScheduleId());
 
         fixedPointDetailsRepository.saveFixedPointDetails(fixedPointDetailsList, requestInfo);
 
@@ -125,4 +127,21 @@ public class FixedPointDetailsServiceImpl implements FixedPointDetailsService {
         criteria.setCountCall(true);
         return fixedPointDetailsRepository.getCount(criteria);
     }
+
+
+    @Override
+    public FixedPointDetailsResponse updateFixedPointDetails(FixedPointDetailsRequest fixedPointDetailsRequest) {
+        FixedPointDetails fixedPointDetails = fixedPointDetailsRequest.getFixedPointDetailsList().get(0);
+        fixedPointEnrichmentService.enrichUpdateFixedPointDetails(fixedPointDetailsRequest);
+
+        fixedPointDetailsRepository.updateFixedPointDetails(
+                fixedPointDetails,
+                fixedPointDetailsRequest.getRequestInfo()
+        );
+
+        return FixedPointDetailsResponse.builder()
+                .fixedPointDetailsList(Collections.singletonList(fixedPointDetails))
+                .build();
+    }
+
 }

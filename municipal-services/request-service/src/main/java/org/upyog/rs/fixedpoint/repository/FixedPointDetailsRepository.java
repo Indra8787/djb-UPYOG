@@ -13,6 +13,10 @@ public interface FixedPointDetailsRepository  {
 
     void saveFixedPointDetails(List<FixedPointDetails> fixedPointDetailsList, RequestInfo requestInfo);
 
-     Integer getCount(FixedPointSearchCriteria criteria);
+    void updateFixedPointDetails(FixedPointDetails fixedPointDetailsList, RequestInfo requestInfo);
+
+    Integer getCount(FixedPointSearchCriteria criteria);
      List<FixedPointTimeTableDetail> getDetails(FixedPointSearchCriteria criteria);
+
+
 }

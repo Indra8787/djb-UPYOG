@@ -1,5 +1,6 @@
 package com.example.gateway.filters.pre.helpers;
 
+import com.example.gateway.config.ApplicationProperties;
 import com.example.gateway.utils.UserUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -33,11 +34,11 @@ public class AuthPreCheckFilterHelper implements RewriteFunction<Map, Map> {
     private ObjectMapper objectMapper;
 
     private UserUtils userUtils;
-    public AuthPreCheckFilterHelper(List<String> openEndpointsWhitelist, List<String> mixedModeEndpointsWhitelist,
+    public AuthPreCheckFilterHelper(ApplicationProperties applicationProperties,
                                     ObjectMapper objectMapper, UserUtils userUtils) {
 
-        this.openEndpointsWhitelist = openEndpointsWhitelist;
-        this.mixedModeEndpointsWhitelist = mixedModeEndpointsWhitelist;
+        this.openEndpointsWhitelist = applicationProperties.getOpenEndpointsWhitelist();
+        this.mixedModeEndpointsWhitelist = applicationProperties.getMixedModeEndpointsWhitelist();
         this.objectMapper = objectMapper;
     }
 
@@ -47,7 +48,8 @@ public class AuthPreCheckFilterHelper implements RewriteFunction<Map, Map> {
 
         String authToken;
         String endPointPath = exchange.getRequest().getPath().value();
-
+        log.info("my end point: {}", endPointPath);
+        log.info("Open endpoint list: {}", openEndpointsWhitelist.toString());
         if (openEndpointsWhitelist.contains(endPointPath)) {
             exchange.getAttributes().put(AUTH_BOOLEAN_FLAG_NAME, Boolean.FALSE);
             log.info(OPEN_ENDPOINT_MESSAGE, endPointPath);

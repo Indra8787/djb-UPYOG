@@ -40,12 +40,6 @@ public class RbacPreCheckFilter implements GlobalFilter, Ordered {
 
         String endPointPath = exchange.getRequest().getPath().value();
 
-        // Bypass RBAC for book-service routes
-//        if (endPointPath.equals("/book-service") || endPointPath.startsWith("/book-service/")) {
-//            exchange.getAttributes().put(RBAC_BOOLEAN_FLAG_NAME, false);
-//            log.info("Skipping RBAC for endpoint: {}", endPointPath);
-//            return chain.filter(exchange);
-//        }
 
         if(applicationProperties.getOpenEndpointsWhitelist().contains(endPointPath) || anonymousEndpointsWhitelist.contains(endPointPath)){
             exchange.getAttributes().put(RBAC_BOOLEAN_FLAG_NAME, false);

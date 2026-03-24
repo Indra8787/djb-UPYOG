@@ -232,6 +232,10 @@
     }
   }
 
+  .label-field-pair {
+    align-items: center;
+  }
+
   .employeeCard {
     /*  TODO need to revisit that we need mx-md NABEEL/ANIL
      @apply mb-md mx-md !important;
@@ -1513,7 +1517,6 @@
 }
 
 @media (min-width: 768px) {
-
   .mobile-sidebar-toggle,
   .mobile-close-btn,
   .sidebar-backdrop {
@@ -1537,46 +1540,5 @@
     border-radius: 8px;
     padding: 20px;
     transition: none;
-  }
-}
-
-/* WT-Home specific premium citizen card styling */
-.wt-citizen-card-premium {
-  .employeeCard {
-    background: linear-gradient(145deg, #ffffff, #eff6ff) !important;
-    border: 1px solid rgba(30, 58, 138, 0.1) !important;
-    border-radius: 20px !important;
-    box-shadow: 0 10px 25px rgba(30, 58, 138, 0.08) !important;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    padding: 24px !important;
-
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 14px 35px rgba(30, 58, 138, 0.12) !important;
-    }
-
-    .card-header {
-      color: #1e3a8a !important;
-      font-size: 1.4rem !important;
-      font-weight: 800 !important;
-    }
-
-    .card-link {
-      background: white;
-      border: 1px solid #bfdbfe;
-      border-radius: 8px;
-      padding: 10px 16px;
-      color: #2563eb !important;
-      font-weight: 600;
-      transition: all 0.2s ease;
-      display: inline-block;
-      margin-bottom: 8px;
-      text-decoration: none !important;
-
-      &:hover {
-        background: #dbeafe;
-        color: #1e3a8a !important;
-      }
-    }
   }
 }

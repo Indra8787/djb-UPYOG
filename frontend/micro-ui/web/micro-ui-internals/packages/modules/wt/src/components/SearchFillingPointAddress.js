@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Table, Menu, AddIcon, TextInput, Dropdown, Label, SubmitBar } from "@djb25/digit-ui-react-components";
+import { Card, Table, Menu, AddIcon, TextInput, Dropdown, Label, SubmitBar, Toast } from "@djb25/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory, Link } from "react-router-dom";
 
@@ -12,7 +12,12 @@ const SearchFillingPointAddress = () => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [status, setStatus] = useState(null);
   const [searchParams, setSearchParams] = useState({});
+  const [toast, setToast] = useState(null);
   const tenantId = Digit.ULBService.getCurrentTenantId();
+
+  const closeToast = () => {
+    setToast(null);
+  };
 
   // ✅ Hooks for Search
   const { isLoading: isFixedLoading, data: fixedPointData, refetch: refetchFixed } = Digit.Hooks.wt.useFixedPointSearchAPI(
@@ -31,9 +36,22 @@ const SearchFillingPointAddress = () => {
     { enabled: selectedTab === "FILLING_POINT" }
   );
 
+  // ✅ Hook to fetch all filling points for mapping dropdown
+  const { isLoading: isAllFillingPointsLoading, data: allFillingPointsData } = Digit.Hooks.wt.useFillPointSearch(
+    {
+      tenantId,
+      filters: { limit: 1000 },
+    },
+    { enabled: true }
+  );
+
+  const allFillingPoints = allFillingPointsData?.fillingPoints || [];
+
+  // ✅ Hook for Mapping
+  const { mutate: mapFixedFilling } = Digit.Hooks.wt.useFixedFillingMapping(tenantId);
+
   const isLoading = selectedTab === "FIXED_POINT" ? isFixedLoading : isFillingLoading;
-  const tableData =
-    (selectedTab === "FIXED_POINT" ? fixedPointData?.waterTankerBookingDetail : fillingPointData?.fillingPoints) || [];
+  const tableData = (selectedTab === "FIXED_POINT" ? fixedPointData?.waterTankerBookingDetail : fillingPointData?.fillingPoints) || [];
 
   // ✅ Dynamic config
   const searchConfig = {
@@ -94,6 +112,30 @@ const SearchFillingPointAddress = () => {
     setSearchParams(filters);
   };
 
+  const onFillingPointSelect = (row, value) => {
+    const payload = {
+      fixedFillingPointMapping: {
+        fixed_pt_name: row.original.applicantDetail?.applicantId,
+        filling_pt_name: value.id || value.bookingId || value.fillingPointId || value.uuid || value.fillingpointmetadata?.fillingPointId,
+      },
+    };
+
+    mapFixedFilling(payload, {
+      onSuccess: () => {
+        setToast({ label: t("WT_FIXED_FILLING_MAPPING_SUCCESS") });
+        setTimeout(closeToast, 5000);
+        refetchFixed();
+      },
+      onError: (err) => {
+        setToast({
+          label: err?.response?.data?.Errors?.[0]?.message || t("WT_FIXED_FILLING_MAPPING_FAIL"),
+          error: true,
+        });
+        setTimeout(closeToast, 5000);
+      },
+    });
+  };
+
   const columns = React.useMemo(() => {
     if (selectedTab === "FIXED_POINT") {
       return [
@@ -119,6 +161,46 @@ const SearchFillingPointAddress = () => {
           accessor: (row) => row?.address?.locality || "NA",
           id: "locality",
         },
+        {
+          Header: t("WT_FILLING_POINT"),
+          accessor: (row) =>
+            row?.fillingPointId ||
+            row?.fillingpointmetadata?.fillingPointId ||
+            row?.fillingPtName ||
+            row?.filling_pt_name ||
+            row?.fillingPoint ||
+            "NA",
+          id: "fillingPoint",
+          Cell: ({ row }) => {
+            const rowFpId = String(
+              row.original.fillingPointId ||
+                row.original.fillingpointmetadata?.fillingPointId ||
+                row.original.fillingPtName ||
+                row.original.filling_pt_name ||
+                (typeof row.original.fillingPoint === "object" ? row.original.fillingPoint?.id : row.original.fillingPoint) ||
+                row.original.fillingPointDetail?.id ||
+                row.original.fillingPointDetail?.bookingId ||
+                ""
+            );
+
+            const selectedOption = allFillingPoints?.find((fp) => {
+              const fpId = String(fp.id || fp.bookingId || fp.fillingPointId || fp.uuid || fp.fillingpointmetadata?.fillingPointId);
+              return fpId === rowFpId && rowFpId !== "undefined" && rowFpId !== "null" && rowFpId !== "";
+            });
+
+            return (
+              <Dropdown
+                className="fsm-registry-dropdown"
+                selected={selectedOption}
+                option={allFillingPoints}
+                select={(value) => onFillingPointSelect(row, value)}
+                style={{ textAlign: "left" }}
+                optionKey="fillingPointName"
+                t={t}
+              />
+            );
+          },
+        },
       ];
     } else {
       return [
@@ -128,16 +210,24 @@ const SearchFillingPointAddress = () => {
           id: "fillingPointName",
           Cell: ({ row }) => (
             <span className="link">
-              <Link to={`/digit-ui/employee/wt/add-filling-point-address?id=${row.original.id}`}>
-                {row.original.fillingPointName || "NA"}
-              </Link>
+              <Link to={`/digit-ui/employee/wt/add-filling-point-address?id=${row.original.id}`}>{row.original.fillingPointName || "NA"}</Link>
             </span>
           ),
+        },
+        {
+          Header: t("WT_AE_NAME"),
+          accessor: (row) => row?.aeName || "NA",
+          id: "aeName",
         },
         {
           Header: t("WT_JE_NAME"),
           accessor: (row) => row?.jeName || "NA",
           id: "jeName",
+        },
+        {
+          Header: t("WT_EE_NAME"),
+          accessor: (row) => row?.eeName || "NA",
+          id: "eeName",
         },
         {
           Header: t("WT_LOCALITY"),
@@ -146,7 +236,7 @@ const SearchFillingPointAddress = () => {
         },
       ];
     }
-  }, [selectedTab, t]);
+  }, [allFillingPoints, selectedTab, t]);
 
   const isMobile = window.Digit.Utils.browser.isMobile();
 
@@ -205,7 +295,15 @@ const SearchFillingPointAddress = () => {
               <Dropdown option={statusOptions} optionKey="i18nKey" selected={status} select={setStatus} t={t} />
             </div>
           )}
-          <div style={{ display: "flex", marginTop: "32px", justifyContent: isMobile ? "center" : "flex-end", flexDirection: isMobile ? "column-reverse" : "row", gap: "16px" }}>
+          <div
+            style={{
+              display: "flex",
+              marginTop: "32px",
+              justifyContent: isMobile ? "center" : "flex-end",
+              flexDirection: isMobile ? "column-reverse" : "row",
+              gap: "16px",
+            }}
+          >
             <span className="clear-search" onClick={clearSearch} style={{ alignSelf: "center" }}>
               {t("ES_COMMON_CLEAR_SEARCH")}
             </span>
@@ -217,6 +315,7 @@ const SearchFillingPointAddress = () => {
       {/* 🔹 Table */}
       <Card>
         <Table
+          key={allFillingPoints?.length > 0 ? "loaded" : "loading"}
           data={tableData}
           columns={columns}
           pageSize={10}
@@ -230,13 +329,14 @@ const SearchFillingPointAddress = () => {
             },
           })}
           t={t}
-          isLoading={isLoading}
+          isLoading={isLoading || isAllFillingPointsLoading}
           isSearchRequired={false}
           isDownloadRequired={true}
           isFilterRequired={true}
           isSortRequired={true}
         />
       </Card>
+      {toast && <Toast error={toast.error} label={toast.label} onClose={closeToast} />}
     </React.Fragment>
   );
 };

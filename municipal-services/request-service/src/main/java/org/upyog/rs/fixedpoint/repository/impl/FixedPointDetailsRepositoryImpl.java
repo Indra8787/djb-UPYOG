@@ -17,6 +17,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.upyog.rs.repository.rowMapper.GenericRowMapper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -69,6 +70,20 @@ public class FixedPointDetailsRepositoryImpl implements FixedPointDetailsReposit
         producer.push(config.getSaveFixedPointTimeTable(), kafkaRequest);
 
         log.info("FixedPointDetailsRepositoryImpl :: saveFixedPointDetails :: Successfully pushed to Kafka");
+    }
+
+    @Override
+    public void updateFixedPointDetails(FixedPointDetails fixedPointDetails, RequestInfo requestInfo) {
+        log.info("FixedPointDetailsRepository :: updateFixedPointDetails :: Pushing to Kafka topic: {}", config.getUpdateFixedPointTimeTable());
+
+        FixedPointDetailsRequest request = FixedPointDetailsRequest.builder()
+                .requestInfo(requestInfo)
+                .fixedPointDetailsList(Collections.singletonList(fixedPointDetails))
+                .build();
+
+        producer.push(config.getUpdateFixedPointTimeTable(), request);
+
+        log.info("FixedPointDetailsRepository :: updateFixedPointDetails :: Successfully pushed to Kafka");
     }
 
 

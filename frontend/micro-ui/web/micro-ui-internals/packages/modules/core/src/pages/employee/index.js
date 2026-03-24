@@ -68,20 +68,14 @@ const EmployeeApp = ({
           )}
           <div
             className={isUserProfile ? "grounded-container" : "loginContainer"}
-            style={
-              isUserProfile
-                ? { padding: 0, paddingTop: "80px", marginLeft: mobileView ? "" : "64px" }
-                : { "--banner-url": `url(${stateInfo?.bannerUrl})`, padding: "0px" }
-            }
+            style={isUserProfile ? { padding: 0, paddingTop: "80px" } : { "--banner-url": `url(${stateInfo?.bannerUrl})`, padding: "0px" }}
           >
-            <div className="loginnn">
+            <div className="login">
               {/* <picture>
               <source media="(min-width: 760px)" src="https://i.postimg.cc/wxnnKGtG/Banner-18-10-22-1.png" style={{"position":"absolute","height":"100%","width":"100%"}}/>
                 <source media="(min-width: 400px)" srcset="https://i.postimg.cc/9Q7jT6Dd/Banner-Image-2.png" style={{"position":"absolute","height":"100%","width":"100%"}}/>
                 </picture> */}
-              <div className="login-logo-wrapper">
-                <div className="logoNiua"></div>
-              </div>
+
               {/* <picture>
                 <source id="backgroung-login" media="(min-width: 950px)" srcset="https://abdeas-dev-asset.s3.ap-south-1.amazonaws.com/bannerImage.jpg" style={{"position":"absolute","height":"100%","width":"100%"}} />
                   <source media="(min-width: 250px)" srcset="https://abdeas-dev-asset.s3.ap-south-1.amazonaws.com/bannerImageMobileView.jpg" />
@@ -160,8 +154,20 @@ const EmployeeApp = ({
                 <a style={{ cursor: "pointer", fontSize: "16px", fontWeight: "400"}} href={pdfUrl} target='_blank'>UPYOG License</a>
               </div>
             </div> */}
-            <div style={{ width: "100%", height: "30px", position: "fixed", bottom: 0, backgroundColor: "#FFF", display:"flex", alignItems:'center', justifyContent:'center', zIndex:'100000' }}>
-              <div style={{ display: "flex", justifyContent: "center", color: "black", opacity:'0.5' }}>
+            <div
+              style={{
+                width: "100%",
+                height: "30px",
+                position: "fixed",
+                bottom: 0,
+                backgroundColor: "#FFF",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: "100000",
+              }}
+            >
+              <div style={{ display: "flex", justifyContent: "center", color: "black", opacity: "0.5" }}>
                 {/* <span style={{ cursor: "pointer", fontSize: window.Digit.Utils.browser.isMobile()?"12px":"14px", fontWeight: "400"}} onClick={() => { window.open('https://www.digit.org/', '_blank').focus();}} >Powered by DIGIT</span> */}
                 {/* <span style={{ margin: "0 10px" ,fontSize: window.Digit.Utils.browser.isMobile()?"12px":"14px"}}>|</span> */}
                 {/* <a style={{ cursor: "pointer", fontSize: window.Digit.Utils.browser.isMobile()?"12px":"14px", fontWeight: "400"}} href="#" target='_blank'>UPYOG License</a> */}

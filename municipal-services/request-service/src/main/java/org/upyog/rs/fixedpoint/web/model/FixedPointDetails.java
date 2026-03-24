@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.upyog.rs.web.models.AuditDetails;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -16,8 +18,11 @@ public class FixedPointDetails {
     private String systemAssignedScheduleId;
     @JsonProperty("fixed_point_code")
     private String fixedPointCode;
+
     @JsonProperty("day")
-    private String day;
+    private List<String> day;
+    @JsonProperty("day_value")
+    private String dayValue;
     @JsonProperty("trip_no")
     private Integer tripNo;
 
